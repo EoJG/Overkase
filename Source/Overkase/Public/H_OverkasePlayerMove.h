@@ -13,6 +13,8 @@ UCLASS()
 class OVERKASE_API UH_OverkasePlayerMove : public UOverkasePlayerBase
 {
 public:
+
+	UH_OverkasePlayerMove();
 	GENERATED_BODY()
 	virtual void BeginPlay() override;
 
@@ -20,11 +22,19 @@ public:
 
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) override;
 	
+	bool bIsDash = false;
+
+	float currentTime = 0;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_move;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ia_dash;
 
 	//ÁÂ¿ìÀÌµ¿
 	UFUNCTION()
 	void Move(const FInputActionValue& value);
+
+	UFUNCTION()
+	void DashMove();
 };

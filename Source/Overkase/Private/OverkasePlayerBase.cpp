@@ -37,8 +37,6 @@ void UOverkasePlayerBase::BeginPlay()
 
 	moveComp = me->GetCharacterMovement();
 
-	//바인딩 처리
-	//me->onInputBindingDelegate.AddUObject(this, &UPlayerBaseComponent::SetupInputBinding);
 	
 }
 
