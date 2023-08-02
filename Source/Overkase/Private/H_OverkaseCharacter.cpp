@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "H_OverPlayer.h"
+#include "H_OverkaseCharacter.h"
 
 // Sets default values
-AH_OverPlayer::AH_OverPlayer()
+AH_OverkaseCharacter::AH_OverkaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -12,21 +12,21 @@ AH_OverPlayer::AH_OverPlayer()
 }
 
 // Called when the game starts or when spawned
-void AH_OverPlayer::BeginPlay()
+void AH_OverkaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
 // Called every frame
-void AH_OverPlayer::Tick(float DeltaTime)
+void AH_OverkaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void AH_OverPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AH_OverkaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
