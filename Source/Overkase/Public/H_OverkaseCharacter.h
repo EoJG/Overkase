@@ -32,8 +32,12 @@ public:
 	// delegate
 	FInputBindingDelegete onInputBindingDelegate;
 
-	//Enhanced Input resources
-	//UPROPERTY(EditDefaultsOnly, Category = "Input")
-	//class UInputMappingContext* imc;
+	// Move Component
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UOverkasePlayerBase* overPlayerMove;
 
+	//Enhanced Input resources
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputMappingContext* imc;
+	
 };

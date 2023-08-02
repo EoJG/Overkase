@@ -10,9 +10,21 @@ UOverkasePlayerBase::UOverkasePlayerBase()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	bWantsInitializeComponent = true;
+
 }
 
+
+void UOverkasePlayerBase::InitializeComponent()
+{
+	Super::InitializeComponent();
+	me = Cast<AH_OverkaseCharacter>(GetOwner());
+
+	moveComp = me->GetCharacterMovement();
+
+	//바인딩 처리
+	me->onInputBindingDelegate.AddUObject(this, &UOverkasePlayerBase::SetupInputBinding);
+}
 
 // Called when the game starts
 void UOverkasePlayerBase::BeginPlay()

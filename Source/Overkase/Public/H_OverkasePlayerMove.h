@@ -20,4 +20,11 @@ public:
 
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) override;
 	
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ia_move;
+
+	//ÁÂ¿ìÀÌµ¿
+	UFUNCTION()
+	void Move(const FInputActionValue& value);
 };
