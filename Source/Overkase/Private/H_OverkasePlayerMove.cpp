@@ -7,7 +7,8 @@
 
 UH_OverkasePlayerMove::UH_OverkasePlayerMove()
 {
-	//moveComp->MaxWalkSpeed = 400;
+	
+
 
 }
 
@@ -15,6 +16,8 @@ void UH_OverkasePlayerMove::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	moveComp->MaxWalkSpeed = 400;
+
 
 
 }
@@ -27,8 +30,12 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	if (currentTime > 0.5f) {
 		bIsDash = false;
+		currentTime = 0;
 	}
-	
+
+	if(!bIsDash) {
+		moveComp->MaxWalkSpeed = 400;
+	}
 }
 
 void UH_OverkasePlayerMove::SetupInputBinding(class UInputComponent* PlayerInputComponent)
@@ -51,13 +58,6 @@ void UH_OverkasePlayerMove::Move(const FInputActionValue& value)
 
 void UH_OverkasePlayerMove::DashMove()
 {
-	
 	bIsDash = true;
-	if (bIsDash) {
-	//moveComp->MaxWalkSpeed = 1000;
-	}
-	else {
-		//moveComp->MaxWalkSpeed = 400;
-	}
-	
+	moveComp->MaxWalkSpeed = 1000;
 }

@@ -14,8 +14,10 @@ class OVERKASE_API UH_OverkasePlayerMove : public UOverkasePlayerBase
 {
 public:
 
-	UH_OverkasePlayerMove();
 	GENERATED_BODY()
+		UH_OverkasePlayerMove();
+
+
 	virtual void BeginPlay() override;
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;

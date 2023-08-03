@@ -19,8 +19,10 @@ void UOverkasePlayerBase::InitializeComponent()
 {
 	Super::InitializeComponent();
 	me = Cast<AH_OverkaseCharacter>(GetOwner());
-
+	//UE_LOG(LogTemp,Warning,TEXT("%s"), *me->GetName());
 	moveComp = me->GetCharacterMovement();
+	//UE_LOG(LogTemp,Warning,TEXT("%s"), *moveComp->GetCharacterOwner()->GetName());
+
 
 	//바인딩 처리
 	me->onInputBindingDelegate.AddUObject(this, &UOverkasePlayerBase::SetupInputBinding);
