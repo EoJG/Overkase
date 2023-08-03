@@ -37,7 +37,7 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void OnItem(class AActor* item);
+	virtual void OnItem(class AActor* item);
 	UFUNCTION(BlueprintCallable)
 	virtual void GetItem(class USceneComponent* playerSceneComp);
 };
