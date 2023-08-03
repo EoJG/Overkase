@@ -13,5 +13,17 @@ UCLASS()
 class OVERKASE_API UH_OverkaseInteraction : public UOverkasePlayerBase
 {
 	GENERATED_BODY()
-	
+public:
+	virtual void BeginPlay() override;
+
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+public:
+	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) override;
+
+	void InterActionInput();
+
+public:
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* ia_Space_Interaction;
 };

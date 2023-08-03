@@ -4,6 +4,7 @@
 #include "H_OverkaseCharacter.h"
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h>
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
+#include "H_OverkaseInteraction.h"
 #include "H_OverkasePlayerMove.h"
 
 // Sets default values
@@ -13,6 +14,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	overPlayerMove = CreateDefaultSubobject<UH_OverkasePlayerMove>(TEXT("PlayerMove"));
+	overPlayerInteraction = CreateDefaultSubobject<UH_OverkaseInteraction>(TEXT("PlayerInteraction"));
 }
 
 // Called when the game starts or when spawned

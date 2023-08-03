@@ -28,12 +28,13 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	currentTime += DeltaTime;
 
-	if (currentTime > 0.5f) {
+	/*if (currentTime > 0.5f) {
 		bIsDash = false;
 		currentTime = 0;
-	}
+	}*/
 
-	if(!bIsDash) {
+	if(moveComp->MaxWalkSpeed < 450){
+		bIsDash = false;
 		moveComp->MaxWalkSpeed = 400;
 	}
 }
@@ -46,18 +47,21 @@ void UH_OverkasePlayerMove::SetupInputBinding(class UInputComponent* PlayerInput
 		pInput->BindAction(ia_move, ETriggerEvent::Triggered, this, &UH_OverkasePlayerMove::Move);
 		pInput->BindAction(ia_dash, ETriggerEvent::Triggered, this, &UH_OverkasePlayerMove::DashMove);
 	}
-	
 }
 
 void UH_OverkasePlayerMove::Move(const FInputActionValue& value)
 {
-	FVector2D mValue = value.Get<FVector2D>();
-	me->AddMovementInput(me->GetActorRightVector(), mValue.X);
-	me->AddMovementInput(me->GetActorForwardVector(), mValue.Y);
+	
+		FVector2D mValue = value.Get<FVector2D>();
+		me->AddMovementInput(me->GetActorRightVector(), mValue.X);
+		me->AddMovementInput(me->GetActorForwardVector(), mValue.Y);
+	
 }
 
 void UH_OverkasePlayerMove::DashMove()
 {
-	bIsDash = true;
-	moveComp->MaxWalkSpeed = 1000;
+	if(!bIsDash){
+		bIsDash = true;
+		moveComp->MaxWalkSpeed = FMath::Lerp(1000, 400, 0.5f);
+	}
 }

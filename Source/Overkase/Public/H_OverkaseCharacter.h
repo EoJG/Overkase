@@ -35,6 +35,8 @@ public:
 	// Move Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UOverkasePlayerBase* overPlayerMove;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UOverkasePlayerBase* overPlayerInteraction;
 
 	//Enhanced Input resources
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
