@@ -14,6 +14,10 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	interactionPosition = CreateDefaultSubobject<USceneComponent>(TEXT("InteractionPosition"));
+	interactionPosition->SetupAttachment(GetMesh());
+	interactionPosition->SetRelativeLocation(FVector(160, 0, 0));
+
 	interationDistance = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionDistance"));
 	interationDistance->SetupAttachment(GetMesh());
 	interationDistance->SetSphereRadius(100);
@@ -43,7 +47,7 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Red, false, -1, 0, 2);
+	DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);
 
 }
 

@@ -33,6 +33,10 @@ public:
 
 	UPROPERTY()
 	UCharacterMovementComponent* moveComp;
+
+	UPROPERTY()
+	class AEO_Block* block;
+
 		
 public:
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) {}

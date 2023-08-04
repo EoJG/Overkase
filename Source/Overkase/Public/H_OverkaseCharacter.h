@@ -31,6 +31,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	class USphereComponent* interationDistance;
+	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* interactionPosition;
 
 	// delegate
 	FInputBindingDelegete onInputBindingDelegate;
