@@ -31,10 +31,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* sceneComp;
 
-public:	
-	UPROPERTY(EditDefaultsOnly, Category="Settings")
-	TSubclassOf<class AEO_NonePlate> nonePlate;
-
+public:
 	UPROPERTY(VisibleAnywhere, Category="Check")
 	bool bOnItem = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Check")

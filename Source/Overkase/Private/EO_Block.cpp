@@ -26,12 +26,6 @@ AEO_Block::AEO_Block()
 		meshComp->SetStaticMesh(meshTemp.Object);
 	}
 
-	static ConstructorHelpers::FClassFinder<AEO_NonePlate> noneTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_NonePlate.BP_NonePlate_C'"));
-	if (noneTemp.Succeeded())
-	{
-		nonePlate = noneTemp.Class;
-	}
-
 	sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	sceneComp->SetupAttachment(RootComponent);
 	sceneComp->SetRelativeLocation(FVector(0, 0, 90));

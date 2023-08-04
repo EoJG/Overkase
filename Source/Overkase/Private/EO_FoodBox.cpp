@@ -28,9 +28,7 @@ void AEO_FoodBox::GetItem(class USceneComponent* playerSceneComp)
 	}
 	else
 	{
-		AEO_NonePlate* noneP = GetWorld()->SpawnActor<AEO_NonePlate>(nonePlate, playerSceneComp->GetComponentTransform());
 		AEO_Food* spawnFood = GetWorld()->SpawnActor<AEO_Food>(food, playerSceneComp->GetComponentTransform());
-		spawnFood->AttachToActor(noneP, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		noneP->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		spawnFood->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	}
 }
