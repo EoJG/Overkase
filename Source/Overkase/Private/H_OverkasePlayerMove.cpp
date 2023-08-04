@@ -17,8 +17,6 @@ void UH_OverkasePlayerMove::BeginPlay()
 	
 	moveComp->MaxWalkSpeed = 400;
 
-
-
 }
 
 void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

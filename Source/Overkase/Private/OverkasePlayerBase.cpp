@@ -2,6 +2,9 @@
 
 
 #include "OverkasePlayerBase.h"
+#include "EO_Block.h"
+#include <Kismet/GameplayStatics.h>
+
 
 // Sets default values for this component's properties
 UOverkasePlayerBase::UOverkasePlayerBase()
@@ -20,9 +23,11 @@ void UOverkasePlayerBase::InitializeComponent()
 	Super::InitializeComponent();
 	me = Cast<AH_OverkaseCharacter>(GetOwner());
 	//UE_LOG(LogTemp,Warning,TEXT("%s"), *me->GetName());
+
 	moveComp = me->GetCharacterMovement();
 	//UE_LOG(LogTemp,Warning,TEXT("%s"), *moveComp->GetCharacterOwner()->GetName());
 
+	block = Cast<AEO_Block>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Block::StaticClass()));
 
 	//바인딩 처리
 	me->onInputBindingDelegate.AddUObject(this, &UOverkasePlayerBase::SetupInputBinding);
@@ -32,12 +37,6 @@ void UOverkasePlayerBase::InitializeComponent()
 void UOverkasePlayerBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-
-	me = Cast<AH_OverkaseCharacter>(GetOwner());
-
-	moveComp = me->GetCharacterMovement();
 
 	
 }
