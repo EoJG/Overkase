@@ -17,11 +17,13 @@ class OVERKASE_API AEO_ChopTable : public AEO_Block
 public:
 	AEO_ChopTable();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	class AEO_Food* food = nullptr;
 
 public:
 	virtual void OnItem(class AActor* item) override;
-	UFUNCTION(BlueprintCallable)
-	void Chop();
+	virtual void Interaction() override;
 };

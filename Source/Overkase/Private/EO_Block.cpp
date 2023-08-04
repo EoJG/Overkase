@@ -3,6 +3,8 @@
 
 #include "EO_Block.h"
 #include <Components/BoxComponent.h>
+#include "EO_Food.h"
+#include "EO_NonePlate.h"
 
 // Sets default values
 AEO_Block::AEO_Block()
@@ -13,15 +15,21 @@ AEO_Block::AEO_Block()
 	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	RootComponent = boxComp;
 	boxComp->SetBoxExtent(FVector(50));
-	//boxComp->SetCollisionProfileName(TEXT("FoodBox"));
+	boxComp->SetCollisionProfileName(TEXT("Block"));
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	meshComp->SetupAttachment(RootComponent);
-	//meshComp->SetCollisionProfileName(TEXT("NoCollision"));
+	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Engine/BasicShapes/Cube'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
+	}
+
+	static ConstructorHelpers::FClassFinder<AEO_NonePlate> noneTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_NonePlate.BP_NonePlate_C'"));
+	if (noneTemp.Succeeded())
+	{
+		nonePlate = noneTemp.Class;
 	}
 
 	sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
@@ -50,6 +58,13 @@ void AEO_Block::OnItem(class AActor* item)
 		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		bOnItem = true;
 	}
+	else
+	{
+		if (Cast<AEO_Food>(item)->bIsCooked)
+		{
+			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		}
+	}
 }
 
 void AEO_Block::GetItem(class USceneComponent* playerSceneComp)
@@ -62,5 +77,10 @@ void AEO_Block::GetItem(class USceneComponent* playerSceneComp)
 		items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
 		bOnItem = false;
 	}
+}
+
+void AEO_Block::Interaction()
+{
+
 }
 

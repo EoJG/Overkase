@@ -3,18 +3,17 @@
 
 #include "EO_FoodBox.h"
 #include "EO_Food.h"
+#include "EO_NonePlate.h"
 
 AEO_FoodBox::AEO_FoodBox()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	/*meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	meshComp->SetupAttachment(RootComponent);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Engine/BasicShapes/Cube'"));
-	if (meshTemp.Succeeded())
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Engine/BasicShapes/Cylinder'"));
+	if (MeshTemp.Succeeded())
 	{
-		meshComp->SetStaticMesh(meshTemp.Object);
-	}*/
+		meshComp->SetStaticMesh(MeshTemp.Object);
+	}
 }
 
 void AEO_FoodBox::GetItem(class USceneComponent* playerSceneComp)
@@ -29,7 +28,9 @@ void AEO_FoodBox::GetItem(class USceneComponent* playerSceneComp)
 	}
 	else
 	{
+		AEO_NonePlate* noneP = GetWorld()->SpawnActor<AEO_NonePlate>(nonePlate, playerSceneComp->GetComponentTransform());
 		AEO_Food* spawnFood = GetWorld()->SpawnActor<AEO_Food>(food, playerSceneComp->GetComponentTransform());
-		spawnFood->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		spawnFood->AttachToActor(noneP, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		noneP->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	}
 }

@@ -32,12 +32,19 @@ public:
 	class USceneComponent* sceneComp;
 
 public:	
+	UPROPERTY(EditDefaultsOnly, Category="Settings")
+	TSubclassOf<class AEO_NonePlate> nonePlate;
+
 	UPROPERTY(VisibleAnywhere, Category="Check")
 	bool bOnItem = false;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Check")
+	bool bIsInterObj = false;
 
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual void OnItem(class AActor* item);
 	UFUNCTION(BlueprintCallable)
 	virtual void GetItem(class USceneComponent* playerSceneComp);
+	UFUNCTION(BlueprintCallable)
+	virtual void Interaction();
 };
