@@ -36,7 +36,26 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_ctrl_Interaction;
 
+
+	UPROPERTY(EditAnywhere, Category = "Foods")
+	TArray<AEO_Block*> foodActor;
+	
+	TArray<float> floatDistance;
+
+
+	UFUNCTION()
+	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+
 private:
 	bool bClickedSpace = false;
 	bool bHasItem = false;
+
+private:
+
+	AActor* FindClosestActor();
+
 };
