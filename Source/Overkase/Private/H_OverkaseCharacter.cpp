@@ -4,7 +4,9 @@
 #include "H_OverkaseCharacter.h"
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputSubsystems.h>
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
+#include "H_OverkaseInteraction.h"
 #include "H_OverkasePlayerMove.h"
+#include <Components/SphereComponent.h>
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -12,7 +14,13 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	interationDistance = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionDistance"));
+	interationDistance->SetupAttachment(GetMesh());
+	interationDistance->SetSphereRadius(100);
+	interationDistance->SetCollisionProfileName(TEXT("PlayerSphereRadius"));
+
 	overPlayerMove = CreateDefaultSubobject<UH_OverkasePlayerMove>(TEXT("PlayerMove"));
+	overPlayerInteraction = CreateDefaultSubobject<UH_OverkaseInteraction>(TEXT("PlayerInteraction"));
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +42,8 @@ void AH_OverkaseCharacter::BeginPlay()
 void AH_OverkaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Red, false, -1, 0, 2);
 
 }
 

@@ -29,12 +29,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(VisibleAnywhere)
+	class USphereComponent* interationDistance;
+
 	// delegate
 	FInputBindingDelegete onInputBindingDelegate;
 
 	// Move Component
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UOverkasePlayerBase* overPlayerMove;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UOverkasePlayerBase* overPlayerInteraction;
 
 	//Enhanced Input resources
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
