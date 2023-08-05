@@ -27,32 +27,13 @@ void AEO_ChopTable::OnItem(class AActor* item)
 		TArray<AActor*> child;
 		GetAttachedActors(child);
 
-		if (Cast<AEO_NonePlate>(child[0]))
+		if (AEO_Food* temp = Cast<AEO_Food>(child[0]))
 		{
-			TArray<AActor*> foodList;
-			child[0]->GetAttachedActors(foodList);
-			if (foodList.Num() == 1)
-			{
-				if (AEO_Food* temp = Cast<AEO_Food>(foodList[0]))
-				{
-					food = temp;
-					UE_LOG(LogTemp, Warning, TEXT("%s"), *food->GetName());
-				}
-			}
-			else
-			{
-				food = nullptr;
-			}
+			food = temp;
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *food->GetName());
 		}
 
 		bOnItem = true;
-	}
-	else
-	{
-		if (Cast<AEO_Food>(item)->bIsCooked)
-		{
-			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		}
 	}
 }
 

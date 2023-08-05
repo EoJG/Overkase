@@ -8,8 +8,8 @@
 AEO_FoodBox::AEO_FoodBox()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Engine/BasicShapes/Cylinder'"));
+	
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Probs/Box_Box.Box_Box'"));
 	if (MeshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(MeshTemp.Object);
@@ -28,9 +28,7 @@ void AEO_FoodBox::GetItem(class USceneComponent* playerSceneComp)
 	}
 	else
 	{
-		AEO_NonePlate* noneP = GetWorld()->SpawnActor<AEO_NonePlate>(nonePlate, playerSceneComp->GetComponentTransform());
 		AEO_Food* spawnFood = GetWorld()->SpawnActor<AEO_Food>(food, playerSceneComp->GetComponentTransform());
-		spawnFood->AttachToActor(noneP, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		noneP->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		spawnFood->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	}
 }
