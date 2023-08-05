@@ -32,6 +32,8 @@ public:
 	class USceneComponent* sceneComp;
 
 	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<class AEO_Plate> plate;
+	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<class AEO_Pot> pot;
 
 public:
@@ -39,6 +41,8 @@ public:
 	bool bOnItem = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Check")
 	bool bIsInterObj = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")
+	bool bSpawnPlate = false;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")
 	bool bSpawnPot = false;
 

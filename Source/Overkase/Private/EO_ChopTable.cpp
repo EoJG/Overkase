@@ -22,7 +22,7 @@ void AEO_ChopTable::OnItem(class AActor* item)
 {
 	if (!bOnItem)
 	{
-		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
 		TArray<AActor*> child;
 		GetAttachedActors(child);

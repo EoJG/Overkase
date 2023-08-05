@@ -18,7 +18,7 @@ void AEO_TrashCan::OnItem(class AActor* item)
 {
 	if (!bOnItem)
 	{
-		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		item->Destroy();
 	}
 }

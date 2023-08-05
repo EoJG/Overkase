@@ -23,12 +23,12 @@ void AEO_FoodBox::GetItem(class USceneComponent* playerSceneComp)
 		TArray<AActor*> items;
 		GetAttachedActors(items);
 
-		items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		bOnItem = false;
 	}
 	else
 	{
 		AEO_Food* spawnFood = GetWorld()->SpawnActor<AEO_Food>(food, playerSceneComp->GetComponentTransform());
-		spawnFood->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		spawnFood->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 }
