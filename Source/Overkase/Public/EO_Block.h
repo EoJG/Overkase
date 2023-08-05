@@ -31,11 +31,16 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* sceneComp;
 
+	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<class AEO_Pot> pot;
+
 public:
 	UPROPERTY(VisibleAnywhere, Category="Check")
 	bool bOnItem = false;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Check")
 	bool bIsInterObj = false;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Settings")
+	bool bSpawnPot = false;
 
 public:
 	UFUNCTION(BlueprintCallable)

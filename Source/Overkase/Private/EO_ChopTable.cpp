@@ -35,13 +35,6 @@ void AEO_ChopTable::OnItem(class AActor* item)
 
 		bOnItem = true;
 	}
-	else
-	{
-		if (Cast<AEO_Food>(item)->bIsCooked)
-		{
-			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		}
-	}
 }
 
 void AEO_ChopTable::Interaction()
