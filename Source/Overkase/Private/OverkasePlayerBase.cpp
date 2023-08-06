@@ -27,7 +27,7 @@ void UOverkasePlayerBase::InitializeComponent()
 	moveComp = me->GetCharacterMovement();
 	//UE_LOG(LogTemp,Warning,TEXT("%s"), *moveComp->GetCharacterOwner()->GetName());
 
-	block = Cast<AEO_Block>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Block::StaticClass()));
+	//block = Cast<AEO_Block>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Block::StaticClass()));
 
 	//바인딩 처리
 	me->onInputBindingDelegate.AddUObject(this, &UOverkasePlayerBase::SetupInputBinding);
