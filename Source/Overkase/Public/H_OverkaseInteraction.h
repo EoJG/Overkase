@@ -56,6 +56,7 @@ private:
 
 private:
 
-	AActor* FindClosestActor();
+	int32 FindClosestActor();
 
+	int32 closestBlockIndex = 0;
 };

@@ -14,13 +14,24 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	crocodileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Crocodile"));
+	crocodileMesh->SetupAttachment(RootComponent);
+	crocodileMesh->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0, -90, 0));
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempCrocoMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/crocodile.crocodile'"));
+
+	if (TempCrocoMesh.Succeeded()) {
+		crocodileMesh->SetStaticMesh(TempCrocoMesh.Object);
+	}
+
 	interactionPosition = CreateDefaultSubobject<USceneComponent>(TEXT("InteractionPosition"));
-	interactionPosition->SetupAttachment(GetMesh());
+	interactionPosition->SetupAttachment(crocodileMesh);
 	interactionPosition->SetRelativeLocation(FVector(160, 0, 0));
 
 	interationDistance = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionDistance"));
-	interationDistance->SetupAttachment(GetMesh());
-	interationDistance->SetSphereRadius(100);
+	interationDistance->SetupAttachment(crocodileMesh);
+	interationDistance->SetRelativeLocation(FVector(0, 160, 60));
+	interationDistance->SetSphereRadius(130);
 	interationDistance->SetCollisionProfileName(TEXT("PlayerSphereRadius"));
 
 	overPlayerMove = CreateDefaultSubobject<UH_OverkasePlayerMove>(TEXT("PlayerMove"));

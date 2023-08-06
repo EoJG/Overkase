@@ -30,6 +30,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* crocodileMesh;
+	UPROPERTY(VisibleAnywhere)
 	class USphereComponent* interationDistance;
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* interactionPosition;
