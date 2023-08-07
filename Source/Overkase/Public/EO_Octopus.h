@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "EO_Food.h"
-#include "EO_Fish.generated.h"
+#include "EO_Octopus.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OVERKASE_API AEO_Fish : public AEO_Food
+class OVERKASE_API AEO_Octopus : public AEO_Food
 {
 	GENERATED_BODY()
 	
 public:
-	AEO_Fish();
+	AEO_Octopus();
 
 protected:
 	virtual void BeginPlay() override;

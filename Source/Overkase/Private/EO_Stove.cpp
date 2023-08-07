@@ -9,6 +9,8 @@ AEO_Stove::AEO_Stove()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	Tags[0] = TEXT("Stove");
+
 	meshComp->SetRelativeLocation(FVector(0, 0, 50));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Probs/Stove.Stove'"));
 	if (MeshTemp.Succeeded())
@@ -31,13 +33,17 @@ void AEO_Stove::OnItem(class AActor* item)
 {
 	if (!bOnItem)
 	{
-		if (Cast<AEO_Pot>(item)->bInFood)
+		if (!Cast<AEO_Plate>(item))
 		{
-			bCanCook = true;
-		}
+			if (Cast<AEO_Pot>(item)->bInFood)
+			{
+				bCanCook = true;
+			}
 
-		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
-		bOnItem = true;
+			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+			bOnItem = true;
+		}
 	}
 }
 

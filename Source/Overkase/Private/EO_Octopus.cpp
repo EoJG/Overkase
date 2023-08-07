@@ -1,19 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EO_Fish.h"
-#include <Components/BoxComponent.h>
+#include "EO_Octopus.h"
 
-AEO_Fish::AEO_Fish()
+AEO_Octopus::AEO_Octopus()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	Tags.Add(TEXT("Fish"));
+	Tags.Add(TEXT("Octopus"));
 }
 
-void AEO_Fish::BeginPlay()
+void AEO_Octopus::BeginPlay()
 {
 	Super::BeginPlay();
 
-	weight = 4;
+	weight = 5;
 }
