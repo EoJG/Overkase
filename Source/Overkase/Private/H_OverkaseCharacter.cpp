@@ -34,8 +34,17 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	interationDistance->SetSphereRadius(130);
 	interationDistance->SetCollisionProfileName(TEXT("PlayerSphereRadius"));
 
+	// Don't rotate when the controller rotates. Let that just affect the camera.
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 500.0f, 0.0f); // ...at this rotation rate
+
 	overPlayerMove = CreateDefaultSubobject<UH_OverkasePlayerMove>(TEXT("PlayerMove"));
 	overPlayerInteraction = CreateDefaultSubobject<UH_OverkaseInteraction>(TEXT("PlayerInteraction"));
+
 }
 
 // Called when the game starts or when spawned
@@ -58,7 +67,7 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);
+	//DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);
 
 }
 

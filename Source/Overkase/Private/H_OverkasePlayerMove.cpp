@@ -62,8 +62,10 @@ void UH_OverkasePlayerMove::Move(const FInputActionValue& value)
 {
 	
 		FVector2D mValue = value.Get<FVector2D>();
-		me->AddMovementInput(me->GetActorRightVector(), mValue.X);
-		me->AddMovementInput(me->GetActorForwardVector(), mValue.Y);
+		FVector rightVectorOfController = FRotationMatrix(me->GetControlRotation()).GetUnitAxis(EAxis::Y);
+		FVector forwardVectorOfController = FRotationMatrix(me->GetControlRotation()).GetUnitAxis(EAxis::X);
+		me->AddMovementInput(rightVectorOfController, mValue.X);
+		me->AddMovementInput(forwardVectorOfController, mValue.Y);
 	
 }
 

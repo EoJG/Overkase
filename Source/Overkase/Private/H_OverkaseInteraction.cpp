@@ -47,10 +47,12 @@ void UH_OverkaseInteraction::SetupInputBinding(class UInputComponent* PlayerInpu
 
 void UH_OverkaseInteraction::SpaceInput()
 {	
-	if (!bHasItem) {
+	if (!bHasItem)
+	{
 		ItemOnPlayer();
 	}
-	else {
+	else
+	{
 		NoItem();
 	}
 }
@@ -62,19 +64,34 @@ void UH_OverkaseInteraction::CtrlInput()
 
 void UH_OverkaseInteraction::ItemOnPlayer()
 {
+	if (foodActor.IsEmpty()) {
+		return;
+	}
+	else {
 	block->GetItem(me->interactionPosition);
 	bHasItem = true;
+	}
 }
 
 void UH_OverkaseInteraction::NoItem()
 {
-
 	TArray<AActor*> items;
 	me->GetAttachedActors(items);
 
-	//items[0]
-	block->OnItem(items[0]);
-	bHasItem = false;
+	if (foodActor.IsEmpty()) 
+	{
+		me->interactionPosition->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		bHasItem = false;
+	}
+	else
+	{
+		if (items.IsEmpty() == false) 
+		{
+			block->OnItem(items[0]);
+			bHasItem = false;
+
+		}
+	}
 }
 
 void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -93,7 +110,6 @@ void UH_OverkaseInteraction::OnComponentEndOverlap(UPrimitiveComponent* Overlapp
 		foodActor.Remove(temp);
 		floatDistance.Remove(0);
 	}
-	
 }
 
 int32 UH_OverkaseInteraction::FindClosestActor()
@@ -117,6 +133,5 @@ int32 UH_OverkaseInteraction::FindClosestActor()
 			ClosestIndex = i; // dist 가 제일 짧다면 i 는 제일 가까운 인덱스 번호
 		}
 	}
-
 	return ClosestIndex; // 제일 가까운 인덱스 번호를 저장
 }

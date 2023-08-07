@@ -49,10 +49,12 @@ public:
 	UFUNCTION()
 	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UPROPERTY(EditAnywhere, Category=foods)
+	bool bHasItem = false;
+
 
 private:
 	bool bClickedSpace = false;
-	bool bHasItem = false;
 
 private:
 
