@@ -28,4 +28,36 @@ public:
 	class UStaticMeshComponent* meshComp;
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* sceneComp;
+
+private:
+	UPROPERTY(VisibleAnywhere, Category="CompleteFood")
+	TSubclassOf<class AEO_CucumberSushi> cucumberSushi;
+	UPROPERTY(VisibleAnywhere, Category="CompleteFood")
+	TSubclassOf<class AEO_FishSushi> fishSushi;
+	UPROPERTY(VisibleAnywhere, Category="CompleteFood")
+	TSubclassOf<class AEO_OctopusSushi> octopusSushi;
+
+private:
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	bool bIsRice = false;
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	bool bIsSeaweed = false;
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	bool bIsCucumber = false;
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	bool bIsFish = false;
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	bool bIsOctopus = false;
+
+public:
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	bool bIsComplete = false;
+	
+	UPROPERTY(VisibleAnywhere, Category="Check")
+	bool bDirty = false;
+
+public:
+	void MakeCompleteFood();
+	UFUNCTION()
+	void CheckRecipe(FName foodTag);
 };

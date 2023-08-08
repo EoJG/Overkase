@@ -8,14 +8,12 @@ AEO_Fish::AEO_Fish()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
-	RootComponent = boxComp;
+	Tags.Add(TEXT("Fish"));
+}
 
-	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
-	meshComp->SetupAttachment(RootComponent);
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Engine/BasicShapes/Sphere.Sphere'"));
-	if (meshTemp.Succeeded())
-	{
-		meshComp->SetStaticMesh(meshTemp.Object);
-	}
+void AEO_Fish::BeginPlay()
+{
+	Super::BeginPlay();
+
+	weight = 4;
 }
