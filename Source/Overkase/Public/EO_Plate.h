@@ -52,6 +52,9 @@ private:
 public:
 	UPROPERTY(VisibleAnywhere, Category="Recipe")
 	bool bIsComplete = false;
+	
+	UPROPERTY(VisibleAnywhere, Category="Check")
+	bool bDirty = false;
 
 public:
 	void MakeCompleteFood();

@@ -19,4 +19,10 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	UPROPERTY(VisibleAnywhere, Category="Check")
+	float curTime = 0;
+	UPROPERTY(VisibleAnywhere, Category="Check")
+	float coolTime = 3;
 };

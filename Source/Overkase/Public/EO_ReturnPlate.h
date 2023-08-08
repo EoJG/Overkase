@@ -18,7 +18,8 @@ public:
 	AEO_ReturnPlate();
 
 public:
-	TSubclassOf<class AEO_Plate> plate;
+	UPROPERTY(VisibleAnywhere, Category="Settings")
+	TSubclassOf<class AEO_Plate> rPlate;
 
 public:
 	virtual void OnItem(class AActor* item) override;

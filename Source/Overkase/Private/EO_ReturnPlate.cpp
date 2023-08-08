@@ -14,10 +14,10 @@ AEO_ReturnPlate::AEO_ReturnPlate()
 		meshComp->SetStaticMesh(meshTemp.Object);
 	}
 
-	ConstructorHelpers::FClassFinder<AEO_Plate> plateTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_Plate.BP_Plate'"));
+	ConstructorHelpers::FClassFinder<AEO_Plate> plateTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_Plate.BP_Plate_C'"));
 	if (plateTemp.Succeeded())
 	{
-		plate = plateTemp.Class;
+		rPlate = plateTemp.Class;
 	}
 }
 
@@ -40,6 +40,6 @@ void AEO_ReturnPlate::GetItem(class USceneComponent* playerSceneComp)
 
 void AEO_ReturnPlate::SpawnPlate()
 {
-	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	GetWorld()->SpawnActor<AEO_Plate>(rPlate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	bOnItem = true;
 }
