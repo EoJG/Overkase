@@ -9,7 +9,6 @@ AEO_ChopTable::AEO_ChopTable()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	Tags[0] = TEXT("ChopTable");
 }
 
 void AEO_ChopTable::BeginPlay()

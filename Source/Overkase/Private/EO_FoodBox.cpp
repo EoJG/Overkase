@@ -9,8 +9,6 @@ AEO_FoodBox::AEO_FoodBox()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	
-	Tags[0] = TEXT("FoodBox");
-
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Probs/Box_Box.Box_Box'"));
 	if (MeshTemp.Succeeded())
 	{
