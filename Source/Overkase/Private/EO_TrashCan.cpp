@@ -7,6 +7,8 @@ AEO_TrashCan::AEO_TrashCan()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	Tags[0] = TEXT("TrashCan");
+
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Probs/trash.trash'"));
 	if (MeshTemp.Succeeded())
 	{
