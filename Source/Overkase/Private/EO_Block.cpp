@@ -15,8 +15,6 @@ AEO_Block::AEO_Block()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Tags.Add(TEXT("Block"));
-
 	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	RootComponent = boxComp;
 	boxComp->SetBoxExtent(FVector(50, 50, 30));
@@ -83,18 +81,14 @@ void AEO_Block::OnItem(class AActor* item)
 	{
 		TArray<AActor*> items;
 		GetAttachedActors(items);
-		if (AEO_Plate* plateTemp = Cast<AEO_Plate>(items[0]))
+		if (AEO_Plate* plateTemp = Cast<AEO_Plate>(items[0]) /*AEO_Plate* plateTemp = Cast<AEO_Plate>(item)*/)
 		{
-			item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			UE_LOG(LogTemp, Warning, TEXT("in"));
+			TArray<AActor*> foods;
 
-			plateTemp->CheckRecipe(item->Tags[0]);
-		}
-		else if (AEO_Plate* pPlateTemp = Cast<AEO_Plate>(item))
-		{
 			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-			items[0]->AttachToComponent(pPlateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
-			pPlateTemp->CheckRecipe(items[0]->Tags[0]);
+			GetAttachedActors(foods);
+			foods[0]->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 		}
 	}
 

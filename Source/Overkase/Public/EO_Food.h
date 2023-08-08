@@ -25,16 +25,5 @@ public:
 
 public:
 	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* boxComp;
-	UPROPERTY(VisibleAnywhere)
-	class UStaticMeshComponent* meshComp;
-
-public:
-	UPROPERTY(VisibleAnywhere, Category="Check")
 	bool bIsCooked = false;
-	UPROPERTY(VisibleAnywhere, Category="Check")
-	bool bIsComplete = false;
-
-	UPROPERTY(VisibleAnywhere, Category="Check")
-	int weight = 0;
 };

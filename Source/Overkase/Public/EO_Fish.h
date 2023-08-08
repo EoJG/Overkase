@@ -17,12 +17,9 @@ class OVERKASE_API AEO_Fish : public AEO_Food
 public:
 	AEO_Fish();
 
-protected:
-	virtual void BeginPlay() override;
-
 public:
-	UPROPERTY(VisibleAnywhere, Category="Check")
-	float curTime = 0;
-	UPROPERTY(VisibleAnywhere, Category="Check")
-	float coolTime = 3;
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* boxComp;
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* meshComp;
 };
