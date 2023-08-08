@@ -31,7 +31,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* crocodileMesh;
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	class USphereComponent* interationDistance;
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* interactionPosition;

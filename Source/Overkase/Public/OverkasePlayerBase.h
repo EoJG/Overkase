@@ -37,6 +37,8 @@ public:
 	UPROPERTY()
 	class AEO_Block* block;
 
+	UPROPERTY()
+	class AEO_Food* Food;
 		
 public:
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) {}

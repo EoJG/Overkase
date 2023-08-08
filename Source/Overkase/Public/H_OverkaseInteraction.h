@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "OverkasePlayerBase.h"
+#include "EO_Food.h"
 #include "H_OverkaseInteraction.generated.h"
 
 /**
@@ -38,9 +39,14 @@ public:
 
 
 	UPROPERTY(EditAnywhere, Category = "Foods")
-	TArray<AEO_Block*> foodActor;
+	TArray<AEO_Block*> blockActor;
 	
-	TArray<float> floatDistance;
+	TArray<float> blockDistance;
+
+	UPROPERTY(EditAnywhere, Category = Foods)
+	TArray<AEO_Food*> foodActor;
+
+	TArray<float> foodDistance;
 
 
 	UFUNCTION()
@@ -49,16 +55,19 @@ public:
 	UFUNCTION()
 	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	UPROPERTY(EditAnywhere, Category=foods)
-	bool bHasItem = false;
+	void GetFood(class USceneComponent* playerSceneComp);
+	void ReleaseFood(class AActor* food);
 
 
 private:
 	bool bClickedSpace = false;
-
+	bool bHasItem = false;
+	//bool bHasFood = false;
 private:
 
-	int32 FindClosestActor();
+	int32 FindClosestBlock();
+	int32 FindClosestFood();
 
+	int32 closestFoodIndex = 0;
 	int32 closestBlockIndex = 0;
 };

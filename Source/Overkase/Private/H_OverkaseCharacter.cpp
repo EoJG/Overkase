@@ -6,6 +6,7 @@
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
 #include "H_OverkaseInteraction.h"
 #include "H_OverkasePlayerMove.h"
+#include <Components/BoxComponent.h>
 #include <Components/SphereComponent.h>
 
 // Sets default values
@@ -30,9 +31,10 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	interationDistance = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionDistance"));
 	interationDistance->SetupAttachment(crocodileMesh);
-	interationDistance->SetRelativeLocation(FVector(0, 160, 60));
-	interationDistance->SetSphereRadius(130);
-	interationDistance->SetCollisionProfileName(TEXT("PlayerSphereRadius"));
+	//interationDistance->SetBoxExtent(FVector(80, 70, 50));
+	interationDistance->SetSphereRadius(100);
+	interationDistance->SetRelativeLocation(FVector(0, 60.000000, 70));
+	interationDistance->SetCollisionProfileName(TEXT("InteractionDistance"));
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
