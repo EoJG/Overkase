@@ -14,5 +14,5 @@ void AEO_Cucumber::BeginPlay()
 {
 	Super::BeginPlay();
 
-	weight = 3;
+	bCanChop = true;
 }

@@ -35,6 +35,13 @@ public:
 	UPROPERTY(VisibleAnywhere, Category="Check")
 	bool bIsComplete = false;
 
-	UPROPERTY(VisibleAnywhere, Category="Check")
-	int weight = 0;
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	bool bCanChop = false;
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	bool bCanBoil = false;
+
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	float curTime = 0;
+	UPROPERTY(VisibleAnywhere, Category="Recipe")
+	float coolTime = 0;
 };

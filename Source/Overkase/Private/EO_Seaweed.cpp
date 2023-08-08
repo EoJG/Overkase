@@ -14,5 +14,5 @@ void AEO_Seaweed::BeginPlay()
 {
 	Super::BeginPlay();
 
-	weight = 2;
+	bIsCooked = true;
 }

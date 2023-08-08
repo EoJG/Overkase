@@ -14,5 +14,5 @@ void AEO_Octopus::BeginPlay()
 {
 	Super::BeginPlay();
 
-	weight = 5;
+	bCanChop = true;
 }

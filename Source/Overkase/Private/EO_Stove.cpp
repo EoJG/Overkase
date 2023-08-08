@@ -25,7 +25,11 @@ void AEO_Stove::Tick(float DeltaTime)
 
 	if (bCanCook)
 	{
-
+		foodTemp->curTime += DeltaTime;
+		if (foodTemp->curTime >= foodTemp->coolTime)
+		{
+			foodTemp->bIsCooked = true;
+		}
 	}
 }
 
@@ -33,17 +37,21 @@ void AEO_Stove::OnItem(class AActor* item)
 {
 	if (!bOnItem)
 	{
-		if (!Cast<AEO_Plate>(item))
+		if (AEO_Pot* potItem = Cast<AEO_Pot>(item))
 		{
-			if (Cast<AEO_Pot>(item)->bInFood)
+			if (potItem->bInFood)
 			{
+				TArray<AActor*> items;
+				potItem->GetAttachedActors(items);
+				foodTemp = Cast<AEO_Food>(items[0]);
+
 				bCanCook = true;
 			}
-
-			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
-
-			bOnItem = true;
 		}
+
+		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+		bOnItem = true;
 	}
 }
 
@@ -51,5 +59,6 @@ void AEO_Stove::GetItem(class USceneComponent* playerSceneComp)
 {
 	Super::GetItem(playerSceneComp);
 
+	foodTemp = nullptr;
 	bCanCook = false;
 }

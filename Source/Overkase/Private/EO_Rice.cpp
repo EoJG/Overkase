@@ -14,5 +14,5 @@ void AEO_Rice::BeginPlay()
 {
 	Super::BeginPlay();
 
-	weight = 1;
+	bCanBoil = true;
 }

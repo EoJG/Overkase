@@ -25,6 +25,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Check")
 	bool bCanCook = false;
 
+private:
+	class AEO_Food* foodTemp;
+
 public:
 	virtual void OnItem(class AActor* item) override;
 	virtual void GetItem(class USceneComponent* playerSceneComp);

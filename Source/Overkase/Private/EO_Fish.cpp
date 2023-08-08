@@ -15,5 +15,6 @@ void AEO_Fish::BeginPlay()
 {
 	Super::BeginPlay();
 
-	weight = 4;
+	bCanChop = true;
+	coolTime = 3;
 }

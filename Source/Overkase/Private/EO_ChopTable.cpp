@@ -40,10 +40,14 @@ void AEO_ChopTable::OnItem(class AActor* item)
 
 void AEO_ChopTable::Interaction()
 {
-	if (bOnItem && !food->bIsCooked)
+	if (bOnItem && !food->bIsCooked && food->bCanChop)
 	{
-		// 일정 시간이 지난 후 요리를 완성함
-		UE_LOG(LogTemp, Warning, TEXT("Maked"));
-		food->bIsCooked = true;
+		food->curTime += GetWorld()->GetDeltaSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%.2f"), food->curTime);
+		if (food->curTime >= food->coolTime)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Maked"));
+			food->bIsCooked = true;
+		}
 	}
 }
