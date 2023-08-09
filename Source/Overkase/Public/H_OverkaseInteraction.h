@@ -40,11 +40,14 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Foods")
 	TArray<AEO_Block*> blockActor;
-	
+	UPROPERTY(EditAnywhere, Category = "Foods")
 	TArray<float> blockDistance;
 
 	UPROPERTY(EditAnywhere, Category = Foods)
 	TArray<AEO_Food*> foodActor;
+
+	UPROPERTY(EditAnywhere, Category = Foods)
+	bool bHasItem = false;
 
 	TArray<float> foodDistance;
 
@@ -61,7 +64,6 @@ public:
 
 private:
 	bool bClickedSpace = false;
-	bool bHasItem = false;
 	//bool bHasFood = false;
 private:
 

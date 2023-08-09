@@ -45,5 +45,4 @@ private:
 	bool bIsDash = false;
 	float currentTime = 0;
 
-
 };
