@@ -8,6 +8,7 @@
 #include "H_OverkasePlayerMove.h"
 #include <Components/BoxComponent.h>
 #include <Components/SphereComponent.h>
+#include "InputMappingContext.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -47,6 +48,11 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	overPlayerMove = CreateDefaultSubobject<UH_OverkasePlayerMove>(TEXT("PlayerMove"));
 	overPlayerInteraction = CreateDefaultSubobject<UH_OverkaseInteraction>(TEXT("PlayerInteraction"));
 
+	ConstructorHelpers::FObjectFinder<UInputMappingContext> TempIMC(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/HanSeunghui/Input/IMC_OverkaseInput.IMC_OverkaseInput'"));
+	if (TempIMC.Succeeded())
+	{
+		imc = TempIMC.Object;
+	}
 }
 
 // Called when the game starts or when spawned

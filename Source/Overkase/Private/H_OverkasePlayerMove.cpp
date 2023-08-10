@@ -48,40 +48,6 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 		bIsDash = false;
 		
 	}
-	auto cam = Cast<AH_PlayerCameraActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AH_PlayerCameraActor::StaticClass()));
-	if (cam != nullptr) {
-		if (me->GetActorLocation().X <50 && me->GetActorLocation().X > -50)
-		{
-			cam->SetActorLocation(FVector(-200, 0, 830));
-		}
-		else if (me->GetActorLocation().X >= 50)
-		{
-			cam->SetActorLocation(cam->GetActorLocation());
-
-		}
-		else if (me->GetActorLocation().X <= -50)
-		{
-			cam->SetActorLocation(FVector(-400, 0, 830));
-
-		}
-
-		if (me->GetActorLocation().Y <50 && me->GetActorLocation().Y > -50)
-		{
-			cam->SetActorLocation(FVector(-200, 0, 830));
-		}
-		else if (me->GetActorLocation().Y >= 50)
-		{
-			cam->SetActorLocation(FVector(-200, 200, 830));
-
-		}
-		else if (me->GetActorLocation().Y <= -50)
-		{
-			cam->SetActorLocation(FVector(-200, -200, 830));
-
-		}
-
-	}
-	
 }
 
 void UH_OverkasePlayerMove::SetupInputBinding(class UInputComponent* PlayerInputComponent)
