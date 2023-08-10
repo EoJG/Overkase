@@ -2,6 +2,7 @@
 
 
 #include "EO_Food.h"
+#include <Components/BoxComponent.h>
 
 // Sets default values
 AEO_Food::AEO_Food()
@@ -11,6 +12,11 @@ AEO_Food::AEO_Food()
 
 	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	RootComponent = boxComp;
+	boxComp->SetLinearDamping(2.5f);
+	boxComp->BodyInstance.bOverrideMass = true;
+	boxComp->BodyInstance.SetMassOverride(20);
+	boxComp->BodyInstance.bLockRotation = true;
+	boxComp->SetCollisionProfileName(TEXT("Food"));
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	meshComp->SetupAttachment(RootComponent);
@@ -39,5 +45,13 @@ void AEO_Food::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AEO_Food::ShootFood()
+{
+	FVector dir = GetAttachParentActor()->GetActorForwardVector() * 30000;
+
+	boxComp->SetSimulatePhysics(true);
+	boxComp->AddImpulse(dir);
 }
 

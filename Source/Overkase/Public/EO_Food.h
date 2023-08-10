@@ -46,4 +46,8 @@ public:
 	float curTime = 0;
 	UPROPERTY(VisibleAnywhere, Category="Recipe")
 	float coolTime = 0;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void ShootFood();
 };

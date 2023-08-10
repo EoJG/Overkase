@@ -35,6 +35,7 @@ AEO_Block::AEO_Block()
 	sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	sceneComp->SetupAttachment(RootComponent);
 	sceneComp->SetRelativeLocation(FVector(0, 0, 50));
+	sceneComp->SetRelativeRotation(FRotator(0, -90, 0));
 
 	static ConstructorHelpers::FClassFinder<AEO_Plate> plateTemp(TEXT("/Script/Engine.Blueprint'/Game/Eo/Blueprints/Plate/BP_Plate.BP_Plate_C'"));
 	if (plateTemp.Succeeded())
@@ -78,6 +79,8 @@ void AEO_Block::OnItem(class AActor* item)
 	if (!bOnItem)
 	{
 		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+		bOnItem = true;
 	}
 	else
 	{
@@ -89,6 +92,13 @@ void AEO_Block::OnItem(class AActor* item)
 
 			plateTemp->CheckRecipe(item->Tags[0]);
 		}
+		else if (AEO_Pot* potTemp = Cast<AEO_Pot>(items[0]))
+		{
+			item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
+
+			potTemp->bInFood = true;
+		}
 		else if (AEO_Plate* pPlateTemp = Cast<AEO_Plate>(item))
 		{
 			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
@@ -96,9 +106,15 @@ void AEO_Block::OnItem(class AActor* item)
 
 			pPlateTemp->CheckRecipe(items[0]->Tags[0]);
 		}
-	}
+		else if (AEO_Pot* pPotTemp = Cast<AEO_Pot>(item))
+		{
+			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			items[0]->AttachToActor(pPotTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			Cast<AEO_Food>(items[0])->meshComp->SetVisibility(false);
 
-	bOnItem = true;
+			pPotTemp->bInFood = true;
+		}
+	}
 }
 
 void AEO_Block::GetItem(class USceneComponent* playerSceneComp)

@@ -36,6 +36,39 @@ void AEO_ChopTable::OnItem(class AActor* item)
 
 		bOnItem = true;
 	}
+	else
+	{
+		TArray<AActor*> items;
+		GetAttachedActors(items);
+		if (AEO_Plate* plateTemp = Cast<AEO_Plate>(items[0]))
+		{
+			item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+			plateTemp->CheckRecipe(item->Tags[0]);
+		}
+		else if (AEO_Pot* potTemp = Cast<AEO_Pot>(items[0]))
+		{
+			item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
+
+			potTemp->bInFood = true;
+		}
+		else if (AEO_Plate* pPlateTemp = Cast<AEO_Plate>(item))
+		{
+			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			items[0]->AttachToComponent(pPlateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+			pPlateTemp->CheckRecipe(items[0]->Tags[0]);
+		}
+		else if (AEO_Pot* pPotTemp = Cast<AEO_Pot>(item))
+		{
+			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			items[0]->AttachToActor(pPotTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			Cast<AEO_Food>(items[0])->meshComp->SetVisibility(false);
+
+			pPotTemp->bInFood = true;
+		}
+	}
 }
 
 void AEO_ChopTable::Interaction()

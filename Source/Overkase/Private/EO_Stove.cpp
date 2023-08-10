@@ -26,6 +26,7 @@ void AEO_Stove::Tick(float DeltaTime)
 	if (bCanCook)
 	{
 		foodTemp->curTime += DeltaTime;
+		UE_LOG(LogTemp, Warning, TEXT("%f"), foodTemp->curTime);
 		if (foodTemp->curTime >= foodTemp->coolTime)
 		{
 			foodTemp->bIsCooked = true;
@@ -49,9 +50,46 @@ void AEO_Stove::OnItem(class AActor* item)
 			}
 		}
 
-		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetIncludingScale);
+		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
 		bOnItem = true;
+	}
+	else
+	{
+		TArray<AActor*> items;
+		GetAttachedActors(items);
+		if (AEO_Plate* plateTemp = Cast<AEO_Plate>(items[0]))
+		{
+			item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+			plateTemp->CheckRecipe(item->Tags[0]);
+		}
+		else if (AEO_Pot* potTemp = Cast<AEO_Pot>(items[0]))
+		{
+			item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			foodTemp = Cast<AEO_Food>(item);
+			foodTemp->meshComp->SetVisibility(false);
+
+			potTemp->bInFood = true;
+			bCanCook = true;
+		}
+		else if (AEO_Plate* pPlateTemp = Cast<AEO_Plate>(item))
+		{
+			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			items[0]->AttachToComponent(pPlateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+			pPlateTemp->CheckRecipe(items[0]->Tags[0]);
+		}
+		else if (AEO_Pot* pPotTemp = Cast<AEO_Pot>(item))
+		{
+			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			items[0]->AttachToActor(pPotTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			foodTemp = Cast<AEO_Food>(item);
+			foodTemp->meshComp->SetVisibility(false);
+
+			pPotTemp->bInFood = true;
+			bCanCook = true;
+		}
 	}
 }
 
