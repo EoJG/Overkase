@@ -48,6 +48,8 @@ void AEO_ChopTable::Interaction()
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Maked"));
 			food->bIsCooked = true;
+			food->changeMeshComp->SetVisibility(true);
+			food->meshComp->SetVisibility(false);
 		}
 	}
 }
