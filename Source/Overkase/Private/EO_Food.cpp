@@ -20,6 +20,11 @@ AEO_Food::AEO_Food()
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 	}
+
+	changeMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ChangeMeshComponent"));
+	changeMeshComp->SetupAttachment(RootComponent);
+	changeMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
+	changeMeshComp->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned

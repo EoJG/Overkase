@@ -8,6 +8,19 @@ AEO_Octopus::AEO_Octopus()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Tags.Add(TEXT("Octopus"));
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Probs/02/Octorpus.Octorpus'"));
+	if (meshTemp.Succeeded())
+	{
+		meshComp->SetStaticMesh(meshTemp.Object);
+		meshComp->SetRelativeLocation(FVector(0, -10, 0));
+	}
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/Models/Probs/02/Slice_Octorpus.Slice_Octorpus'"));
+	if (changeMeshTemp.Succeeded())
+	{
+		changeMeshComp->SetStaticMesh(changeMeshTemp.Object);
+		changeMeshComp->SetRelativeLocation(FVector(0, 20, 0));
+	}
 }
 
 void AEO_Octopus::BeginPlay()
@@ -15,4 +28,5 @@ void AEO_Octopus::BeginPlay()
 	Super::BeginPlay();
 
 	bCanChop = true;
+	coolTime = 3;
 }

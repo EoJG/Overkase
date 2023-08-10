@@ -28,6 +28,8 @@ public:
 	class UBoxComponent* boxComp;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* meshComp;
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* changeMeshComp;
 
 public:
 	UPROPERTY(VisibleAnywhere, Category="Check")
