@@ -134,3 +134,29 @@ void AEO_Plate::CheckRecipe(FName foodTag)
 	}
 }
 
+bool AEO_Plate::CheckOnFood(FName foodTag)
+{
+	if (foodTag == TEXT("Rice"))
+	{
+		return bIsRice;
+	}
+	else if (foodTag == TEXT("Seaweed"))
+	{
+		return bIsSeaweed;
+	}
+	else if (foodTag == TEXT("Cucumber"))
+	{
+		return bIsCucumber;
+	}
+	else if (foodTag == TEXT("Fish"))
+	{
+		return bIsFish;
+	}
+	else if (foodTag == TEXT("Octopus"))
+	{
+		return bIsOctopus;
+	}
+
+	return false;
+}
+

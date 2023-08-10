@@ -21,12 +21,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+public:	
+	class AEO_Food* foodTemp;
+
 public:
 	UPROPERTY(VisibleAnywhere, Category = "Check")
 	bool bCanCook = false;
-
-private:
-	class AEO_Food* foodTemp;
 
 public:
 	virtual void OnItem(class AActor* item) override;

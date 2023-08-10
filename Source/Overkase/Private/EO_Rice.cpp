@@ -14,6 +14,11 @@ AEO_Rice::AEO_Rice()
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 	}
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/Models/Probs/02/ingredients_rice_boiled.ingredients_rice_boiled'"));
+	if (changeMeshTemp.Succeeded())
+	{
+		changeMeshComp->SetStaticMesh(changeMeshTemp.Object);
+	}
 }
 
 void AEO_Rice::BeginPlay()
