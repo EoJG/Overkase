@@ -36,7 +36,7 @@ public:
 	class UInputAction* ia_Space_Interaction;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_ctrl_Interaction;
-
+	
 
 	UPROPERTY(EditAnywhere, Category = "Foods")
 	TArray<AEO_Block*> blockActor;
@@ -64,7 +64,7 @@ public:
 
 private:
 	bool bClickedSpace = false;
-	//bool bHasFood = false;
+	
 private:
 
 	int32 FindClosestBlock();

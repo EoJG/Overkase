@@ -140,6 +140,9 @@ void UH_OverkaseInteraction::NoItem()
 	TArray<AActor*> items;
 	me->GetAttachedActors(items);
 
+	//Food = Cast<AEO_Food>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Food::StaticClass()));
+
+
 	// 만약 아이템을 손에 들고있으면
 	if(bHasItem){
 		// 만약 근처에 블록이 없다면
@@ -149,8 +152,8 @@ void UH_OverkaseInteraction::NoItem()
 			if (items.IsValidIndex(0))
 			{
 				// 아이템을 내려놓아라
+				Food->boxComp->SetSimulatePhysics(true);
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-				
 				
 			}
 			bHasItem = false;
@@ -161,7 +164,7 @@ void UH_OverkaseInteraction::NoItem()
 			{
 				block->OnItem(items[0]);
 				bHasItem = false;
-				//bHasFood = false;
+				
 			}
 		}
 	}
