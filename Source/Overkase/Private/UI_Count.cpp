@@ -15,7 +15,8 @@ void UUI_Count::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 	// float인 변수를 int 정수형으로 변환
 	Timer_MinCount->SetText(FText::AsNumber(int(GetMinutes())));
 	Timer_SecCount->SetText(FText::AsNumber(int(GetSeconds())));
-	
+
+	ProgBar = CurrentTime / MaxTime;
 	
 	timegage(InDeltaTime);
 }
@@ -28,13 +29,11 @@ float UUI_Count::GetMinutes()
 
 	// 시간이 지났으니까
 	/*CurrentTime -= seconds;*/
-	if (CurrentTime <= 0)
+	// CurT가 마이너스가 되면 안되니까 0보다 클때까지만 카운트 하장
+	if (CurrentTime > 0)
 	{
 		//분값이 줄어들게 하고 싶다.
-		if (MinTime >= 0)
-		{
-			MinTime = MinTime - 1;
-		}
+		MinTime = CurrentTime / 60;
 	}
 	return MinTime;
 
@@ -45,12 +44,14 @@ float UUI_Count::GetSeconds()
 {
 	// 59초가 지나면 커런트타임이 59로 리셋되고 다시 초값이 -1씩 떨어지고 싶다.
 	
-	if (CurrentTime <= 0)
+	if (CurrentTime > 0)
 	{
-		CurrentTime = 59.9f;
+		// 실수끼리 연산하기 위한 식
+		SecTime = FMath::Fmod(CurrentTime, 60);
+		//SecTime = CurrentTime % 60;
 	}
 
-	return CurrentTime;
+	return SecTime;
 
 }
 
@@ -60,7 +61,7 @@ void UUI_Count::timegage(float value)
 	//필요속성
 	
 	
-	Timergage->SetPercent(ProgBar-value);
+	Timergage->SetPercent(ProgBar);
 	
 	
 
