@@ -115,7 +115,24 @@ void UH_OverkaseInteraction::SpaceInput()
 
 void UH_OverkaseInteraction::CtrlInput()
 {
-	
+	me->Jump();
+	TArray<AActor*> items;
+	me->GetAttachedActors(items);
+	//Food = Cast<AEO_Food>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Food::StaticClass()));
+	if(bHasItem)
+	{
+		items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	//AEO_Food* food = Cast(items[0])
+
+		UE_LOG(LogTemp, Warning, TEXT("Detached"));
+		if (items[0])
+		{
+			//Food->boxComp->SetSimulatePhysics(true);
+			Food->ShootFood();
+			bHasItem = false;
+		}
+
+	}
 }
 
 void UH_OverkaseInteraction::ItemOnPlayer()
@@ -139,9 +156,6 @@ void UH_OverkaseInteraction::NoItem()
 {
 	TArray<AActor*> items;
 	me->GetAttachedActors(items);
-
-	//Food = Cast<AEO_Food>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Food::StaticClass()));
-
 
 	// 만약 아이템을 손에 들고있으면
 	if(bHasItem){
@@ -195,6 +209,7 @@ void UH_OverkaseInteraction::OnComponentEndOverlap(UPrimitiveComponent* Overlapp
 
 	if (AEO_Food* food = Cast<AEO_Food>(OtherActor))
 	{
+		UE_LOG(LogTemp,Warning, TEXT("GetFood"));
 		foodActor.Remove(food);
 		foodDistance.RemoveAt(0);
 	}
@@ -210,6 +225,7 @@ void UH_OverkaseInteraction::GetFood(class USceneComponent* playerSceneComp)
 			if (foodActor.IsEmpty()) {
 				return;
 			}
+			foodActor[closestFoodIndex]->boxComp->SetSimulatePhysics(false);
 			foodActor[closestFoodIndex]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			bHasItem = true;
 		}
