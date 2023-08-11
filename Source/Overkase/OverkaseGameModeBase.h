@@ -20,4 +20,6 @@ public:
 	float Seconds = 30;
 	UPROPERTY(BlueprintReadWrite, Category = Time)
 	float Minutes = 3;
+		
+
 };
