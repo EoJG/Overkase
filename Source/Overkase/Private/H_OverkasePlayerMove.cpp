@@ -3,11 +3,23 @@
 
 #include "H_OverkasePlayerMove.h"
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
+#include "H_PlayerCameraActor.h"
+#include <Kismet/GameplayStatics.h>
 
 
 UH_OverkasePlayerMove::UH_OverkasePlayerMove()
 {
+	ConstructorHelpers::FObjectFinder<UInputAction> TempMove (TEXT("/Script/EnhancedInput.InputAction'/Game/HanSeunghui/Input/IA_OverkaseMove.IA_OverkaseMove'"));
+	if (TempMove.Succeeded())
+	{
+		ia_move = TempMove.Object;
+	}
 
+	ConstructorHelpers::FObjectFinder<UInputAction> TempDash(TEXT("/Script/EnhancedInput.InputAction'/Game/HanSeunghui/Input/IA_OverkaseDash.IA_OverkaseDash'"));
+	if (TempDash.Succeeded())
+	{
+		ia_dash = TempDash.Object;
+	}
 
 }
 
@@ -25,9 +37,6 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	currentTime += DeltaTime;
 
-	//대쉬중에는 대쉬키를 비활성화 시키고 싶다.
-		// 1. 대쉬중인지 아닌지 알고싶다.
-	
 	if (bIsDash) {
 		// 2. 대쉬중이면 인풋값을 받지않는다
 		UE_LOG(LogTemp,Warning,TEXT("in"));
@@ -39,11 +48,6 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 		bIsDash = false;
 		
 	}
-	//if (moveComp->MaxWalkSpeed < 450) {
-	//	// 3. 속도가 400 근처가되면 속도를 400으로 바꾼다
-	//	bIsDash = false;
-	//	moveComp->MaxWalkSpeed = 400;
-	//}
 }
 
 void UH_OverkasePlayerMove::SetupInputBinding(class UInputComponent* PlayerInputComponent)
