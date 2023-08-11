@@ -19,14 +19,14 @@ AEO_Block::AEO_Block()
 
 	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
 	RootComponent = boxComp;
-	boxComp->SetBoxExtent(FVector(50, 50, 30));
+	boxComp->SetBoxExtent(FVector(75, 75, 45));
 	boxComp->SetCollisionProfileName(TEXT("Block"));
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	meshComp->SetupAttachment(RootComponent);
-	meshComp->SetRelativeLocationAndRotation(FVector(0, 0, -30), FRotator(0, -90, 0));
+	meshComp->SetRelativeLocationAndRotation(FVector(0, 0, -45), FRotator(0, -90, 0));
 	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Probs/Box_2_Desk_0.Box_2_Desk_0'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Interior/S_Desk_Desk.S_Desk_Desk'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);

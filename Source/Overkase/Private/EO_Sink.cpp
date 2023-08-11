@@ -11,7 +11,7 @@ AEO_Sink::AEO_Sink()
 
 	boxComp->SetBoxExtent(FVector(50, 100, 30));
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Probs/sink.sink'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Interior/S_Sink.S_Sink'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
