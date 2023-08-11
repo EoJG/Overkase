@@ -10,6 +10,8 @@ AEO_OrderTable::AEO_OrderTable()
 
 	Tags[0] = TEXT("OrderTable");
 
+	boxComp->SetBoxExtent(FVector(50, 100, 30));
+
 	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Probs/Servingrail.Servingrail'"));
 	if (meshTemp.Succeeded())
 	{
