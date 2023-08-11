@@ -47,9 +47,9 @@ void AEO_Food::Tick(float DeltaTime)
 
 }
 
-void AEO_Food::ShootFood()
+void AEO_Food::ShootFood(FVector forward)
 {
-	FVector dir = GetAttachParentActor()->GetActorForwardVector() * 30000;
+	FVector dir = forward * 30000;
 
 	boxComp->SetSimulatePhysics(true);
 	boxComp->AddImpulse(dir);

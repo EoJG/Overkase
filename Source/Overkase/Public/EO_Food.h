@@ -49,5 +49,5 @@ public:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void ShootFood();
+	void ShootFood(FVector forward);
 };
