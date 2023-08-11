@@ -115,20 +115,17 @@ void UH_OverkaseInteraction::SpaceInput()
 
 void UH_OverkaseInteraction::CtrlInput()
 {
-	me->Jump();
 	TArray<AActor*> items;
 	me->GetAttachedActors(items);
-	//Food = Cast<AEO_Food>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Food::StaticClass()));
+
 	if(bHasItem)
 	{
 		items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	//AEO_Food* food = Cast(items[0])
+		//AEO_Food* food = Cast(items[0])
 
-		UE_LOG(LogTemp, Warning, TEXT("Detached"));
 		if (items[0])
 		{
-			//Food->boxComp->SetSimulatePhysics(true);
-			Food->ShootFood();
+			Food->ShootFood(me->GetActorForwardVector());
 			bHasItem = false;
 		}
 
@@ -151,6 +148,7 @@ void UH_OverkaseInteraction::ItemOnPlayer()
 		}
 	}
 }
+//Food->boxComp->SetSimulatePhysics(true);
 
 void UH_OverkaseInteraction::NoItem()
 {
