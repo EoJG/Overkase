@@ -9,7 +9,7 @@ AEO_TrashCan::AEO_TrashCan()
 
 	Tags[0] = TEXT("TrashCan");
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Probs/trash.trash'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Re/Interior/S_Trash_trashcan.S_Trash_trashcan'"));
 	if (MeshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(MeshTemp.Object);

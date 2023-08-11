@@ -9,15 +9,19 @@ AEO_Rice::AEO_Rice()
 
 	Tags.Add(TEXT("Rice"));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Probs/02/m_plated_rice.m_plated_rice'"));
+	boxComp->SetBoxExtent(FVector(32, 32, 8));
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Food_/SF_rice.SF_rice'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
+		meshComp->SetRelativeLocation(FVector(0, 0, -8));
 	}
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/Models/Probs/02/ingredients_rice_boiled.ingredients_rice_boiled'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/Models/Re/Food_/SF_Rice_boiled.SF_Rice_boiled'"));
 	if (changeMeshTemp.Succeeded())
 	{
 		changeMeshComp->SetStaticMesh(changeMeshTemp.Object);
+		changeMeshComp->SetRelativeLocation(FVector(0, 0, -8));
 	}
 }
 

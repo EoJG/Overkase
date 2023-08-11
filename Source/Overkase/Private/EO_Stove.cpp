@@ -11,11 +11,11 @@ AEO_Stove::AEO_Stove()
 
 	Tags[0] = TEXT("Stove");
 
-	meshComp->SetRelativeLocation(FVector(0, 0, 50));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Probs/Stove.Stove'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Re/Interior/S_Stove_Stove.S_Stove_Stove'"));
 	if (MeshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(MeshTemp.Object);
+		meshComp->SetRelativeLocation(FVector(0, 0, -45));
 	}
 }
 
@@ -89,7 +89,8 @@ void AEO_Stove::OnItem(class AActor* item)
 			if (Cast<AEO_Food>(item)->bCanBoil && !potTemp->bInFood)
 			{
 				item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-				Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
+				foodTemp = Cast<AEO_Food>(item);
+				foodTemp->meshComp->SetVisibility(false);
 
 				potTemp->bInFood = true;
 				bCanCook = true;
@@ -114,7 +115,8 @@ void AEO_Stove::OnItem(class AActor* item)
 			{
 				item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 				items[0]->AttachToActor(pPotTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-				Cast<AEO_Food>(items[0])->meshComp->SetVisibility(false);
+				foodTemp = Cast<AEO_Food>(items[0]);
+				foodTemp->meshComp->SetVisibility(false);
 
 				pPotTemp->bInFood = true;
 				bCanCook = true;
