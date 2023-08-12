@@ -7,7 +7,7 @@
 #include <Components/BoxComponent.h>
 #include <Components/SphereComponent.h>
 #include <Kismet/GameplayStatics.h>
-
+#include "EO_Sink.h"
 
 
 UH_OverkaseInteraction::UH_OverkaseInteraction()
@@ -57,6 +57,19 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	{
 		Food = Cast<AEO_Food>(foodActor[closestFoodIndex]);
 	}
+
+	if (bIsDoingInteraction)
+	{
+		block->Interaction();
+		UE_LOG(LogTemp,Warning,TEXT("WashingDishes"));
+	}
+	if (!bPressedCtrl)
+	{
+		bIsDoingInteraction = false;
+	}
+	//AEO_Sink* sink = Cast<AEO_Sink>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Sink::StaticClass()));
+	
+	
 }
 
 void UH_OverkaseInteraction::SetupInputBinding(class UInputComponent* PlayerInputComponent)
@@ -66,7 +79,8 @@ void UH_OverkaseInteraction::SetupInputBinding(class UInputComponent* PlayerInpu
 	if (pInput) 
 	{
 		pInput->BindAction(ia_Space_Interaction, ETriggerEvent::Triggered, this, &UH_OverkaseInteraction::SpaceInput);
-		pInput->BindAction(ia_ctrl_Interaction, ETriggerEvent::Triggered, this, &UH_OverkaseInteraction::CtrlInput);
+		pInput->BindAction(ia_ctrl_Interaction, ETriggerEvent::Started, this, &UH_OverkaseInteraction::CtrlInput);
+		pInput->BindAction(ia_ctrl_Interaction, ETriggerEvent::Completed, this, &UH_OverkaseInteraction::CtrlCompleted);
 
 	}
 	
@@ -115,6 +129,7 @@ void UH_OverkaseInteraction::SpaceInput()
 
 void UH_OverkaseInteraction::CtrlInput()
 {
+	bPressedCtrl = true;
 	TArray<AActor*> items;
 	me->GetAttachedActors(items);
 
@@ -129,6 +144,10 @@ void UH_OverkaseInteraction::CtrlInput()
 			bHasItem = false;
 		}
 
+	}
+	else if (block->bIsInterObj)
+	{
+		bIsDoingInteraction = true;
 	}
 }
 
@@ -180,6 +199,11 @@ void UH_OverkaseInteraction::NoItem()
 			}
 		}
 	}
+}
+
+void UH_OverkaseInteraction::CtrlCompleted()
+{
+	bPressedCtrl = false;
 }
 
 void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

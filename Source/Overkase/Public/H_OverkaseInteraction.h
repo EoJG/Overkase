@@ -30,7 +30,7 @@ public:
 	void CtrlInput();
 	void ItemOnPlayer();
 	void NoItem();
-
+	void CtrlCompleted();
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_Space_Interaction;
@@ -64,7 +64,8 @@ public:
 
 private:
 	bool bClickedSpace = false;
-	
+	bool bIsDoingInteraction = false;
+	bool bPressedCtrl = false;
 private:
 
 	int32 FindClosestBlock();
