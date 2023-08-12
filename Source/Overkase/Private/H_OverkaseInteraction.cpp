@@ -135,15 +135,15 @@ void UH_OverkaseInteraction::CtrlInput()
 
 	if(bHasItem)
 	{
-		items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		//AEO_Food* food = Cast(items[0])
-
-		if (items[0])
-		{
-			Food->ShootFood(me->GetActorForwardVector());
-			bHasItem = false;
+		AEO_Food* food = Cast<AEO_Food>(items[0]);
+		if (!items.IsEmpty()) {
+			if (items[0] == food)
+			{
+				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+				Food->ShootFood(me->GetActorForwardVector());
+				bHasItem = false;
+			}
 		}
-
 	}
 	else if (block != nullptr &&  block->bIsInterObj)
 	{
