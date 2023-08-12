@@ -24,5 +24,41 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+private:
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* bodyMesh;
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* headMesh;	
+	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* handComp;
+	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* handRComp;
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* handRMesh;	
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* handLMesh;
+
+private:
+	bool isPlayChopHand = false;
+	bool isPlayWashHand = false;
+	bool bDoOnce = true;
+
+	float time = 0;
+	float c = 0;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void UpHand();
+	UFUNCTION(BlueprintCallable)
+	void DownHand();
+	UFUNCTION(BlueprintCallable)
+	void CallChopHand(bool playAnimation);
+	UFUNCTION(BlueprintCallable)
+	void CallWashHand(bool playAnimation);
+
+private:
+	UFUNCTION()
+	void ChopHand();
+	UFUNCTION()
+	void WashHand();
 };
