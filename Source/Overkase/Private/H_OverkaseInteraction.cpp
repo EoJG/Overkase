@@ -10,6 +10,7 @@
 #include "EO_Sink.h"
 #include "EO_Plate.h"
 #include "EO_Pot.h"
+#include "EO_FoodBox.h"
 
 
 UH_OverkaseInteraction::UH_OverkaseInteraction()
@@ -70,7 +71,18 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 		bIsDoingInteraction = false;
 	}
 	//AEO_Sink* sink = Cast<AEO_Sink>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Sink::StaticClass()));
+
 	
+	me->GetAttachedActors(items);
+	if (items.IsEmpty())
+	{
+		bHasItem = false;
+	}
+	else
+	{
+		bHasItem = true;
+
+	}
 	
 }
 
@@ -131,9 +143,7 @@ void UH_OverkaseInteraction::SpaceInput()
 void UH_OverkaseInteraction::CtrlInput()
 {
 	bPressedCtrl = true;
-	TArray<AActor*> items;
-	me->GetAttachedActors(items);
-
+	
 	if(bHasItem)
 	{
 		AEO_Food* food = Cast<AEO_Food>(items[0]);
@@ -142,7 +152,7 @@ void UH_OverkaseInteraction::CtrlInput()
 			{
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				Food->ShootFood(me->GetActorForwardVector());
-				bHasItem = false;
+				//bHasItem = false;
 			}
 		}
 	}
@@ -154,26 +164,32 @@ void UH_OverkaseInteraction::CtrlInput()
 
 void UH_OverkaseInteraction::ItemOnPlayer()
 {
-	if(!bHasItem){
+	if(!bHasItem)
+	{
 		//블록 이근처에 없으면
 		if (blockActor.IsEmpty())
 		{
 			// 그냥넘어가라
 			return;
 		}
-		else {
+		else
+		{
 			// 블록을 든다
-			block->GetItem(me->interactionPosition);
-			bHasItem = true;
+			if (block) 
+			{
+				block->GetItem(me->interactionPosition);
+
+				if (items.IsEmpty() == false) 
+				{
+					//bHasItem = true;
+				}
+			}
 		}
 	}
 }
 
 void UH_OverkaseInteraction::NoItem()
 {
-	TArray<AActor*> items;
-	me->GetAttachedActors(items);
-
 	//AEO_Plate* plate = Cast<AEO_Plate>(items[0]);
 	//AEO_Pot* pot = Cast<AEO_Pot>(items[0]);
 
@@ -189,7 +205,7 @@ void UH_OverkaseInteraction::NoItem()
 				Food->boxComp->SetSimulatePhysics(true);
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 			}
-			bHasItem = false;
+			//bHasItem = false;
 		}
 		else
 		{
@@ -198,7 +214,7 @@ void UH_OverkaseInteraction::NoItem()
 				block->OnItem(items[0]);
 				if (items.IsEmpty()) 
 				{
-					bHasItem = false;
+					//bHasItem = false;
 				}
 			}
 		}

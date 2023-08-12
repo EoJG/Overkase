@@ -73,4 +73,6 @@ private:
 
 	int32 closestFoodIndex = 0;
 	int32 closestBlockIndex = 0;
+
+	TArray<AActor*> items;
 };
