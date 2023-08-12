@@ -30,11 +30,16 @@ public:
 	class UStaticMeshComponent* meshComp;
 	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* sceneComp;
+	UPROPERTY(VisibleAnywhere)
+	class UWidgetComponent* widgetComp;
 
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<class AEO_Plate> plate;
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<class AEO_Pot> pot;
+
+	UPROPERTY(VisibleAnywhere)
+	class UEO_Progressbar* progressWidget;
 
 public:
 	UPROPERTY(VisibleAnywhere, Category="Check")

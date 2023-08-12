@@ -8,6 +8,8 @@
 #include "EO_Plate.h"
 #include "EO_Pot.h"
 #include "EO_Plate.h"
+#include <UMG/Public/Components/WidgetComponent.h>
+#include "EO_Progressbar.h"
 
 // Sets default values
 AEO_Block::AEO_Block()
@@ -37,6 +39,16 @@ AEO_Block::AEO_Block()
 	sceneComp->SetRelativeLocation(FVector(0, 0, 50));
 	sceneComp->SetRelativeRotation(FRotator(0, -90, 0));
 
+	widgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComponent"));
+	widgetComp->SetupAttachment(RootComponent);
+	widgetComp->SetRelativeLocation(FVector(-80, 0, 0));
+	static ConstructorHelpers::FClassFinder<UUserWidget> progressTemp(TEXT("'/Game/Eo/Blueprints/UI/BP_UI_Progressbar.BP_UI_Progressbar_C'"));
+	if (progressTemp.Succeeded())
+	{
+		widgetComp->SetWidgetClass(progressTemp.Class);
+	}
+	widgetComp->SetWidgetSpace(EWidgetSpace::Screen);
+
 	static ConstructorHelpers::FClassFinder<AEO_Plate> plateTemp(TEXT("/Script/Engine.Blueprint'/Game/Eo/Blueprints/Plate/BP_Plate.BP_Plate_C'"));
 	if (plateTemp.Succeeded())
 	{
@@ -54,6 +66,10 @@ AEO_Block::AEO_Block()
 void AEO_Block::BeginPlay()
 {
 	Super::BeginPlay();
+
+	widgetComp->SetWorldLocation(GetActorLocation() + FVector(-80, 0, 0));
+	widgetComp->SetVisibility(false);
+	progressWidget = Cast<UEO_Progressbar>(widgetComp->GetUserWidgetObject());
 	
 	if (bSpawnPlate)
 	{

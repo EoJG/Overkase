@@ -26,11 +26,17 @@ void AEO_Stove::Tick(float DeltaTime)
 	if (bCanCook)
 	{
 		sFoodTemp->curTime += DeltaTime;
-		UE_LOG(LogTemp, Warning, TEXT("%f"), sFoodTemp->curTime);
+		progressWidget->curTime = sFoodTemp->curTime;
 		if (sFoodTemp->curTime >= sFoodTemp->coolTime)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("IsCoocked"), sFoodTemp->curTime);
 			sFoodTemp->bIsCooked = true;
+			widgetComp->SetVisibility(false);
+		}
+		else
+		{
+			widgetComp->SetVisibility(true);
+			progressWidget->BindProgressFunc();
 		}
 	}
 }
@@ -46,6 +52,7 @@ void AEO_Stove::OnItem(class AActor* item)
 				TArray<AActor*> items;
 				potItem->GetAttachedActors(items);
 				sFoodTemp = Cast<AEO_Food>(items[0]);
+				progressWidget->coolTime = sFoodTemp->coolTime;
 
 				bCanCook = true;
 			}
@@ -123,6 +130,7 @@ void AEO_Stove::OnItem(class AActor* item)
 					Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
 
 					sFoodTemp = pFood;
+					progressWidget->coolTime = sFoodTemp->coolTime;
 					potTemp->bInFood = true;
 					bCanCook = true;
 				}
@@ -148,6 +156,7 @@ void AEO_Stove::OnItem(class AActor* item)
 					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					foodTemp->AttachToActor(pPot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					foodTemp->meshComp->SetVisibility(false);
+					progressWidget->coolTime = sFoodTemp->coolTime;
 
 					pPot->bInFood = true;
 					bCanCook = true;

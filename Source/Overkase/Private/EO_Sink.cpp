@@ -19,7 +19,7 @@ AEO_Sink::AEO_Sink()
 
 	sceneComp->SetRelativeLocation(FVector(0, -50, 50));
 
-	ConstructorHelpers::FClassFinder<AEO_Plate> pTemp(TEXT("'/Game/Models/Probs/02/plate.plate'"));
+	ConstructorHelpers::FClassFinder<AEO_Plate> pTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_Plate.BP_Plate_C'"));
 	if (pTemp.Succeeded())
 	{
 		plate = pTemp.Class;
@@ -78,4 +78,6 @@ void AEO_Sink::Interaction()
 void AEO_Sink::SpawnPlate()
 {
 	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+	bOnItem = true;
 }

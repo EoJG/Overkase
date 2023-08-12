@@ -4,6 +4,7 @@
 #include "EO_ChopTable.h"
 #include "../Public/EO_Food.h"
 #include "EO_NonePlate.h"
+#include "EO_Progressbar.h"
 
 AEO_ChopTable::AEO_ChopTable()
 {
@@ -31,8 +32,8 @@ void AEO_ChopTable::OnItem(class AActor* item)
 		if (AEO_Food* temp = Cast<AEO_Food>(child[0]))
 		{
 			food = temp;
-			UE_LOG(LogTemp, Warning, TEXT("%s"), *food->GetName());
-		}
+			progressWidget->coolTime = food->coolTime;
+		}	
 
 		bOnItem = true;
 	}
@@ -144,13 +145,19 @@ void AEO_ChopTable::Interaction()
 	if (bOnItem && !food->bIsCooked && food->bCanChop)
 	{
 		food->curTime += GetWorld()->GetDeltaSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%.2f"), food->curTime);
+		progressWidget->curTime = food->curTime;
 		if (food->curTime >= food->coolTime)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Maked"));
 			food->bIsCooked = true;
 			food->changeMeshComp->SetVisibility(true);
 			food->meshComp->SetVisibility(false);
+			widgetComp->SetVisibility(false);
+		}
+		else
+		{
+			widgetComp->SetVisibility(true);
+			progressWidget->BindProgressFunc();
 		}
 	}
 }
