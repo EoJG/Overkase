@@ -2,6 +2,7 @@
 
 
 #include "EO_Rice.h"
+#include <Components/BoxComponent.h>
 
 AEO_Rice::AEO_Rice()
 {

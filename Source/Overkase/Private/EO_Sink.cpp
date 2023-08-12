@@ -73,7 +73,7 @@ void AEO_Sink::Interaction()
 			curTime = 0;
 		}
 	}
-} 
+}
 
 void AEO_Sink::SpawnPlate()
 {
