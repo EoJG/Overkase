@@ -66,7 +66,7 @@ void AEO_Sink::Interaction()
 	if (plateCount > 0)
 	{
 		curTime += GetWorld()->DeltaTimeSeconds;
-		if (curTime >= curTime)
+		if (curTime >= coolTime)
 		{
 			SpawnPlate();
 			plateCount--;

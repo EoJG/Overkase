@@ -25,12 +25,12 @@ void AEO_Stove::Tick(float DeltaTime)
 
 	if (bCanCook)
 	{
-		foodTemp->curTime += DeltaTime;
-		UE_LOG(LogTemp, Warning, TEXT("%f"), foodTemp->curTime);
-		if (foodTemp->curTime >= foodTemp->coolTime)
+		sFoodTemp->curTime += DeltaTime;
+		UE_LOG(LogTemp, Warning, TEXT("%f"), sFoodTemp->curTime);
+		if (sFoodTemp->curTime >= sFoodTemp->coolTime)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("IsCoocked"), foodTemp->curTime);
-			foodTemp->bIsCooked = true;
+			UE_LOG(LogTemp, Warning, TEXT("IsCoocked"), sFoodTemp->curTime);
+			sFoodTemp->bIsCooked = true;
 		}
 	}
 }
@@ -45,7 +45,7 @@ void AEO_Stove::OnItem(class AActor* item)
 			{
 				TArray<AActor*> items;
 				potItem->GetAttachedActors(items);
-				foodTemp = Cast<AEO_Food>(items[0]);
+				sFoodTemp = Cast<AEO_Food>(items[0]);
 
 				bCanCook = true;
 			}
@@ -59,67 +59,102 @@ void AEO_Stove::OnItem(class AActor* item)
 	{
 		TArray<AActor*> items;
 		GetAttachedActors(items);
+		// 테이블 위에 아이템이 접시 일 때
 		if (AEO_Plate* plateTemp = Cast<AEO_Plate>(items[0]))
 		{
-			if (!plateTemp->bDirty)
+			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
 			{
-				if (AEO_Pot* potTemp = Cast<AEO_Pot>(item))
+				return;
+			}
+			else if (AEO_Pot* pPot = Cast<AEO_Pot>(item))
+			{
+				if (!plateTemp->bDirty && pPot->bInFood)
+				{
+					TArray<AActor*> inFoods;
+					pPot->GetAttachedActors(inFoods);
+					if (Cast<AEO_Food>(inFoods[0])->bIsCooked)
+					{
+						inFoods[0]->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+						Cast<AEO_Food>(inFoods[0])->changeMeshComp->SetVisibility(true);
+
+						plateTemp->CheckRecipe(inFoods[0]->Tags[0]);
+						pPot->bInFood = false;
+					}
+				}
+			}
+			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
+			{
+				if (!plateTemp->CheckOnFood(pFood->Tags[0]))
+				{
+					item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+					plateTemp->CheckRecipe(item->Tags[0]);
+				}
+			}
+		}
+		// 테이블 위에 아이템이 냄비 일 때
+		else if (AEO_Pot* potTemp = Cast<AEO_Pot>(items[0]))
+		{
+			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
+			{
+				if (!pPlate->bDirty && potTemp->bInFood)
 				{
 					TArray<AActor*> inFoods;
 					potTemp->GetAttachedActors(inFoods);
 					if (Cast<AEO_Food>(inFoods[0])->bIsCooked)
 					{
-						inFoods[0]->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+						inFoods[0]->AttachToComponent(pPlate->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 						Cast<AEO_Food>(inFoods[0])->changeMeshComp->SetVisibility(true);
+
+						pPlate->CheckRecipe(inFoods[0]->Tags[0]);
+						potTemp->bInFood = false;
 					}
 				}
-				else
+			}
+			else if (AEO_Pot* pPot = Cast<AEO_Pot>(item))
+			{
+				return;
+			}
+			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
+			{
+				if (pFood->bCanBoil && !potTemp->bInFood)
 				{
-					if (!plateTemp->CheckOnFood(Cast<AEO_Food>(item)->Tags[0]))
-					{
-						item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
 
-						plateTemp->CheckRecipe(item->Tags[0]);
-					}
+					potTemp->bInFood = true;
+					bCanCook = true;
 				}
 			}
 		}
-		else if (AEO_Pot* potTemp = Cast<AEO_Pot>(items[0]))
+		// 테이블 위에 아이템이 음식 일 때
+		else if (AEO_Food* foodTemp = Cast<AEO_Food>(items[0]))
 		{
-			if (Cast<AEO_Food>(item)->bCanBoil && !potTemp->bInFood)
+			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
 			{
-				item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-				foodTemp = Cast<AEO_Food>(item);
-				foodTemp->meshComp->SetVisibility(false);
-
-				potTemp->bInFood = true;
-				bCanCook = true;
-			}
-		}
-		else if (AEO_Plate* pPlateTemp = Cast<AEO_Plate>(item))
-		{
-			if (!plateTemp->bDirty)
-			{
-				if (!pPlateTemp->CheckOnFood(Cast<AEO_Food>(items[0])->Tags[0]))
+				if (!pPlate->bDirty && !pPlate->CheckOnFood(foodTemp->Tags[0]))
 				{
 					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-					items[0]->AttachToComponent(pPlateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					foodTemp->AttachToComponent(pPlate->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
-					pPlateTemp->CheckRecipe(items[0]->Tags[0]);
+					pPlate->CheckRecipe(foodTemp->Tags[0]);
 				}
 			}
-		}
-		else if (AEO_Pot* pPotTemp = Cast<AEO_Pot>(item))
-		{
-			if (Cast<AEO_Food>(item)->bCanBoil && !pPotTemp->bInFood)
+			else if (AEO_Pot* pPot = Cast<AEO_Pot>(item))
 			{
-				item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-				items[0]->AttachToActor(pPotTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-				foodTemp = Cast<AEO_Food>(items[0]);
-				foodTemp->meshComp->SetVisibility(false);
+				if (foodTemp->bCanBoil && !pPot->bInFood)
+				{
+					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					foodTemp->AttachToActor(pPot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					foodTemp->meshComp->SetVisibility(false);
 
-				pPotTemp->bInFood = true;
-				bCanCook = true;
+					pPot->bInFood = true;
+					bCanCook = true;
+				}
+			}
+			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
+			{
+				return;
 			}
 		}
 	}
@@ -129,6 +164,6 @@ void AEO_Stove::GetItem(class USceneComponent* playerSceneComp)
 {
 	Super::GetItem(playerSceneComp);
 
-	foodTemp = nullptr;
+	sFoodTemp = nullptr;
 	bCanCook = false;
 }

@@ -22,7 +22,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:	
-	class AEO_Food* foodTemp;
+	class AEO_Food* sFoodTemp;
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = "Check")
