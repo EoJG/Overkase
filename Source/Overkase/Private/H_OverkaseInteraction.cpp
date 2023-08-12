@@ -8,6 +8,8 @@
 #include <Components/SphereComponent.h>
 #include <Kismet/GameplayStatics.h>
 #include "EO_Sink.h"
+#include "EO_Plate.h"
+#include "EO_Pot.h"
 
 
 UH_OverkaseInteraction::UH_OverkaseInteraction()
@@ -119,7 +121,7 @@ void UH_OverkaseInteraction::SpaceInput()
 		//푸드를 가져와라
 		GetFood(me->interactionPosition);
 	}
-	// 아이템이 으면
+	// 아이템이 없으면
 	else
 	{
 		// 손에 든것을 내려놓아라
@@ -167,12 +169,14 @@ void UH_OverkaseInteraction::ItemOnPlayer()
 		}
 	}
 }
-//Food->boxComp->SetSimulatePhysics(true);
 
 void UH_OverkaseInteraction::NoItem()
 {
 	TArray<AActor*> items;
 	me->GetAttachedActors(items);
+
+	//AEO_Plate* plate = Cast<AEO_Plate>(items[0]);
+	//AEO_Pot* pot = Cast<AEO_Pot>(items[0]);
 
 	// 만약 아이템을 손에 들고있으면
 	if(bHasItem){
@@ -185,17 +189,18 @@ void UH_OverkaseInteraction::NoItem()
 				// 아이템을 내려놓아라
 				Food->boxComp->SetSimulatePhysics(true);
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-				
 			}
 			bHasItem = false;
 		}
 		else
 		{
-			if (items.IsEmpty() == false) 
+			if (!items.IsEmpty()) 
 			{
 				block->OnItem(items[0]);
-				bHasItem = false;
-				
+				if (items.IsEmpty()) 
+				{
+					bHasItem = false;
+				}
 			}
 		}
 	}
