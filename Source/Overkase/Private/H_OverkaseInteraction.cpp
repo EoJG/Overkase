@@ -91,13 +91,12 @@ void UH_OverkaseInteraction::SetupInputBinding(class UInputComponent* PlayerInpu
 void UH_OverkaseInteraction::SpaceInput()
 {	
 	// 만약 가까이에 아무것도 있지 않으면 
-	if (blockDistance.IsEmpty() && foodDistance.IsEmpty()) 
+	if (blockDistance.IsEmpty() && foodDistance.IsEmpty())
 	{
 		// 아무것도 하지 마라
 		return;
 	}
-
-	// 만약 아이템이 없고 근처에 블록이 있으면 
+	// 만약 아이템이 없고 근처에 블록이 있으면
 	if (!bHasItem && !blockDistance.IsEmpty())
 	{
 		// 블록을 가져와라
