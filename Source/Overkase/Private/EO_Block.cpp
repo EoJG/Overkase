@@ -162,6 +162,6 @@ void AEO_Block::GetItem(class USceneComponent* playerSceneComp)
 
 void AEO_Block::Interaction()
 {
-
+	
 }
 
