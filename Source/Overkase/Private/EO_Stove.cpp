@@ -122,6 +122,7 @@ void AEO_Stove::OnItem(class AActor* item)
 					item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
 
+					sFoodTemp = pFood;
 					potTemp->bInFood = true;
 					bCanCook = true;
 				}
