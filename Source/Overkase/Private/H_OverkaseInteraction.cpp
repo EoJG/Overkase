@@ -145,7 +145,7 @@ void UH_OverkaseInteraction::CtrlInput()
 		}
 
 	}
-	else if (block->bIsInterObj)
+	else if (block != nullptr &&  block->bIsInterObj)
 	{
 		bIsDoingInteraction = true;
 	}
