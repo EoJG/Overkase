@@ -12,10 +12,11 @@ AEO_OrderTable::AEO_OrderTable()
 
 	boxComp->SetBoxExtent(FVector(75, 150, 45));
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Interior/S_Servingrail.S_Servingrail'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/Servingrail.Servingrail'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
+		meshComp->SetRelativeRotation(FRotator(0, 0, 0));
 	}
 
 	ConstructorHelpers::FClassFinder<AEO_ReturnPlate> rpTemp(TEXT("'/Game/Eo/Blueprints/Object/BP_ReturnPlate.BP_ReturnPlate_C'"));

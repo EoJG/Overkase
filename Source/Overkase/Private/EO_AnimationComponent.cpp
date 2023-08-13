@@ -58,6 +58,9 @@ void UEO_AnimationComponent::DownHand()
 void UEO_AnimationComponent::CallWalk(bool playAnimation)
 {
 	isPlayWalk = playAnimation;
+
+	if (playAnimation == false)
+		bDoOnce = true;
 }
 
 void UEO_AnimationComponent::CallChopHand(bool playAnimation)

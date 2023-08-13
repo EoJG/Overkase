@@ -14,11 +14,20 @@ AEO_Plate::AEO_Plate()
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Interior/S_Plate.S_Plate'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/plate.plate'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 	}
+	changeMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ChangeMeshComponent"));
+	changeMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
+	changeMeshComp->SetupAttachment(meshComp);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> cMeshTemp(TEXT("'/Game/00/Interior/plate_2.plate_2'"));
+	if (cMeshTemp.Succeeded())
+	{
+		changeMeshComp->SetStaticMesh(cMeshTemp.Object);
+	}
+	changeMeshComp->SetVisibility(false);
 
 	sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	sceneComp->SetupAttachment(meshComp);
@@ -55,6 +64,17 @@ void AEO_Plate::Tick(float DeltaTime)
 	if (!bIsComplete)
 	{
 		MakeCompleteFood();
+	}
+
+	if (!bDirty)
+	{
+		meshComp->SetVisibility(true);
+		changeMeshComp->SetVisibility(false);
+	}
+	else
+	{
+		meshComp->SetVisibility(false);
+		changeMeshComp->SetVisibility(true);
 	}
 }
 

@@ -20,6 +20,12 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+public:
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* boardComp;
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* knifeComp;
+
 private:
 	class AEO_Food* food = nullptr;
 

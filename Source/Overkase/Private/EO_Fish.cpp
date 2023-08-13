@@ -12,17 +12,19 @@ AEO_Fish::AEO_Fish()
 
 	boxComp->SetBoxExtent(FVector(40, 30, 10));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Food_/SF__Fish.SF__Fish'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Food/SF__Fish.SF__Fish'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 		meshComp->SetRelativeLocation(FVector(0, 0, -12));
+		meshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/Models/Re/Food_/SF_Slice_Fish.SF_Slice_Fish'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/00/Food/SF_Slice_Fish1.SF_Slice_Fish1'"));
 	if (changeMeshTemp.Succeeded())
 	{
 		changeMeshComp->SetStaticMesh(changeMeshTemp.Object);
 		changeMeshComp->SetRelativeLocation(FVector(0, 0, -12));
+		changeMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
 }
 

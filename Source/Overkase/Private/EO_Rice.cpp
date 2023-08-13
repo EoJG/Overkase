@@ -12,17 +12,19 @@ AEO_Rice::AEO_Rice()
 
 	boxComp->SetBoxExtent(FVector(32, 32, 8));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Food_/SF_rice.SF_rice'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Food/SF_rice.SF_rice'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 		meshComp->SetRelativeLocation(FVector(0, 0, -8));
+		meshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/Models/Re/Food_/SF_Rice_boiled.SF_Rice_boiled'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/00/Food/SF_Rice_boiled.SF_Rice_boiled'"));
 	if (changeMeshTemp.Succeeded())
 	{
 		changeMeshComp->SetStaticMesh(changeMeshTemp.Object);
 		changeMeshComp->SetRelativeLocation(FVector(0, 0, -8));
+		changeMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
 }
 

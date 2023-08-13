@@ -11,7 +11,7 @@ AEO_Stove::AEO_Stove()
 
 	Tags[0] = TEXT("Stove");
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Re/Interior/S_Stove_Stove.S_Stove_Stove'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/00/Interior/Stove.Stove'"));
 	if (MeshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(MeshTemp.Object);

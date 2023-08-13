@@ -11,11 +11,12 @@ AEO_Seaweed::AEO_Seaweed()
 
 	boxComp->SetBoxExtent(FVector(32, 32, 5));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Food_/SF_Plated_Seaweed.SF_Plated_Seaweed'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Food/SF_Seaweed.SF_Seaweed'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 		meshComp->SetRelativeLocation(FVector(0, 0, -4));
+		meshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
 }
 

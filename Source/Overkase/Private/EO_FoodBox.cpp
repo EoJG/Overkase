@@ -11,7 +11,7 @@ AEO_FoodBox::AEO_FoodBox()
 	
 	Tags[0] = TEXT("FoodBox");
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/Models/Re/Interior/S_Box_2_Box002.S_Box_2_Box002'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/00/Interior/Box_2.Box_2'"));
 	if (MeshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(MeshTemp.Object);
