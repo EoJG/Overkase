@@ -41,22 +41,30 @@ private:
 private:
 	bool isPlayChopHand = false;
 	bool isPlayWashHand = false;
+	bool isPlayWalk = false;
 	bool bDoOnce = true;
 
 	float time = 0;
 	float c = 0;
 
 public:
+	UFUNCTION()
+	void SetMeshData(class UStaticMeshComponent* mBodyMesh, class UStaticMeshComponent* mHeadMesh, class USceneComponent* sHandComp, class USceneComponent* sHandRComp, class UStaticMeshComponent* mHandRMesh, class UStaticMeshComponent* mHandLMesh);
+
 	UFUNCTION(BlueprintCallable)
 	void UpHand();
 	UFUNCTION(BlueprintCallable)
 	void DownHand();
+	UFUNCTION(BlueprintCallable)
+	void CallWalk(bool playAnimation);
 	UFUNCTION(BlueprintCallable)
 	void CallChopHand(bool playAnimation);
 	UFUNCTION(BlueprintCallable)
 	void CallWashHand(bool playAnimation);
 
 private:
+	UFUNCTION()
+	void Walk();
 	UFUNCTION()
 	void ChopHand();
 	UFUNCTION()

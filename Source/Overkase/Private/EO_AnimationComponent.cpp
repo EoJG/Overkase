@@ -29,8 +29,20 @@ void UEO_AnimationComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	Walk();
 	ChopHand();
 	WashHand();
+}
+
+
+void UEO_AnimationComponent::SetMeshData(class UStaticMeshComponent* mBodyMesh, class UStaticMeshComponent* mHeadMesh, class USceneComponent* sHandComp, class USceneComponent* sHandRComp, class UStaticMeshComponent* mHandRMesh, class UStaticMeshComponent* mHandLMesh)
+{
+	bodyMesh = mBodyMesh;
+	headMesh = mHeadMesh;
+	handComp = sHandComp;
+	handRComp = sHandRComp;
+	handRMesh = mHandRMesh;
+	handLMesh = mHandLMesh;
 }
 
 void UEO_AnimationComponent::UpHand()
@@ -41,6 +53,11 @@ void UEO_AnimationComponent::UpHand()
 void UEO_AnimationComponent::DownHand()
 {
 	handComp->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0, 0, 0));
+}
+
+void UEO_AnimationComponent::CallWalk(bool playAnimation)
+{
+	isPlayWalk = playAnimation;
 }
 
 void UEO_AnimationComponent::CallChopHand(bool playAnimation)
@@ -59,6 +76,33 @@ void UEO_AnimationComponent::CallWashHand(bool playAnimation)
 		bDoOnce = true;
 }
 
+void UEO_AnimationComponent::Walk()
+{
+	if (isPlayWalk)
+	{
+		if (bDoOnce)
+		{
+			handComp->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0, 0, 0));
+			c = -5;
+			bDoOnce = false;
+		}
+
+		
+		if (handComp->GetRelativeRotation().Yaw >= 40)
+		{
+			c = -5;
+		}
+		else if (handComp->GetRelativeRotation().Yaw <= -40)
+		{
+			c = 5;
+		}
+			
+
+		handComp->AddWorldRotation(FRotator(0, c, 0));
+		UE_LOG(LogTemp, Warning, TEXT("%f"), handComp->GetRelativeRotation().Yaw);
+	}
+}
+
 void UEO_AnimationComponent::ChopHand()
 {
 	if (isPlayChopHand)
@@ -66,14 +110,15 @@ void UEO_AnimationComponent::ChopHand()
 		if (bDoOnce)
 		{
 			handRComp->SetRelativeRotation(FRotator(80, 0, 0));
+			c = 10;
 			bDoOnce = false;
 		}
 
-		if (handRComp->GetRelativeRotation().Pitch >= 80)
+		if (handRComp->GetRelativeRotation().Pitch <= 80)
 		{
 			c = 10;
 		}
-		else if (handRComp->GetRelativeRotation().Pitch <= -10)
+		else if (handRComp->GetRelativeRotation().Pitch >= -10)
 		{
 			c = -10;
 		}
@@ -93,6 +138,7 @@ void UEO_AnimationComponent::WashHand()
 		if (bDoOnce)
 		{
 			handComp->SetRelativeLocationAndRotation(FVector(100, 0, 0), FRotator(90, 0, 0));
+			time = 0;
 			bDoOnce = false;
 		}
 
