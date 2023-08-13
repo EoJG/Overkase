@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "H_OverkaseCharacter.h"
+#include "EO_AnimationComponent.h"
 #include <GameFramework/CharacterMovementComponent.h>
 #include "OverkasePlayerBase.generated.h"
 

@@ -2,6 +2,7 @@
 
 
 #include "H_OverkasePlayerMove.h"
+#include "H_OverkaseInteraction.h"
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
 #include "H_PlayerCameraActor.h"
 #include <Kismet/GameplayStatics.h>
@@ -52,8 +53,39 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 	if (currentTime > 0.3) {
 		moveComp->MaxWalkSpeed = 400;
 		bIsDash = false;
-		
 	}
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%f"), me->GetCharacterMovement()->Velocity.Length()));
+	if (me->GetCharacterMovement()->Velocity.Length() > 0) 
+	{
+		bIsWalk = true;
+	}
+	else 
+	{
+		bIsWalk = false;
+	}
+
+	space = Cast<UH_OverkaseInteraction>(me->overPlayerInteraction);
+
+
+	//애니메이션 if문
+	if (bIsWalk && space->bHasItem == false)
+	{
+		me->AnimationComponent->CallWalk(true);
+	}
+	else if (bIsWalk && space->bHasItem == true)
+	{
+		me->AnimationComponent->UpHand();
+	}
+	else if(!bIsWalk && space->bHasItem == false)
+	{
+		me->AnimationComponent->CallWalk(false);
+		me->AnimationComponent->DownHand();
+	}
+	else if (bIsWalk && space->bHasItem == true)
+	{
+		me->AnimationComponent->UpHand();
+	}
+
 }
 
 void UH_OverkasePlayerMove::SetupInputBinding(class UInputComponent* PlayerInputComponent)
@@ -71,17 +103,18 @@ void UH_OverkasePlayerMove::SetupInputBinding(class UInputComponent* PlayerInput
 void UH_OverkasePlayerMove::Move(const FInputActionValue& value)
 {
 	
-		FVector2D mValue = value.Get<FVector2D>();
-		FVector rightVectorOfController = FRotationMatrix(me->GetControlRotation()).GetUnitAxis(EAxis::Y);
-		FVector forwardVectorOfController = FRotationMatrix(me->GetControlRotation()).GetUnitAxis(EAxis::X);
-		me->AddMovementInput(rightVectorOfController, mValue.X);
-		me->AddMovementInput(forwardVectorOfController, mValue.Y);
+	FVector2D mValue = value.Get<FVector2D>();
+	FVector rightVectorOfController = FRotationMatrix(me->GetControlRotation()).GetUnitAxis(EAxis::Y);
+	FVector forwardVectorOfController = FRotationMatrix(me->GetControlRotation()).GetUnitAxis(EAxis::X);
+	me->AddMovementInput(rightVectorOfController, mValue.X);
+	me->AddMovementInput(forwardVectorOfController, mValue.Y);
+
+	
 	
 }
 
 void UH_OverkasePlayerMove::DashMove()
 {
-	
 	if (!bIsDash) {
 		UGameplayStatics::PlaySound2D(GetWorld(), dashSound);
 		// 3. 대쉬중이아니면 대쉬를 한다.

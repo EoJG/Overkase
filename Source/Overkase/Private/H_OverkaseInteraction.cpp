@@ -96,7 +96,6 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	else
 	{
 		bHasItem = true;
-
 	}
 	
 }

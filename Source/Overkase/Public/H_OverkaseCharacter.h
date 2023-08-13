@@ -60,6 +60,8 @@ public:
 	class UOverkasePlayerBase* overPlayerMove;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UOverkasePlayerBase* overPlayerInteraction;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UEO_AnimationComponent* AnimationComponent;
 
 	//Enhanced Input resources
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
