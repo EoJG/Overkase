@@ -66,11 +66,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = minuteTime)
 	float MinTime = 03;
 
-	// 초값은 30초로 셋팅
+	// 
 	UPROPERTY(BlueprintReadWrite, Category = secondTime)
 	float SecTime = 0;
 
-	// 59초부터 떨어뜨리도록 
+	// 
 	UPROPERTY(BlueprintReadOnly)
 	float CurrentTime = 210;
 
@@ -100,6 +100,23 @@ public:
 	
 	//UPROPERTY(BlueprintReadWrite, Category = secondTime)
 	
+//========================================================================================
+
+	// 주문표 미션생성하기
+
+//public:
+//	UPROPERTY(BlueprintReadWrite, Category = sushiMenu)
+//	class AEO_Food* cucumberSushi;
+//	
+//	UPROPERTY(BlueprintReadWrite, Category = sushiMenu)
+//	class AEO_Food* octorSushi;
+//
+//	UPROPERTY(BlueprintReadWrite, Category = sushiMenu)
+//	class AEO_Food* Hamburger;
+//
+//	void Get_Mission();
+
+
 
 
 
