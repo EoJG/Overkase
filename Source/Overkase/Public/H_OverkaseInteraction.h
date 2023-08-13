@@ -66,7 +66,9 @@ public:
 	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	void GetFood(class USceneComponent* playerSceneComp);
-	void ReleaseFood(class AActor* food);
+
+	void WashHand();
+	void ChopHand();
 
 	UPROPERTY(VisibleAnywhere)
 	class UH_OverkasePlayerMove* space;
@@ -76,6 +78,7 @@ public:
 	bool bIsDoingInteraction = false;
 	bool bPressedCtrl = false;
 	bool bSoundPlay = false;
+	bool bIsInteraction = false;
 private:
 
 	int32 FindClosestBlock();
