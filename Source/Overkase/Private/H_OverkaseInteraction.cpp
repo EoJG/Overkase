@@ -27,7 +27,22 @@ UH_OverkaseInteraction::UH_OverkaseInteraction()
 		ia_ctrl_Interaction = TempCtrl.Object;
 	}
 
+	ConstructorHelpers::FObjectFinder<USoundBase> TempPick(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Item_PickUp_02.Item_PickUp_02'"));
+	if (TempPick.Succeeded())
+	{
+		pickUpSound = TempPick.Object;
+	}
 
+	ConstructorHelpers::FObjectFinder<USoundBase> TempPut(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Item_PutDown_01.Item_PutDown_01'"));
+	if (TempPut.Succeeded())
+	{
+		putDownSound = TempPut.Object;
+	}
+	ConstructorHelpers::FObjectFinder<USoundBase> TempThrow(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Throw1.Throw1'"));
+	if (TempThrow.Succeeded())
+	{
+		throwSound = TempThrow.Object;
+	}
 }
 
 void UH_OverkaseInteraction::BeginPlay()
