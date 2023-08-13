@@ -2,6 +2,7 @@
 
 
 #include "H_OverkaseInteraction.h"
+#include "H_OverkasePlayerMove.h"
 #include "EO_Block.h"
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
 #include <Components/BoxComponent.h>
@@ -11,7 +12,9 @@
 #include "EO_Plate.h"
 #include "EO_Pot.h"
 #include "EO_FoodBox.h"
-
+#include "EO_ChopTable.h"
+#include "TimerManager.h"
+#include "Components/AudioComponent.h"
 
 UH_OverkaseInteraction::UH_OverkaseInteraction()
 {
@@ -58,6 +61,9 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	space = Cast<UH_OverkasePlayerMove>(me->overPlayerMove);
+	
+
 	// me 와 가까운 블록의 거리를 저장
 	closestBlockIndex = FindClosestBlock();
 
@@ -76,19 +82,49 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 		Food = Cast<AEO_Food>(foodActor[closestFoodIndex]);
 	}
 
-	if (bIsDoingInteraction)
-	{
-		block->Interaction();
-		UE_LOG(LogTemp,Warning,TEXT("WashingDishes"));
-	}
 	if (!bPressedCtrl)
 	{
 		bIsDoingInteraction = false;
 	}
-	//AEO_Sink* sink = Cast<AEO_Sink>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Sink::StaticClass()));
+	if (blockActor.IsEmpty() == false) {
+		if (bIsDoingInteraction)
+		{
+			block->Interaction();
+
+			if (space->bIsWalk == false && blockActor[closestBlockIndex]->GetName().Contains(FString("Sink")))
+			{
+				
+				GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
+				me->AnimationComponent->CallWashHand(true);
+				
+			}
+			else if (space->bIsWalk == false && blockActor[closestBlockIndex]->GetName().Contains(FString("ChopTable")))
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Cyan, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
+				me->AnimationComponent->CallChopHand(true);
+				if (!bSoundPlay) {
+					SoundPlay();
+				}
+			}
+
+		}
+		else if (!bIsDoingInteraction && blockActor[closestBlockIndex]->GetName().Contains(FString("Sink")))
+		{
+			me->AnimationComponent->CallWashHand(false);
+			me->AnimationComponent->DownHand();
+		}
+		else if (!bIsDoingInteraction && blockActor[closestBlockIndex]->GetName().Contains(FString("ChopTable")))
+		{
+			me->AnimationComponent->CallChopHand(false);
+			me->AnimationComponent->DownHand();
+
+		}
+	}
 
 	
+	
 	me->GetAttachedActors(items);
+
 	if (items.IsEmpty())
 	{
 		bHasItem = false;
@@ -96,7 +132,6 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	else
 	{
 		bHasItem = true;
-
 	}
 	
 }
@@ -250,6 +285,21 @@ void UH_OverkaseInteraction::NoItem()
 void UH_OverkaseInteraction::CtrlCompleted()
 {
 	bPressedCtrl = false;
+}
+
+void UH_OverkaseInteraction::SoundPlay()
+{
+	bSoundPlay = true;
+
+	UAudioComponent* AudioComp = UGameplayStatics::SpawnSound2D(this, chopSound);
+	FTimerHandle soundTimerHandle;
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	// 3초 후에 사운드 중지
+	TimerManager.SetTimer(soundTimerHandle, [this, AudioComp]()
+		{
+			AudioComp->Stop();
+			bSoundPlay = false;
+		}, 0.2f, false);
 }
 
 void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

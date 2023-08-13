@@ -35,6 +35,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
 	class USoundBase* dashSound;
 
+	UPROPERTY(VisibleAnywhere)
+	class UH_OverkaseInteraction* space;
 	//좌우이동
 	UFUNCTION()
 	void Move(const FInputActionValue& value);
@@ -42,10 +44,11 @@ public:
 	//대쉬
 	UFUNCTION()
 	void DashMove();
-	
-	
+
+	bool bIsWalk = false;
 private:
 	bool bIsDash = false;
+	
 	float currentTime = 0;
 
 };

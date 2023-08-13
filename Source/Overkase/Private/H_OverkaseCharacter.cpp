@@ -9,6 +9,7 @@
 #include <Components/BoxComponent.h>
 #include <Components/SphereComponent.h>
 #include "InputMappingContext.h"
+#include "EO_AnimationComponent.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -72,8 +73,6 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 		hatComp->SetStaticMesh(TempHatMesh.Object);
 	}
 
-
-
 	interactionPosition = CreateDefaultSubobject<USceneComponent>(TEXT("InteractionPosition"));
 	interactionPosition->SetupAttachment(crocodileMesh);
 	interactionPosition->SetRelativeLocation(FVector(160, 0, 0));
@@ -95,12 +94,14 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	overPlayerMove = CreateDefaultSubobject<UH_OverkasePlayerMove>(TEXT("PlayerMove"));
 	overPlayerInteraction = CreateDefaultSubobject<UH_OverkaseInteraction>(TEXT("PlayerInteraction"));
+	AnimationComponent = CreateDefaultSubobject<UEO_AnimationComponent>(TEXT("AnimationComponent"));
 
 	ConstructorHelpers::FObjectFinder<UInputMappingContext> TempIMC(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/HanSeunghui/Input/IMC_OverkaseInput.IMC_OverkaseInput'"));
 	if (TempIMC.Succeeded())
 	{
 		imc = TempIMC.Object;
 	}
+
 }
 
 // Called when the game starts or when spawned
@@ -116,6 +117,8 @@ void AH_OverkaseCharacter::BeginPlay()
 			subSystem->AddMappingContext(imc, 0);
 		}
 	}
+
+	AnimationComponent->SetMeshData(crocodileMesh, headComp, handComp, handRComp, handR, handL);
 }
 
 // Called every frame
