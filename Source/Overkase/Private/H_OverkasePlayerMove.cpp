@@ -20,6 +20,12 @@ UH_OverkasePlayerMove::UH_OverkasePlayerMove()
 	{
 		ia_dash = TempDash.Object;
 	}
+	ConstructorHelpers::FObjectFinder<USoundBase> TempSound(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Dash1.Dash1'"));
+	if (TempSound.Succeeded())
+	{
+		dashSound = TempSound.Object;
+	}
+
 
 }
 
