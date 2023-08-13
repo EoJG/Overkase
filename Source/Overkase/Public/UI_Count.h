@@ -34,9 +34,6 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
 	class UProgressBar* Timergage;
 
-	// 5. 타이머 프로그래스바 보더
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
-	class UBorder* gageBorder;
 
 	// 6. 주문표 1
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
@@ -52,7 +49,11 @@ public:
 
 	// 9. 주문표 4
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
-	class UImage* Mission4;
+	class UImage* Mission4;	
+	
+	// 10. 주문표 5
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
+	class UImage* Mission5;
 
 //====================================================================================
 
@@ -65,13 +66,16 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = minuteTime)
 	float MinTime = 03;
 
-	// 초값은 30초로 셋팅
+	// 
 	UPROPERTY(BlueprintReadWrite, Category = secondTime)
 	float SecTime = 0;
 
-	// 59초부터 떨어뜨리도록 
+	// 
 	UPROPERTY(BlueprintReadOnly)
-	float CurrentTime = 30;
+	float CurrentTime = 210;
+
+	UPROPERTY(BlueprintReadOnly)
+	float MaxTime = 210;
 
 	// 타이머 UI 바인딩을 위한 함수
 	float GetMinutes();
@@ -87,7 +91,7 @@ public:
 	//타이머 게이지 UI만들기
 
 	UPROPERTY(BlueprintReadWrite, Category = ProgBar)
-	float ProgBar = 100;
+	float ProgBar = 0;
 
 
 	// 타이머게이지 UI 함수
@@ -96,6 +100,23 @@ public:
 	
 	//UPROPERTY(BlueprintReadWrite, Category = secondTime)
 	
+//========================================================================================
+
+	// 주문표 미션생성하기
+
+//public:
+//	UPROPERTY(BlueprintReadWrite, Category = sushiMenu)
+//	class AEO_Food* cucumberSushi;
+//	
+//	UPROPERTY(BlueprintReadWrite, Category = sushiMenu)
+//	class AEO_Food* octorSushi;
+//
+//	UPROPERTY(BlueprintReadWrite, Category = sushiMenu)
+//	class AEO_Food* Hamburger;
+//
+//	void Get_Mission();
+
+
 
 
 
