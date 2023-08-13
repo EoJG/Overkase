@@ -77,6 +77,7 @@ void UH_OverkasePlayerMove::DashMove()
 {
 	
 	if (!bIsDash) {
+		UGameplayStatics::PlaySound2D(GetWorld(), dashSound);
 		// 3. 대쉬중이아니면 대쉬를 한다.
 		bIsDash = true;
 		currentTime = 0;

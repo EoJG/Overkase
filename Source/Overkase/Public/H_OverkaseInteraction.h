@@ -36,7 +36,12 @@ public:
 	class UInputAction* ia_Space_Interaction;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_ctrl_Interaction;
-	
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* pickUpSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* putDownSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* throwSound;
 
 	UPROPERTY(EditAnywhere, Category = "Foods")
 	TArray<AEO_Block*> blockActor;

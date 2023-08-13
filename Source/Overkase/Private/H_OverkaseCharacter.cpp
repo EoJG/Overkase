@@ -16,15 +16,63 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	handComp = CreateDefaultSubobject<USceneComponent>(TEXT("Hand"));
+	handComp->SetupAttachment(RootComponent);
+	handComp->SetRelativeLocation(FVector(0,0,-60));
+
+	handRComp = CreateDefaultSubobject<USceneComponent>(TEXT("HandRComp"));
+	handRComp->SetupAttachment(handComp);
+	handRComp->SetRelativeLocation(FVector(0,0,90));
+
+	handR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HandR"));
+	handR->SetupAttachment(handRComp);
+	handR->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator( 0.000000, -90.000000, 0.000000));
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHandRMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Crocodile_Hand_Open_R.Crocodile_Hand_Open_R'"));
+
+	if (TempHandRMesh.Succeeded()) {
+		handR->SetStaticMesh(TempHandRMesh.Object);
+	}
+
+	handL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("handL"));
+	handL->SetupAttachment(handComp);
+	handL->SetRelativeLocationAndRotation(FVector(0, 0, 0), FRotator(0.000000, -90.000000, 0.000000));
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHandLMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Crocodile_Hand_Open_L.Crocodile_Hand_Open_L'"));
+
+	if (TempHandLMesh.Succeeded()) {
+		handL->SetStaticMesh(TempHandLMesh.Object);
+	}
+
 	crocodileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Crocodile"));
 	crocodileMesh->SetupAttachment(RootComponent);
 	crocodileMesh->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0, -90, 0));
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh>TempCrocoMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/crocodile.crocodile'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempCrocoMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Body.Body'"));
 
 	if (TempCrocoMesh.Succeeded()) {
 		crocodileMesh->SetStaticMesh(TempCrocoMesh.Object);
 	}
+
+	headComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Head"));
+	headComp->SetupAttachment(crocodileMesh);
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHeadMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Chef_Crocodile_Chef_Crocodile.Chef_Crocodile_Chef_Crocodile'"));
+
+	if (TempHeadMesh.Succeeded()) {
+		headComp->SetStaticMesh(TempHeadMesh.Object);
+	}
+
+	hatComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
+	hatComp->SetupAttachment(headComp);
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHatMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Chef_Crocodile_SubMesh_0.Chef_Crocodile_SubMesh_0'"));
+
+	if (TempHatMesh.Succeeded()) {
+		hatComp->SetStaticMesh(TempHatMesh.Object);
+	}
+
+
 
 	interactionPosition = CreateDefaultSubobject<USceneComponent>(TEXT("InteractionPosition"));
 	interactionPosition->SetupAttachment(crocodileMesh);

@@ -113,30 +113,40 @@ void UH_OverkaseInteraction::SpaceInput()
 	{
 		// 블록을 가져와라
 		ItemOnPlayer();
+		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+
 	}
 	// 만약 아이템이 없고 근처에 푸드가 있으면
 	else if (!bHasItem && !foodDistance.IsEmpty())
 	{
 		//푸드를 가져와라
 		GetFood(me->interactionPosition);
+		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+
 	}
 	// 만약 아이템이 없고 블록의 거리가 푸드의 거리보다 가까우면
 	else if (!bHasItem && blockDistance[closestBlockIndex] < foodDistance[closestFoodIndex])
 	{
 		// 블록을 가져와라
 		ItemOnPlayer();
+		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+
 	}
 	// 만약 아이템이 없고 푸드의 거리가 블록의 거리보다 가까우면
 	else if (!bHasItem && blockDistance[closestBlockIndex] > foodDistance[closestFoodIndex])
 	{
 		//푸드를 가져와라
 		GetFood(me->interactionPosition);
+		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+
 	}
 	// 아이템이 없으면
 	else
 	{
 		// 손에 든것을 내려놓아라
 		NoItem();
+		UGameplayStatics::PlaySound2D(GetWorld(), putDownSound);
+
 	}
 }
 
@@ -152,7 +162,8 @@ void UH_OverkaseInteraction::CtrlInput()
 			{
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				Food->ShootFood(me->GetActorForwardVector());
-				//bHasItem = false;
+				UGameplayStatics::PlaySound2D(GetWorld(), throwSound);
+
 			}
 		}
 	}
