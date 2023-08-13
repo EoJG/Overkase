@@ -11,17 +11,19 @@ AEO_Cucumber::AEO_Cucumber()
 
 	boxComp->SetBoxExtent(FVector(40, 10, 10));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Food_/SF__cucumber.SF__cucumber'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Food/SF_Cucumber.SF_Cucumber'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 		meshComp->SetRelativeLocation(FVector(0, 0, -14));
+		meshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/Models/Re/Food_/SF_Slice_Cucumber_2.SF_Slice_Cucumber_2'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/00/Food/SF_Slice_Cucumber2.SF_Slice_Cucumber2'"));
 	if (changeMeshTemp.Succeeded())
 	{
 		changeMeshComp->SetStaticMesh(changeMeshTemp.Object);
 		changeMeshComp->SetRelativeLocation(FVector(0, 0, -12));
+		changeMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
 }
 

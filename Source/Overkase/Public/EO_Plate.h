@@ -27,6 +27,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* meshComp;
 	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* changeMeshComp;
+	UPROPERTY(VisibleAnywhere)
 	class USceneComponent* sceneComp;
 
 private:

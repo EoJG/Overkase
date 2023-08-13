@@ -8,13 +8,13 @@ AEO_ReturnPlate::AEO_ReturnPlate()
 {
 	Tags[0] = TEXT("ReturnPlate");
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Interior/S_Dishoutlet_Dishoutlet.S_Dishoutlet_Dishoutlet'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/Dishoutlet.Dishoutlet'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 	}
 
-	ConstructorHelpers::FClassFinder<AEO_Plate> plateTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_Plate.BP_Plate_C'"));
+	ConstructorHelpers::FClassFinder<AEO_Plate> plateTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_Plates.BP_Plates_C'"));
 	if (plateTemp.Succeeded())
 	{
 		rPlate = plateTemp.Class;

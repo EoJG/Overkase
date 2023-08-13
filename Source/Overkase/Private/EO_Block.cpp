@@ -28,7 +28,7 @@ AEO_Block::AEO_Block()
 	meshComp->SetupAttachment(RootComponent);
 	meshComp->SetRelativeLocationAndRotation(FVector(0, 0, -45), FRotator(0, -90, 0));
 	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Interior/S_Desk_Desk.S_Desk_Desk'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/Desk.Desk'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
@@ -37,7 +37,7 @@ AEO_Block::AEO_Block()
 	sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	sceneComp->SetupAttachment(RootComponent);
 	sceneComp->SetRelativeLocation(FVector(0, 0, 50));
-	sceneComp->SetRelativeRotation(FRotator(0, -90, 0));
+	sceneComp->SetRelativeRotation(FRotator(0));
 
 	widgetComp = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComponent"));
 	widgetComp->SetupAttachment(RootComponent);
@@ -49,7 +49,7 @@ AEO_Block::AEO_Block()
 	}
 	widgetComp->SetWidgetSpace(EWidgetSpace::Screen);
 
-	static ConstructorHelpers::FClassFinder<AEO_Plate> plateTemp(TEXT("/Script/Engine.Blueprint'/Game/Eo/Blueprints/Plate/BP_Plate.BP_Plate_C'"));
+	static ConstructorHelpers::FClassFinder<AEO_Plate> plateTemp(TEXT("/Script/Engine.Blueprint'/Game/Eo/Blueprints/Plate/BP_Plates.BP_Plates_C'"));
 	if (plateTemp.Succeeded())
 	{
 		plate = plateTemp.Class;

@@ -11,6 +11,26 @@ AEO_ChopTable::AEO_ChopTable()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Tags[0] = TEXT("ChopTable");
+
+	boardComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BoardComponent"));
+	boardComp->SetupAttachment(meshComp);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> boardMeshTemp(TEXT("'/Game/00/Interior/S_Board.S_Board'"));
+	if (boardMeshTemp.Succeeded())
+	{
+		boardComp->SetStaticMesh(boardMeshTemp.Object);
+		boardComp->SetRelativeLocationAndRotation(FVector(0, 0, 85), FRotator(0, 180, 0));
+		boardComp->SetRelativeScale3D(FVector(0.8f));
+	}
+
+	knifeComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("KnifeComponent"));
+	knifeComp->SetupAttachment(meshComp);
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> knifeMeshTemp(TEXT("'/Game/00/Interior/S_Knife.S_Knife'"));
+	if (knifeMeshTemp.Succeeded())
+	{
+		knifeComp->SetStaticMesh(knifeMeshTemp.Object);
+		knifeComp->SetRelativeLocationAndRotation(FVector(5, -25, 105), FRotator(0, -20, 0));
+		knifeComp->SetRelativeScale3D(FVector(1));
+	}
 }
 
 void AEO_ChopTable::BeginPlay()

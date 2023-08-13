@@ -11,15 +11,16 @@ AEO_Sink::AEO_Sink()
 
 	boxComp->SetBoxExtent(FVector(50, 100, 30));
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Interior/S_Sink.S_Sink'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/sink.sink'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
+		meshComp->SetRelativeRotation(FRotator(0, 0, 0));
 	}
 
 	sceneComp->SetRelativeLocation(FVector(0, -50, 50));
 
-	ConstructorHelpers::FClassFinder<AEO_Plate> pTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_Plate.BP_Plate_C'"));
+	ConstructorHelpers::FClassFinder<AEO_Plate> pTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_Plates.BP_Plates_C'"));
 	if (pTemp.Succeeded())
 	{
 		plate = pTemp.Class;
@@ -41,6 +42,7 @@ void AEO_Sink::OnItem(class AActor* item)
 		if (plateTemp->bDirty)
 		{
 			item->Destroy();
+			progressWidget->coolTime = coolTime;
 			plateCount++;
 		}
 	}
@@ -66,11 +68,17 @@ void AEO_Sink::Interaction()
 	if (plateCount > 0)
 	{
 		curTime += GetWorld()->DeltaTimeSeconds;
+		progressWidget->curTime = curTime;
 		if (curTime >= coolTime)
 		{
 			SpawnPlate();
+			widgetComp->SetVisibility(false);
 			plateCount--;
 			curTime = 0;
+		}
+		else
+		{
+			widgetComp->SetVisibility(true);
 		}
 	}
 }

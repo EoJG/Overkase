@@ -13,7 +13,7 @@ AEO_Pot::AEO_Pot()
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Interior/S_Pot.S_Pot'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/pot.pot'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
