@@ -44,11 +44,11 @@ public:
 	//´ë½¬
 	UFUNCTION()
 	void DashMove();
-	
-	
+
+	bool bIsWalk = false;
 private:
 	bool bIsDash = false;
-	bool bIsWalk = false;
+	
 	float currentTime = 0;
 
 };

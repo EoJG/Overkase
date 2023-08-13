@@ -66,7 +66,6 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	space = Cast<UH_OverkaseInteraction>(me->overPlayerInteraction);
 
-
 	//애니메이션 if문
 	if (bIsWalk && space->bHasItem == false)
 	{
@@ -81,10 +80,11 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 		me->AnimationComponent->CallWalk(false);
 		me->AnimationComponent->DownHand();
 	}
-	else if (bIsWalk && space->bHasItem == true)
+	else if (!bIsWalk && space->bHasItem == true)
 	{
 		me->AnimationComponent->UpHand();
 	}
+
 
 }
 

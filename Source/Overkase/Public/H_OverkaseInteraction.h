@@ -42,6 +42,8 @@ public:
 	class USoundBase* putDownSound;
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
 	class USoundBase* throwSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* chopSound;
 
 	UPROPERTY(EditAnywhere, Category = "Foods")
 	TArray<AEO_Block*> blockActor;
@@ -56,7 +58,7 @@ public:
 
 	TArray<float> foodDistance;
 
-
+	void SoundPlay();
 	UFUNCTION()
 	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
@@ -66,11 +68,14 @@ public:
 	void GetFood(class USceneComponent* playerSceneComp);
 	void ReleaseFood(class AActor* food);
 
+	UPROPERTY(VisibleAnywhere)
+	class UH_OverkasePlayerMove* space;
 
-private:
+public:
 	bool bClickedSpace = false;
 	bool bIsDoingInteraction = false;
 	bool bPressedCtrl = false;
+	bool bSoundPlay = false;
 private:
 
 	int32 FindClosestBlock();
