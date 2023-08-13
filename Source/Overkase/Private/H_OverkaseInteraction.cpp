@@ -46,6 +46,11 @@ UH_OverkaseInteraction::UH_OverkaseInteraction()
 	{
 		throwSound = TempThrow.Object;
 	}
+	ConstructorHelpers::FObjectFinder<USoundBase> TempChop(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/KnifeChop.KnifeChop'"));
+	if (TempChop.Succeeded())
+	{
+		chopSound = TempChop.Object;
+	}
 }
 
 void UH_OverkaseInteraction::BeginPlay()
@@ -63,7 +68,6 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 
 	space = Cast<UH_OverkasePlayerMove>(me->overPlayerMove);
 	
-
 	// me 와 가까운 블록의 거리를 저장
 	closestBlockIndex = FindClosestBlock();
 
@@ -91,17 +95,21 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 		{
 			block->Interaction();
 
-			if (space->bIsWalk == false && blockActor[closestBlockIndex]->GetName().Contains(FString("Sink")))
+			if (blockActor[closestBlockIndex]->GetName().Contains(FString("Sink")))
 			{
 				
-				GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
-				me->AnimationComponent->CallWashHand(true);
+				//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
+				if (!bIsInteraction) {
+					WashHand();
+				}
 				
 			}
-			else if (space->bIsWalk == false && blockActor[closestBlockIndex]->GetName().Contains(FString("ChopTable")))
+			else if (blockActor[closestBlockIndex]->GetName().Contains(FString("ChopTable")))
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Cyan, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
-				me->AnimationComponent->CallChopHand(true);
+				//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Cyan, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
+				if (!bIsInteraction) {
+					ChopHand();
+				}
 				if (!bSoundPlay) {
 					SoundPlay();
 				}
@@ -112,11 +120,14 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 		{
 			me->AnimationComponent->CallWashHand(false);
 			me->AnimationComponent->DownHand();
+			bIsInteraction = false;
 		}
 		else if (!bIsDoingInteraction && blockActor[closestBlockIndex]->GetName().Contains(FString("ChopTable")))
 		{
 			me->AnimationComponent->CallChopHand(false);
 			me->AnimationComponent->DownHand();
+			bIsInteraction = false;
+
 
 		}
 	}
@@ -350,9 +361,17 @@ void UH_OverkaseInteraction::GetFood(class USceneComponent* playerSceneComp)
 	}
 }
 
-void UH_OverkaseInteraction::ReleaseFood(class AActor* food)
+
+void UH_OverkaseInteraction::WashHand()
 {
-	
+	bIsInteraction = true;
+	me->AnimationComponent->CallWashHand(true);
+}
+
+void UH_OverkaseInteraction::ChopHand()
+{
+	bIsInteraction = true;
+	me->AnimationComponent->CallChopHand(true);
 }
 
 int32 UH_OverkaseInteraction::FindClosestBlock()
