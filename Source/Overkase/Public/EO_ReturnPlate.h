@@ -25,4 +25,6 @@ public:
 	virtual void OnItem(class AActor* item) override;
 	virtual void GetItem(class USceneComponent* playerSceneComp) override;
 	void SpawnPlate();
+
+	float plateCount = 0;
 };

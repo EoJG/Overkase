@@ -34,7 +34,9 @@ void AEO_ReturnPlate::GetItem(class USceneComponent* playerSceneComp)
 		GetAttachedActors(items);
 
 		items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		bOnItem = false;
+
+		if (plateCount <= 0)
+			bOnItem = false;
 	}
 }
 
@@ -43,5 +45,7 @@ void AEO_ReturnPlate::SpawnPlate()
 	AEO_Plate* plateTemp = GetWorld()->SpawnActor<AEO_Plate>(rPlate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation());
 	plateTemp->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	plateTemp->bDirty = true;
+	plateCount++;
+
 	bOnItem = true;
 }

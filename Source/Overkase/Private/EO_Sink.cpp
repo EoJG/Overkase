@@ -18,7 +18,7 @@ AEO_Sink::AEO_Sink()
 		meshComp->SetRelativeRotation(FRotator(0, 0, 0));
 	}
 
-	sceneComp->SetRelativeLocation(FVector(0, -50, 50));
+	sceneComp->SetRelativeLocation(FVector(0, -80, 50));
 
 	ConstructorHelpers::FClassFinder<AEO_Plate> pTemp(TEXT("'/Game/Eo/Blueprints/Plate/BP_Plates.BP_Plates_C'"));
 	if (pTemp.Succeeded())
@@ -56,9 +56,9 @@ void AEO_Sink::GetItem(class USceneComponent* playerSceneComp)
 		GetAttachedActors(items);
 
 		items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		plateCount--;
+		compleCount--;
 
-		if (plateCount <= 0)
+		if (compleCount <= 0)
 			bOnItem = false;
 	}
 }
@@ -79,6 +79,7 @@ void AEO_Sink::Interaction()
 		else
 		{
 			widgetComp->SetVisibility(true);
+			progressWidget->BindProgressFunc();
 		}
 	}
 }
@@ -86,6 +87,7 @@ void AEO_Sink::Interaction()
 void AEO_Sink::SpawnPlate()
 {
 	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	compleCount++;
 
 	bOnItem = true;
 }

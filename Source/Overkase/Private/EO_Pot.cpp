@@ -11,13 +11,19 @@ AEO_Pot::AEO_Pot()
 
 	Tags.Add(TEXT("Pot"));
 
+	sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootScene"));
+	RootComponent = sceneComp;
+
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/pot.pot'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
+		meshComp->SetRelativeRotation(FRotator(0, 90, 0));
+		meshComp->SetRelativeScale3D(FVector(1.5f));
 	}
+	meshComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
