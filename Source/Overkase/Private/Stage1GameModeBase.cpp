@@ -2,25 +2,22 @@
 
 
 #include "Stage1GameModeBase.h"
+#include <Kismet/GameplayStatics.h>
 
 AStage1GameModeBase::AStage1GameModeBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	ConstructorHelpers::FClassFinder<AEO_CucumberSushi> cSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_CucumberSushi.BP_CucumberSushi_C'");
-	if (cSushiTemp.Succeeded())
+	static ConstructorHelpers::FClassFinder<UEO_InGameInterface> menuTemp(TEXT("'/Game/Eo/Blueprints/UI/BP_UI_InGameInterface.BP_UI_InGameInterface_C'"));
+	if (menuTemp.Succeeded())
 	{
-		cucumberSushi = cSushiTemp.Class;
+		menuInterface = menuTemp.Class;
 	}
-	ConstructorHelpers::FClassFinder<AEO_FishSushi> fSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_FishSushi.BP_FishSushi_C'");
-	if (fSushiTemp.Succeeded())
+
+	static ConstructorHelpers::FClassFinder<AEO_OrderTable> orderTemp(TEXT("'/Game/Eo/Blueprints/Object/BP_OrderTable.BP_OrderTable_C'"));
+	if (orderTemp.Succeeded())
 	{
-		fishSushi = fSushiTemp.Class;
-	}
-	ConstructorHelpers::FClassFinder<AEO_OctopusSushi> oSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_OctopusSushi.BP_OctopusSushi_C'");
-	if (oSushiTemp.Succeeded())
-	{
-		octopusSushi = oSushiTemp.Class;
+		orderTable = orderTemp.Class;
 	}
 }
 
@@ -28,4 +25,8 @@ void AStage1GameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UUserWidget* menu;
+	menu = CreateWidget(GetWorld(), menuInterface);
+	menu->AddToViewport();
+	Cast<AEO_OrderTable>(UGameplayStatics::GetActorOfClass(GetWorld(), orderTable))->menuInter = Cast<UEO_InGameInterface>(menu);
 }

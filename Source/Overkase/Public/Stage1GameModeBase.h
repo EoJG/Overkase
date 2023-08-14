@@ -21,10 +21,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(VisibleAnywhere, Category="Foods")
-	TSubclassOf<class AEO_CucumberSushi> cucumberSushi;
-	UPROPERTY(VisibleAnywhere, Category="Foods")
-	TSubclassOf<class AEO_FishSushi> fishSushi;
-	UPROPERTY(VisibleAnywhere, Category="Foods")
-	TSubclassOf<class AEO_OctopusSushi> octopusSushi;
+	UPROPERTY(VisibleAnywhere, Category="WidgetSettings")
+	TSubclassOf<class UEO_InGameInterface> menuInterface;
+	UPROPERTY(VisibleAnywhere, Category="WidgetSettings")
+	TSubclassOf<class AEO_OrderTable> orderTable;
 };

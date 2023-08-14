@@ -3,6 +3,7 @@
 
 #include "EO_OrderTable.h"
 #include <Kismet/GameplayStatics.h>
+#include <UMG/Public/Blueprint/WidgetBlueprintLibrary.h>
 
 AEO_OrderTable::AEO_OrderTable()
 {
@@ -29,7 +30,7 @@ AEO_OrderTable::AEO_OrderTable()
 void AEO_OrderTable::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	wReturnPlate = Cast<AEO_ReturnPlate>(UGameplayStatics::GetActorOfClass(GetWorld(), returnPlate));
 }
 
@@ -43,6 +44,8 @@ void AEO_OrderTable::OnItem(class AActor* item)
 			
 			TArray<AActor*> items;
 			item->GetAttachedActors(items);
+			menuInter->SubmitMenu(items[0]->Tags[0]);
+
 			items[0]->Destroy();
 			item->Destroy();
 

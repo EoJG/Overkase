@@ -18,9 +18,12 @@ public:
 	AEO_OrderTable(); 
 
 protected:
-		virtual void BeginPlay() override;
+	virtual void BeginPlay() override;
 
 public:
+	UPROPERTY(VisibleAnywhere, Category="Widget")
+	class UEO_InGameInterface* menuInter;
+
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<class AEO_ReturnPlate> returnPlate;
 	UPROPERTY(VisibleAnywhere)
