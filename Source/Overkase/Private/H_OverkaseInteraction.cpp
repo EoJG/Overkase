@@ -100,7 +100,7 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 				
 				//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
 				if (!bIsInteraction) {
-					//WashHand();
+					WashHand();
 				}
 				
 			}
@@ -108,7 +108,7 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 			{
 				//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Cyan, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
 				if (!bIsInteraction) {
-					//ChopHand();
+					ChopHand();
 				}
 				if (!bSoundPlay) {
 					SoundPlay();
