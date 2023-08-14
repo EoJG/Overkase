@@ -25,6 +25,7 @@ private:
 
 private:
 	int plateCount = 0;
+	int compleCount = 0;
 	float curTime = 0;
 	float coolTime = 3;
 

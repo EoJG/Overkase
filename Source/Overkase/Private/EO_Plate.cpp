@@ -31,6 +31,7 @@ AEO_Plate::AEO_Plate()
 
 	sceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
 	sceneComp->SetupAttachment(meshComp);
+	sceneComp->SetRelativeLocation(FVector(0, 0, 25));
 
 	ConstructorHelpers::FClassFinder<AEO_CucumberSushi> cSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_CucumberSushi.BP_CucumberSushi_C'");
 	if (cSushiTemp.Succeeded())

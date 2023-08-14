@@ -25,7 +25,10 @@ public:
 
 public:
 	UPROPERTY(VisibleAnywhere)
+	class USceneComponent* sceneComp;
+	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* meshComp;
+
 
 public:
 	UPROPERTY(VisibleAnywhere, Category = "Settings")

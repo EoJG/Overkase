@@ -102,7 +102,6 @@ void UEO_AnimationComponent::Walk()
 			
 
 		handComp->AddWorldRotation(FRotator(0, c, 0));
-		UE_LOG(LogTemp, Warning, TEXT("%f"), handComp->GetRelativeRotation().Yaw);
 	}
 }
 
