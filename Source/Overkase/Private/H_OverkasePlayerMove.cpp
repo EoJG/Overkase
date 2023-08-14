@@ -34,7 +34,7 @@ void UH_OverkasePlayerMove::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	moveComp->MaxWalkSpeed = 400;
+	moveComp->MaxWalkSpeed = 600;
 
 }
 
@@ -47,11 +47,11 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 	if (bIsDash) {
 		// 2. 대쉬중이면 인풋값을 받지않는다
 		UE_LOG(LogTemp,Warning,TEXT("in"));
-		moveComp->MaxWalkSpeed = FMath::Lerp(1500, 350, 0.2f);
+		moveComp->MaxWalkSpeed = FMath::Lerp(2000, 350, 0.2f);
 	}
 
 	if (currentTime > 0.3) {
-		moveComp->MaxWalkSpeed = 400;
+		moveComp->MaxWalkSpeed = 600;
 		bIsDash = false;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%f"), me->GetCharacterMovement()->Velocity.Length()));
