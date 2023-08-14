@@ -32,4 +32,5 @@ void AEO_Cucumber::BeginPlay()
 	Super::BeginPlay();
 
 	bCanChop = true;
+	coolTime = 3;
 }
