@@ -33,12 +33,12 @@ public:
 	TSubclassOf<class AEO_Food> sushiMenu1;
 
 	UPROPERTY(EditAnywhere, Category = "menu")
-	TSubclassOf<class AEO_CucumberSushi> sushiMenu2;
+	TSubclassOf<class AO2_sushi> sushiMenu2;
 
 	UPROPERTY(EditAnywhere, Category = "menu")
-	TSubclassOf<class AEO_OctopusSushi> sushiMenu3;
+	TSubclassOf<class AMooner_sushi> sushiMenu3;
 
-
+	
 
 	/*UPROPERTY(BlueprintReadWrite, Category = sushiMenu)
 	class AEO_Food* cucumberSushi;

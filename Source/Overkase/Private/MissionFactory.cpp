@@ -7,6 +7,8 @@
 #include "EO_CucumberSushi.h"
 #include "EO_OctopusSushi.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "O2_sushi.h"
+#include "Mooner_sushi.h"
 
 // Sets default values
 AMissionFactory::AMissionFactory()
@@ -34,7 +36,7 @@ void AMissionFactory::Tick(float DeltaTime)
     if (currentTime > createTime)
     {
         
-        GetWorld()->SpawnActor<AEO_CucumberSushi>(sushiMenu2, GetActorLocation(), FRotator());
+        GetWorld()->SpawnActor<AO2_sushi>(sushiMenu2, GetActorLocation(), FRotator());
         //GetWorld()->SpawnActor<AEO_OctopusSushi>(sushiMenu3, GetActorLocation(), FRotator());
 
         // 경과시간을 초기화
@@ -53,8 +55,8 @@ void AMissionFactory::Get_MissionMenu()
     UWorld* World = GetWorld();
     FActorSpawnParameters param;
     param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-    AEO_CucumberSushi* oeSushi = World->SpawnActor<AEO_CucumberSushi>(sushiMenu2, GetActorLocation(), FRotator(), param);
-    AEO_OctopusSushi* octorSushi = World->SpawnActor<AEO_OctopusSushi>(sushiMenu3, GetActorLocation(), FRotator(), param);
+    AO2_sushi* oeSushi = World->SpawnActor<AO2_sushi>(sushiMenu2, GetActorLocation(), FRotator(), param);
+    AMooner_sushi* octorSushi = World->SpawnActor<AMooner_sushi>(sushiMenu3, GetActorLocation(), FRotator(), param);
 }
 
 
