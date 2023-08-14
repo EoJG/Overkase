@@ -24,7 +24,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	handRComp = CreateDefaultSubobject<USceneComponent>(TEXT("HandRComp"));
 	handRComp->SetupAttachment(handComp);
 	handRComp->SetRelativeLocation(FVector(0,0,90));
-
+	
 	handR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HandR"));
 	handR->SetupAttachment(handRComp);
 	handR->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator( 0.000000, -90.000000, 0.000000));
@@ -120,6 +120,9 @@ void AH_OverkaseCharacter::BeginPlay()
 
 	AnimationComponent->SetMeshData(crocodileMesh, headComp, handComp, handRComp, handR, handL);
 }
+		
+
+
 
 // Called every frame
 void AH_OverkaseCharacter::Tick(float DeltaTime)
