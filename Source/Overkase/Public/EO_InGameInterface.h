@@ -34,7 +34,7 @@ public:
 	TSubclassOf<class UEO_Menu> octopusSushiMenu;
 
 private:
-	UPROPERTY();
+	UPROPERTY()
 	class UEO_Menu* menuSlot;
 
 	UPROPERTY()

@@ -118,14 +118,14 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 		}
 		else if (!bIsDoingInteraction && blockActor[closestBlockIndex]->GetName().Contains(FString("Sink")))
 		{
-			me->AnimationComponent->CallWashHand(false);
-			me->AnimationComponent->DownHand();
+			/*me->AnimationComponent->CallWashHand(false);
+			me->AnimationComponent->DownHand();*/
 			bIsInteraction = false;
 		}
 		else if (!bIsDoingInteraction && blockActor[closestBlockIndex]->GetName().Contains(FString("ChopTable")))
 		{
-			me->AnimationComponent->CallChopHand(false);
-			me->AnimationComponent->DownHand();
+			/*me->AnimationComponent->CallChopHand(false);
+			me->AnimationComponent->DownHand();*/
 			bIsInteraction = false;
 
 
@@ -365,13 +365,13 @@ void UH_OverkaseInteraction::GetFood(class USceneComponent* playerSceneComp)
 void UH_OverkaseInteraction::WashHand()
 {
 	bIsInteraction = true;
-	me->AnimationComponent->CallWashHand(true);
+	//me->AnimationComponent->CallWashHand(true);
 }
 
 void UH_OverkaseInteraction::ChopHand()
 {
 	bIsInteraction = true;
-	me->AnimationComponent->CallChopHand(true);
+	//me->AnimationComponent->CallChopHand(true);
 }
 
 int32 UH_OverkaseInteraction::FindClosestBlock()

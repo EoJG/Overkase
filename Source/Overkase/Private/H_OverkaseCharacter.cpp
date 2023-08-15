@@ -17,17 +17,9 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	handComp = CreateDefaultSubobject<USceneComponent>(TEXT("Hand"));
-	handComp->SetupAttachment(RootComponent);
-	handComp->SetRelativeLocation(FVector(0,0,-60));
-
-	handRComp = CreateDefaultSubobject<USceneComponent>(TEXT("HandRComp"));
-	handRComp->SetupAttachment(handComp);
-	handRComp->SetRelativeLocation(FVector(0,0,90));
-	
 	handR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HandR"));
-	handR->SetupAttachment(handRComp);
-	handR->SetRelativeLocationAndRotation(FVector(0, 0, -90), FRotator( 0.000000, -90.000000, 0.000000));
+	handR->SetupAttachment(RootComponent);
+	handR->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator( 0.000000, -90.000000, 0.000000));
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHandRMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Crocodile_Hand_Open_R.Crocodile_Hand_Open_R'"));
 
@@ -36,8 +28,8 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	}
 
 	handL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("handL"));
-	handL->SetupAttachment(handComp);
-	handL->SetRelativeLocationAndRotation(FVector(0, 0, 0), FRotator(0.000000, -90.000000, 0.000000));
+	handL->SetupAttachment(RootComponent);
+	handL->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0.000000, -90.000000, 0.000000));
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHandLMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Crocodile_Hand_Open_L.Crocodile_Hand_Open_L'"));
 
@@ -56,7 +48,8 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	}
 
 	headComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Head"));
-	headComp->SetupAttachment(crocodileMesh);
+	headComp->SetupAttachment(RootComponent);
+	headComp->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0, -90, 0));
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHeadMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Chef_Crocodile_Chef_Crocodile.Chef_Crocodile_Chef_Crocodile'"));
 
@@ -94,7 +87,6 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	overPlayerMove = CreateDefaultSubobject<UH_OverkasePlayerMove>(TEXT("PlayerMove"));
 	overPlayerInteraction = CreateDefaultSubobject<UH_OverkaseInteraction>(TEXT("PlayerInteraction"));
-	AnimationComponent = CreateDefaultSubobject<UEO_AnimationComponent>(TEXT("AnimationComponent"));
 
 	ConstructorHelpers::FObjectFinder<UInputMappingContext> TempIMC(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/HanSeunghui/Input/IMC_OverkaseInput.IMC_OverkaseInput'"));
 	if (TempIMC.Succeeded())
@@ -117,8 +109,6 @@ void AH_OverkaseCharacter::BeginPlay()
 			subSystem->AddMappingContext(imc, 0);
 		}
 	}
-
-	AnimationComponent->SetMeshData(crocodileMesh, headComp, handComp, handRComp, handR, handL);
 }
 		
 

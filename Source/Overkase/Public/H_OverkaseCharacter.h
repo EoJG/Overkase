@@ -30,10 +30,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(VisibleAnywhere)
-	class USceneComponent* handComp;
-	UPROPERTY(VisibleAnywhere)
-	class USceneComponent* handRComp;
-	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* handR;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* handL;
@@ -60,8 +56,6 @@ public:
 	class UOverkasePlayerBase* overPlayerMove;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UOverkasePlayerBase* overPlayerInteraction;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UEO_AnimationComponent* AnimationComponent;
 
 	//Enhanced Input resources
 	UPROPERTY(EditDefaultsOnly, Category = "Input")

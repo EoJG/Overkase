@@ -69,20 +69,20 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 	//애니메이션 if문
 	if (bIsWalk && space->bHasItem == false)
 	{
-		me->AnimationComponent->CallWalk(true);
+		//me->AnimationComponent->CallWalk(true);
 	}
 	else if (bIsWalk && space->bHasItem == true)
 	{
-		me->AnimationComponent->UpHand();
+		//me->AnimationComponent->UpHand();
 	}
 	else if(!bIsWalk && space->bHasItem == false)
 	{
-		me->AnimationComponent->CallWalk(false);
-		me->AnimationComponent->DownHand();
+		/*me->AnimationComponent->CallWalk(false);
+		me->AnimationComponent->DownHand();*/
 	}
 	else if (!bIsWalk && space->bHasItem == true)
 	{
-		me->AnimationComponent->UpHand();
+		//me->AnimationComponent->UpHand();
 	}
 
 
