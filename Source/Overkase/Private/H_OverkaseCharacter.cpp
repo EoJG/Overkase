@@ -48,8 +48,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	}
 
 	headComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Head"));
-	headComp->SetupAttachment(RootComponent);
-	headComp->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0, -90, 0));
+	headComp->SetupAttachment(crocodileMesh);
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHeadMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Chef_Crocodile_Chef_Crocodile.Chef_Crocodile_Chef_Crocodile'"));
 
