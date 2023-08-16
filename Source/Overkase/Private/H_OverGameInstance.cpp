@@ -22,7 +22,6 @@ void UH_OverGameInstance::Init()
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UH_OverGameInstance::OnCreateMySession);
 		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UH_OverGameInstance::OnFindOtherSessions);
 		sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UH_OverGameInstance::OnJoinSelectedSession);
-
 	}
 }
 
@@ -75,8 +74,6 @@ void UH_OverGameInstance::FindOtherSession()
 
 void UH_OverGameInstance::OnFindOtherSessions(bool bWasSuccessful)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnFindOtherSessions"));
-
 	if (bWasSuccessful)
 	{
 		// 검색된 세션 목록을 가져온다.
