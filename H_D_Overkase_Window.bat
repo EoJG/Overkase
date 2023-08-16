@@ -1,0 +1,1 @@
+"D:\epic\UE_5.2\Engine\Binaries\Win64\UnrealEditor.exe" "C:\Users\PC\Documents\GitHub\Overkase\Overkase.uproject" -game -ResX=640 -ResY=480 -WinX=200 -WinY=450 -log
