@@ -10,6 +10,7 @@
 #include <Components/SphereComponent.h>
 #include "InputMappingContext.h"
 #include "EO_AnimationComponent.h"
+#include "EO_InGameInterface.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -95,6 +96,13 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	bReplicates = true;
 
+
+	// 서버부터는 플레이어가 각자 UI를 생성하여야 하여 추가함
+	ConstructorHelpers::FClassFinder<UEO_InGameInterface> inUITemp(TEXT("'/Game/Eo/Blueprints/UI/BP_UI_InGameInterface.BP_UI_InGameInterface_C'"));
+	if (inUITemp.Succeeded())
+	{
+		inGameUIClass = inUITemp.Class;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -110,6 +118,9 @@ void AH_OverkaseCharacter::BeginPlay()
 			subSystem->AddMappingContext(imc, 0);
 		}
 	}
+
+	inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
+	inGameUI->AddToViewport();
 }
 		
 

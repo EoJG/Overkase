@@ -60,5 +60,10 @@ public:
 	//Enhanced Input resources
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* imc;
-	
+
+
+	UPROPERTY(VisibleAnywhere, Category="EO")
+	TSubclassOf<class UEO_InGameInterface> inGameUIClass;
+	UPROPERTY(VisibleAnywhere, Category = "EO")
+	class UEO_InGameInterface* inGameUI;
 };

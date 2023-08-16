@@ -47,10 +47,10 @@ void UH_OverGameInstance::CreateMySession(FText roomName)
 
 void UH_OverGameInstance::OnCreateMySession(FName sessionName, bool bWasSuccessful)
 {
-
+	
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/Maps/SHMap?Listen");
+		bool result = GetWorld()->ServerTravel("/Game/OverCook?Listen");
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result: %s"), result ? *FString("Success") : *FString("Failed..."));
 
 	}
@@ -134,6 +134,7 @@ void UH_OverGameInstance::OnJoinSelectedSession(FName sessionName, EOnJoinSessio
 			// 주소를 받았다면, 그 주소에 따라서 맵 이동한다.
 			if (!url.IsEmpty())
 			{
+				UE_LOG(LogTemp, Warning, TEXT("Travle On"));
 				playerCon->ClientTravel(url, ETravelType::TRAVEL_Absolute);
 			}
 		}

@@ -51,11 +51,11 @@ private:
 	UPROPERTY()
 	int score = 0;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	float curTime = 0;
 	UPROPERTY()
 	float limitTime = 240;
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	float menuCurTime = 0;
 	UPROPERTY()
 	float menuCoolTime = 2;
@@ -63,12 +63,19 @@ private:
 private:
 	UFUNCTION()
 	void SetTimerUI();
-	UFUNCTION()
-	void SpawnMenu(int randomNum);
 
 public:
+	UFUNCTION(Server, Reliable)
+	void ServerSpawnMenu();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSpawnMenu();
 	UFUNCTION()
 	void SubmitMenu(FName foodTag);
 	UFUNCTION()
 	void AddScore();
+	UFUNCTION()
+	void SetTimer(float settingTime);
+
+private:
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 };

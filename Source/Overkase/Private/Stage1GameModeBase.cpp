@@ -25,8 +25,8 @@ void AStage1GameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UUserWidget* menu;
+	/*UUserWidget* menu;
 	menu = CreateWidget(GetWorld(), menuInterface);
 	menu->AddToViewport();
-	Cast<AEO_OrderTable>(UGameplayStatics::GetActorOfClass(GetWorld(), orderTable))->menuInter = Cast<UEO_InGameInterface>(menu);
+	Cast<AEO_OrderTable>(UGameplayStatics::GetActorOfClass(GetWorld(), orderTable))->menuInter = Cast<UEO_InGameInterface>(menu);*/
 }

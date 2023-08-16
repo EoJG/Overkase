@@ -5,33 +5,37 @@
 #include <UMG/Public/Components/TextBlock.h>
 #include <UMG/Public/Components/ProgressBar.h>
 #include <UMG/Public/Components/StackBox.h>
+#include "Net/UnrealNetwork.h"
+#include "EO_Manager.h"
+#include <Kismet/GameplayStatics.h>
 
 
 void UEO_InGameInterface::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
-	curTime = limitTime;
+
+	SetTimer(180);
+	//ServerSpawnMenu();
 	text_Score->SetText(FText::AsNumber(score));
 }
 
 void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
 {
 	Super::NativeTick(Geometry, DeltaSeconds);
-
+	
 	curTime -= DeltaSeconds;
 
 	SetTimerUI();
 
-	if (menuCount < 5)
+	/*if (menuCount < 5)
 	{
 		menuCurTime += DeltaSeconds;
 		if (menuCurTime >= menuCoolTime)
 		{
-			SpawnMenu(FMath::RandRange(0, 2));
+			SpawnMenu();
 			menuCurTime = 0;
 		}
-	}
+	}*/
 }
 
 void UEO_InGameInterface::SetTimerUI()
@@ -45,8 +49,15 @@ void UEO_InGameInterface::SetTimerUI()
 	progress_Timer->SetPercent(curTime / limitTime);
 }
 
-void UEO_InGameInterface::SpawnMenu(int randomNum)
+void UEO_InGameInterface::ServerSpawnMenu_Implementation()
 {
+	MulticastSpawnMenu();
+}
+
+void UEO_InGameInterface::MulticastSpawnMenu_Implementation()
+{
+	int randomNum = FMath::RandRange(0, 2);
+
 	switch (randomNum)
 	{
 	case 0:
@@ -130,4 +141,18 @@ void UEO_InGameInterface::AddScore()
 	}
 
 	score += 60 + plusPoint;
+}
+
+void UEO_InGameInterface::SetTimer(float settingTime)
+{
+	limitTime = settingTime;
+	curTime = limitTime;
+}
+
+void UEO_InGameInterface::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UEO_InGameInterface, curTime);
+	DOREPLIFETIME(UEO_InGameInterface, menuCurTime);
 }
