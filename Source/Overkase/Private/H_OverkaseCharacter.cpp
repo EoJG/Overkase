@@ -93,6 +93,8 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 		imc = TempIMC.Object;
 	}
 
+	bReplicates = true;
+
 }
 
 // Called when the game starts or when spawned
