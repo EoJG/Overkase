@@ -45,6 +45,7 @@ void UH_OverLoginWidget::OnClickFindButton()
 {
 	if (ogi != nullptr)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("OnClickFindButton"));
 		ogi->FindOtherSession();
 		sb_RoomListBox->ClearChildren();
 	}
