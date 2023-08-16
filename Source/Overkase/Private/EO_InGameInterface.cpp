@@ -12,6 +12,7 @@ void UEO_InGameInterface::NativeConstruct()
 	Super::NativeConstruct();
 	
 	curTime = limitTime;
+	text_Score->SetText(FText::AsNumber(score));
 }
 
 void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
@@ -75,6 +76,8 @@ void UEO_InGameInterface::SubmitMenu(FName foodTag)
 		{
 			st_MenuList->RemoveChild(cucumberArr[0]);
 			cucumberArr.RemoveAt(0);
+			AddScore();
+			text_Score->SetText(FText::AsNumber(score));
 
 			menuCount--;
 		}
@@ -85,6 +88,8 @@ void UEO_InGameInterface::SubmitMenu(FName foodTag)
 		{
 			st_MenuList->RemoveChild(fishArr[0]);
 			fishArr.RemoveAt(0);
+			AddScore();
+			text_Score->SetText(FText::AsNumber(score));
 
 			menuCount--;
 		}
@@ -95,8 +100,34 @@ void UEO_InGameInterface::SubmitMenu(FName foodTag)
 		{
 			st_MenuList->RemoveChild(octopusArr[0]);
 			octopusArr.RemoveAt(0);
+			AddScore();
+			text_Score->SetText(FText::AsNumber(score));
 
 			menuCount--;
 		}
 	}
+}
+
+void UEO_InGameInterface::AddScore()
+{
+	int random = FMath::RandRange(1, 4);
+	int plusPoint = 0;
+
+	switch (random)
+	{
+	case 1:
+		plusPoint = 5;
+		break;
+	case 2:
+		plusPoint = 6;
+		break;
+	case 3:
+		plusPoint = 7;
+		break;
+	case 4:
+		plusPoint = 8;
+		break;
+	}
+
+	score += 60 + plusPoint;
 }

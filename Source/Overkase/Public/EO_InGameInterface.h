@@ -23,6 +23,8 @@ public:
 	class UTextBlock* text_Second;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category="TimerSettings")
 	class UProgressBar* progress_Timer;
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category="ScoreSettings")
+	class UTextBlock* text_Score;
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category="MenuSettings")
 	class UStackBox* st_MenuList;
@@ -46,6 +48,8 @@ private:
 
 	UPROPERTY()
 	int menuCount = 0;
+	UPROPERTY()
+	int score = 0;
 
 	UPROPERTY()
 	float curTime = 0;
@@ -65,4 +69,6 @@ private:
 public:
 	UFUNCTION()
 	void SubmitMenu(FName foodTag);
+	UFUNCTION()
+	void AddScore();
 };
