@@ -68,7 +68,7 @@ public:
 	class UH_OverGameInstance* ogi;
 
 	UFUNCTION()
-	void AddRoomSlot(struct FSessionSlotInfo slotInfo);
+	void AddRoomSlot(FSessionSlotInfo slotInfo);
 
 	UPROPERTY()
 	class UH_SessionInfoWidget* sessionSlot;

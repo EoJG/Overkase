@@ -19,6 +19,12 @@ void UH_OverLoginWidget::NativeConstruct()
 	btn_FindSession->OnClicked.AddDynamic(this, &UH_OverLoginWidget::OnClickFindButton);
 	btn_BackFromCreate->OnClicked.AddDynamic(this, &UH_OverLoginWidget::BackToFirstCanvas);
 	btn_BackFromFind->OnClicked.AddDynamic(this, &UH_OverLoginWidget::BackToFirstCanvas);
+
+	if (ogi != nullptr)
+	{
+		ogi->onSearchCompleted.AddDynamic(this, &UH_OverLoginWidget::AddRoomSlot);
+		ogi->onFindButtonActivation.AddDynamic(this, &UH_OverLoginWidget::ChangeButtonActivation);
+	}
 }
 
 void UH_OverLoginWidget::OnClickCreateButton()
@@ -67,7 +73,7 @@ void UH_OverLoginWidget::SwitchCanvas(int32 index)
 	ws_SessionUISwitch->SetActiveWidgetIndex(index);
 }
 
-void UH_OverLoginWidget::AddRoomSlot(struct FSessionSlotInfo slotInfo)
+void UH_OverLoginWidget::AddRoomSlot(FSessionSlotInfo slotInfo)
 {
 	// ½½·Ô À§Á¬À» »ý¼ºÇÑ´Ù.
 	sessionSlot = CreateWidget<UH_SessionInfoWidget>(GetWorld(), sessionInfoWidget);

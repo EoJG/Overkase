@@ -20,7 +20,8 @@ void UH_OverGameInstance::Init()
 		sessionInterface = subsys->GetSessionInterface();
 
 		sessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &UH_OverGameInstance::OnCreateMySession);
-
+		sessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &UH_OverGameInstance::OnFindOtherSessions);
+		sessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &UH_OverGameInstance::OnJoinSelectedSession);
 	}
 }
 
