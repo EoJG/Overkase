@@ -68,7 +68,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	interactionPosition = CreateDefaultSubobject<USceneComponent>(TEXT("InteractionPosition"));
 	interactionPosition->SetupAttachment(crocodileMesh);
-	interactionPosition->SetRelativeLocation(FVector(160, 0, 0));
+	interactionPosition->SetRelativeLocation(FVector(0, 100, 70));
 
 	interationDistance = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionDistance"));
 	interationDistance->SetupAttachment(crocodileMesh);
