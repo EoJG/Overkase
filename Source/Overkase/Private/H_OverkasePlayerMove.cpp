@@ -95,7 +95,7 @@ void UH_OverkasePlayerMove::SetupInputBinding(class UInputComponent* PlayerInput
 	if (pInput) {
 	
 		pInput->BindAction(ia_move, ETriggerEvent::Triggered, this, &UH_OverkasePlayerMove::Move);
-		pInput->BindAction(ia_dash, ETriggerEvent::Triggered, this, &UH_OverkasePlayerMove::DashMove);
+		pInput->BindAction(ia_dash, ETriggerEvent::Triggered, this, &UH_OverkasePlayerMove::ServerDashMove);
 
 	}
 }
@@ -113,7 +113,7 @@ void UH_OverkasePlayerMove::Move(const FInputActionValue& value)
 	
 }
 
-void UH_OverkasePlayerMove::DashMove()
+void UH_OverkasePlayerMove::ServerDashMove_Implementation()
 {
 	if (!bIsDash) {
 		UGameplayStatics::PlaySound2D(GetWorld(), dashSound);
@@ -123,3 +123,4 @@ void UH_OverkasePlayerMove::DashMove()
 
 	}
 }
+

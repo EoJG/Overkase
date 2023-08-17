@@ -17,7 +17,6 @@
 #include "Components/AudioComponent.h"
 #include "Net/UnrealNetwork.h"
 
-
 UH_OverkaseInteraction::UH_OverkaseInteraction()
 {
 	ConstructorHelpers::FObjectFinder<UInputAction> TempSpace(TEXT("/Script/EnhancedInput.InputAction'/Game/HanSeunghui/Input/IA_OverKaseSpace.IA_OverKaseSpace'"));
@@ -100,7 +99,7 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 			if (blockActor[closestBlockIndex]->GetName().Contains(FString("Sink")))
 			{
 				
-				//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
+				GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
 				if (!bIsInteraction) {
 					//WashHand();
 				}
@@ -108,7 +107,7 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 			}
 			else if (blockActor[closestBlockIndex]->GetName().Contains(FString("ChopTable")))
 			{
-				//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Cyan, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
+				GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Cyan, FString::Printf(TEXT("%s"), *blockActor[closestBlockIndex]->GetName()));
 				if (!bIsInteraction) {
 					//ChopHand();
 				}
@@ -155,16 +154,21 @@ void UH_OverkaseInteraction::SetupInputBinding(class UInputComponent* PlayerInpu
 	auto pInput = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 	if (pInput) 
 	{
-		pInput->BindAction(ia_Space_Interaction, ETriggerEvent::Triggered, this, &UH_OverkaseInteraction::SpaceInput);
-		pInput->BindAction(ia_ctrl_Interaction, ETriggerEvent::Started, this, &UH_OverkaseInteraction::CtrlInput);
-		pInput->BindAction(ia_ctrl_Interaction, ETriggerEvent::Completed, this, &UH_OverkaseInteraction::CtrlCompleted);
+		pInput->BindAction(ia_Space_Interaction, ETriggerEvent::Triggered, this, &UH_OverkaseInteraction::ServerSpaceInput);
+		pInput->BindAction(ia_ctrl_Interaction, ETriggerEvent::Started, this, &UH_OverkaseInteraction::ServerCtrlInput);
+		pInput->BindAction(ia_ctrl_Interaction, ETriggerEvent::Completed, this, &UH_OverkaseInteraction::ServerCtrlCompleted);
 
 	}
 	
 }
 
-void UH_OverkaseInteraction::SpaceInput()
+void UH_OverkaseInteraction::ServerSpaceInput_Implementation()
 {	
+	MulticastSpaceInput();
+}
+
+void UH_OverkaseInteraction::MulticastSpaceInput_Implementation()
+{
 	// 만약 가까이에 아무것도 있지 않으면 
 	if (blockDistance.IsEmpty() && foodDistance.IsEmpty())
 	{
@@ -175,7 +179,7 @@ void UH_OverkaseInteraction::SpaceInput()
 	if (!bHasItem && !blockDistance.IsEmpty())
 	{
 		// 블록을 가져와라
-		ItemOnPlayer();
+		ServerItemOnPlayer();
 		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
 
 	}
@@ -183,7 +187,7 @@ void UH_OverkaseInteraction::SpaceInput()
 	else if (!bHasItem && !foodDistance.IsEmpty())
 	{
 		//푸드를 가져와라
-		GetFood(me->interactionPosition);
+		ServerGetFood(me->interactionPosition);
 		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
 
 	}
@@ -191,7 +195,7 @@ void UH_OverkaseInteraction::SpaceInput()
 	else if (!bHasItem && blockDistance[closestBlockIndex] < foodDistance[closestFoodIndex])
 	{
 		// 블록을 가져와라
-		ItemOnPlayer();
+		ServerItemOnPlayer();
 		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
 
 	}
@@ -199,7 +203,7 @@ void UH_OverkaseInteraction::SpaceInput()
 	else if (!bHasItem && blockDistance[closestBlockIndex] > foodDistance[closestFoodIndex])
 	{
 		//푸드를 가져와라
-		GetFood(me->interactionPosition);
+		ServerGetFood(me->interactionPosition);
 		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
 
 	}
@@ -207,17 +211,22 @@ void UH_OverkaseInteraction::SpaceInput()
 	else
 	{
 		// 손에 든것을 내려놓아라
-		NoItem();
+		ServerNoItem();
 		UGameplayStatics::PlaySound2D(GetWorld(), putDownSound);
 
 	}
 }
 
-void UH_OverkaseInteraction::CtrlInput()
+void UH_OverkaseInteraction::ServerCtrlInput_Implementation()
+{
+	MulicastCtrlInput();
+}
+
+void UH_OverkaseInteraction::MulicastCtrlInput_Implementation()
 {
 	bPressedCtrl = true;
-	
-	if(bHasItem)
+
+	if (bHasItem)
 	{
 		AEO_Food* food = Cast<AEO_Food>(items[0]);
 		if (!items.IsEmpty()) {
@@ -230,15 +239,20 @@ void UH_OverkaseInteraction::CtrlInput()
 			}
 		}
 	}
-	else if (block != nullptr &&  block->bIsInterObj)
+	else if (block != nullptr && block->bIsInterObj)
 	{
 		bIsDoingInteraction = true;
 	}
 }
 
-void UH_OverkaseInteraction::ItemOnPlayer()
+void UH_OverkaseInteraction::ServerItemOnPlayer_Implementation()
 {
-	if(!bHasItem)
+	MulticastItemOnPlayer();
+}
+
+void UH_OverkaseInteraction::MulticastItemOnPlayer_Implementation()
+{
+	if (!bHasItem)
 	{
 		//블록 이근처에 없으면
 		if (blockActor.IsEmpty())
@@ -249,40 +263,37 @@ void UH_OverkaseInteraction::ItemOnPlayer()
 		else
 		{
 			// 블록을 든다
-			if (block) 
+			if (block)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("on block"));
-				//block->GetItem(me->interactionPosition);
 				SetOwnerToActor(block);
-				/*if(GetOwner()->HasAuthority())
-				{
-					block->ServerGetItem_Implementation(me->interactionPosition);
-				}
-				else
-				{
-					block->ServerGetItem(me->interactionPosition);
-				}*/
-				//block->ServerGetItem(me->interactionPosition);
-				FTimerHandle getHandler;
-				GetWorld()->GetTimerManager().SetTimer(getHandler, FTimerDelegate::CreateLambda([&] () {block->TestGetItem(me->interactionPosition);}), 0.3f, false);
+				block->ServerGetItem(me->interactionPosition);
+				//block->GetItem(me->interactionPosition);
 
-
-				if (items.IsEmpty() == false) 
+				if (items.IsEmpty() == false)
 				{
 					//bHasItem = true;
 				}
+
+
+				/*FTimerHandle getHandler;
+				GetWorld()->GetTimerManager().SetTimer(getHandler, FTimerDelegate::CreateLambda([&]() {block->ServerGetItem(me->interactionPosition); }), 0.3f, false);*/
 			}
 		}
 	}
 }
 
-void UH_OverkaseInteraction::NoItem()
+void UH_OverkaseInteraction::ServerNoItem_Implementation()
+{
+	MulticastNoItem();
+}
+
+void UH_OverkaseInteraction::MulticastNoItem_Implementation()
 {
 	//AEO_Plate* plate = Cast<AEO_Plate>(items[0]);
-	//AEO_Pot* pot = Cast<AEO_Pot>(items[0]);
+		//AEO_Pot* pot = Cast<AEO_Pot>(items[0]);
 
-	// 만약 아이템을 손에 들고있으면
-	if(bHasItem){
+		// 만약 아이템을 손에 들고있으면
+	if (bHasItem) {
 		// 만약 근처에 블록이 없다면
 		if (blockActor.IsEmpty())
 		{
@@ -297,10 +308,11 @@ void UH_OverkaseInteraction::NoItem()
 		}
 		else
 		{
-			if (!items.IsEmpty()) 
+			if (!items.IsEmpty())
 			{
-				block->OnItem(items[0]);
-				if (items.IsEmpty()) 
+				SetOwnerToActor(block);
+				block->ServerOnItem(items[0]);
+				if (items.IsEmpty())
 				{
 					//bHasItem = false;
 				}
@@ -309,7 +321,12 @@ void UH_OverkaseInteraction::NoItem()
 	}
 }
 
-void UH_OverkaseInteraction::CtrlCompleted()
+void UH_OverkaseInteraction::ServerCtrlCompleted_Implementation()
+{
+	MulticastCtrlCompleted();
+}
+
+void UH_OverkaseInteraction::MulticastCtrlCompleted_Implementation()
 {
 	bPressedCtrl = false;
 }
@@ -321,12 +338,17 @@ void UH_OverkaseInteraction::SoundPlay()
 	UAudioComponent* AudioComp = UGameplayStatics::SpawnSound2D(this, chopSound);
 	FTimerHandle soundTimerHandle;
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
-	// 3초 후에 사운드 중지
+	
 	TimerManager.SetTimer(soundTimerHandle, [this, AudioComp]()
 		{
 			AudioComp->Stop();
 			bSoundPlay = false;
 		}, 0.2f, false);
+}
+
+void UH_OverkaseInteraction::SetOwnerToActor_Implementation(class AActor* sibling)
+{
+	sibling->SetOwner(me);
 }
 
 void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -360,7 +382,7 @@ void UH_OverkaseInteraction::OnComponentEndOverlap(UPrimitiveComponent* Overlapp
 	}
 }
 
-void UH_OverkaseInteraction::GetFood(class USceneComponent* playerSceneComp)
+void UH_OverkaseInteraction::ServerGetFood_Implementation(class USceneComponent* playerSceneComp)
 {
 	Food = Cast<AEO_Food>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Food::StaticClass()));
 	if (Food)
@@ -378,13 +400,13 @@ void UH_OverkaseInteraction::GetFood(class USceneComponent* playerSceneComp)
 }
 
 
-void UH_OverkaseInteraction::WashHand()
+void UH_OverkaseInteraction::ServerWashHand_Implementation()
 {
 	bIsInteraction = true;
 	//me->AnimationComponent->CallWashHand(true);
 }
 
-void UH_OverkaseInteraction::ChopHand()
+void UH_OverkaseInteraction::ServerChopHand_Implementation()
 {
 	bIsInteraction = true;
 	//me->AnimationComponent->CallChopHand(true);
@@ -439,8 +461,9 @@ int32 UH_OverkaseInteraction::FindClosestFood()
 	return ClosestIndex; // 제일 가까운 인덱스 번호를 저장
 }
 
-void UH_OverkaseInteraction::SetOwnerToActor_Implementation(AActor* sibling)
+void UH_OverkaseInteraction::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	sibling->SetOwner(me);
-}
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	DOREPLIFETIME(UH_OverkaseInteraction, bIsInteraction);
+}

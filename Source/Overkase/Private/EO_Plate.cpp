@@ -48,6 +48,8 @@ AEO_Plate::AEO_Plate()
 	{
 		octopusSushi = oSushiTemp.Class;
 	}
+
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned

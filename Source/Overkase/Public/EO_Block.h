@@ -59,9 +59,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Interaction();
 
-	void TestGetItem(class USceneComponent* sceneComp);
-	UFUNCTION(Server,Reliable)
-	void ServerGetItem(class USceneComponent* playerSceneComp);
-	UFUNCTION(NetMulticast,Reliable)
-	void MulticastGetItem(class USceneComponent* playerSceneComp);
+	UFUNCTION(Server, Reliable)
+	virtual void ServerOnItem(class AActor* item);
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastOnItem(class AActor* item);
+
+	UFUNCTION(Server, Reliable)
+	virtual void ServerGetItem(class USceneComponent* playerSceneComp);
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastGetItem(class USceneComponent* playerSceneComp);
+
+	UFUNCTION(Server, Reliable)
+	void ServerOnSpawnPlate();
+	UFUNCTION(Server, Reliable)
+	void ServerPutSpawnPlate();
+	
+
 };

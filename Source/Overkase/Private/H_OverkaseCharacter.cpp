@@ -75,7 +75,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	//interationDistance->SetBoxExtent(FVector(80, 70, 50));
 	interationDistance->SetSphereRadius(100);
 	interationDistance->SetRelativeLocation(FVector(0, 60.000000, 70));
-	interationDistance->SetCollisionProfileName(TEXT("InteractionDistance"));
+	interationDistance->SetCollisionProfileName(TEXT("Interaction"));
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;

@@ -24,6 +24,8 @@ AEO_Pot::AEO_Pot()
 		meshComp->SetRelativeScale3D(FVector(1.5f));
 	}
 	meshComp->SetupAttachment(RootComponent);
+
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned

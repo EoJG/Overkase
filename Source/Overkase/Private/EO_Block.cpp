@@ -63,7 +63,6 @@ AEO_Block::AEO_Block()
 	}
 
 	bReplicates = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -77,13 +76,12 @@ void AEO_Block::BeginPlay()
 	
 	if (bSpawnPlate)
 	{
-		GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		bOnItem = true;
+		
+		ServerOnSpawnPlate();
 	}
 	else if (bSpawnPot)
 	{
-		GetWorld()->SpawnActor<AEO_Pot>(pot, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-		bOnItem = true;
+		ServerPutSpawnPlate();
 	}
 }
 
@@ -222,21 +220,129 @@ void AEO_Block::Interaction()
 	
 }
 
-void AEO_Block::TestGetItem(class USceneComponent* sceneCompN)
+void AEO_Block::ServerOnItem_Implementation(class AActor* item)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Owner: %s"), GetOwner() != nullptr ? *GetOwner()->GetName() : *FString("None"));
-	ServerGetItem(sceneCompN);
+	MulticastOnItem(item);
+}
+
+void AEO_Block::MulticastOnItem_Implementation(class AActor* item)
+{
+	if (!bOnItem)
+	{
+		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+		bOnItem = true;
+	}
+	else
+	{
+		TArray<AActor*> items;
+		GetAttachedActors(items);
+		// 테이블 위에 아이템이 접시 일 때
+		if (AEO_Plate* plateTemp = Cast<AEO_Plate>(items[0]))
+		{
+			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
+			{
+				return;
+			}
+			else if (AEO_Pot* pPot = Cast<AEO_Pot>(item))
+			{
+				if (!plateTemp->bDirty && pPot->bInFood)
+				{
+					TArray<AActor*> inFoods;
+					pPot->GetAttachedActors(inFoods);
+					if (Cast<AEO_Food>(inFoods[0])->bIsCooked)
+					{
+						inFoods[0]->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+						Cast<AEO_Food>(inFoods[0])->changeMeshComp->SetVisibility(true);
+
+						plateTemp->CheckRecipe(inFoods[0]->Tags[0]);
+						pPot->bInFood = false;
+					}
+				}
+			}
+			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
+			{
+				if (!plateTemp->CheckOnFood(pFood->Tags[0]))
+				{
+					item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+					plateTemp->CheckRecipe(item->Tags[0]);
+				}
+			}
+		}
+		// 테이블 위에 아이템이 냄비 일 때
+		else if (AEO_Pot* potTemp = Cast<AEO_Pot>(items[0]))
+		{
+			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
+			{
+				if (!pPlate->bDirty && potTemp->bInFood)
+				{
+					TArray<AActor*> inFoods;
+					potTemp->GetAttachedActors(inFoods);
+					if (Cast<AEO_Food>(inFoods[0])->bIsCooked)
+					{
+						inFoods[0]->AttachToComponent(pPlate->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+						Cast<AEO_Food>(inFoods[0])->changeMeshComp->SetVisibility(true);
+
+						pPlate->CheckRecipe(inFoods[0]->Tags[0]);
+						potTemp->bInFood = false;
+					}
+				}
+			}
+			else if (AEO_Pot* pPot = Cast<AEO_Pot>(item))
+			{
+				return;
+			}
+			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
+			{
+				if (pFood->bCanBoil && !potTemp->bInFood)
+				{
+					item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
+
+					potTemp->bInFood = true;
+				}
+			}
+		}
+		// 테이블 위에 아이템이 음식 일 때
+		else if (AEO_Food* foodTemp = Cast<AEO_Food>(items[0]))
+		{
+			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
+			{
+				if (!pPlate->bDirty && !pPlate->CheckOnFood(foodTemp->Tags[0]))
+				{
+					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					foodTemp->AttachToComponent(pPlate->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+					pPlate->CheckRecipe(foodTemp->Tags[0]);
+				}
+			}
+			else if (AEO_Pot* pPot = Cast<AEO_Pot>(item))
+			{
+				if (foodTemp->bCanBoil && !pPot->bInFood)
+				{
+					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					foodTemp->AttachToActor(pPot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					foodTemp->meshComp->SetVisibility(false);
+
+					pPot->bInFood = true;
+				}
+			}
+			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
+			{
+				return;
+			}
+		}
+	}
 }
 
 void AEO_Block::ServerGetItem_Implementation(class USceneComponent* playerSceneComp)
 {
-	UE_LOG(LogTemp,Warning,TEXT("server on"));
 	MulticastGetItem(playerSceneComp);
 }
 
 void AEO_Block::MulticastGetItem_Implementation(class USceneComponent* playerSceneComp)
 {
-	UE_LOG(LogTemp, Warning, TEXT("multicast on"));
 	if (bOnItem)
 	{
 		TArray<AActor*> items;
@@ -247,3 +353,23 @@ void AEO_Block::MulticastGetItem_Implementation(class USceneComponent* playerSce
 	}
 }
 
+void AEO_Block::ServerOnSpawnPlate_Implementation()
+{
+	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	bOnItem = true;
+}
+
+void AEO_Block::ServerPutSpawnPlate_Implementation()
+{
+	GetWorld()->SpawnActor<AEO_Pot>(pot, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	bOnItem = true;
+}
+
+
+
+//void AEO_Block::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+//{
+//	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+//
+//	/*DOREPLIFETIME(AEO_Block, bOnItem);*/
+//}

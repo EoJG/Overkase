@@ -31,6 +31,8 @@ AEO_Food::AEO_Food()
 	changeMeshComp->SetupAttachment(RootComponent);
 	changeMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
 	changeMeshComp->SetVisibility(false);
+
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned

@@ -42,8 +42,8 @@ public:
 	void Move(const FInputActionValue& value);
 
 	//´ë½¬
-	UFUNCTION()
-	void DashMove();
+	UFUNCTION(Server, UnReliable)
+	void ServerDashMove();
 
 	bool bIsWalk = false;
 private:

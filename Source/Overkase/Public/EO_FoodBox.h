@@ -23,4 +23,7 @@ public:
 
 public:
 	virtual void GetItem(class USceneComponent* playerSceneComp) override;
+
+	virtual void ServerGetItem(class USceneComponent* playerSceneComp) override;
+	virtual void MulticastGetItem(class USceneComponent* playerSceneComp) override;
 };
