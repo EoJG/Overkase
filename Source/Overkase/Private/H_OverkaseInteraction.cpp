@@ -15,6 +15,8 @@
 #include "EO_ChopTable.h"
 #include "TimerManager.h"
 #include "Components/AudioComponent.h"
+#include "Net/UnrealNetwork.h"
+
 
 UH_OverkaseInteraction::UH_OverkaseInteraction()
 {
@@ -249,7 +251,21 @@ void UH_OverkaseInteraction::ItemOnPlayer()
 			// 블록을 든다
 			if (block) 
 			{
-				block->GetItem(me->interactionPosition);
+				UE_LOG(LogTemp, Warning, TEXT("on block"));
+				//block->GetItem(me->interactionPosition);
+				SetOwnerToActor(block);
+				/*if(GetOwner()->HasAuthority())
+				{
+					block->ServerGetItem_Implementation(me->interactionPosition);
+				}
+				else
+				{
+					block->ServerGetItem(me->interactionPosition);
+				}*/
+				//block->ServerGetItem(me->interactionPosition);
+				FTimerHandle getHandler;
+				GetWorld()->GetTimerManager().SetTimer(getHandler, FTimerDelegate::CreateLambda([&] () {block->TestGetItem(me->interactionPosition);}), 0.3f, false);
+
 
 				if (items.IsEmpty() == false) 
 				{
@@ -422,3 +438,9 @@ int32 UH_OverkaseInteraction::FindClosestFood()
 	}
 	return ClosestIndex; // 제일 가까운 인덱스 번호를 저장
 }
+
+void UH_OverkaseInteraction::SetOwnerToActor_Implementation(AActor* sibling)
+{
+	sibling->SetOwner(me);
+}
+

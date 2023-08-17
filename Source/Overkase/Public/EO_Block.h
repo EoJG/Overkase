@@ -58,4 +58,10 @@ public:
 	virtual void GetItem(class USceneComponent* playerSceneComp);
 	UFUNCTION(BlueprintCallable)
 	virtual void Interaction();
+
+	void TestGetItem(class USceneComponent* sceneComp);
+	UFUNCTION(Server,Reliable)
+	void ServerGetItem(class USceneComponent* playerSceneComp);
+	UFUNCTION(NetMulticast,Reliable)
+	void MulticastGetItem(class USceneComponent* playerSceneComp);
 };
