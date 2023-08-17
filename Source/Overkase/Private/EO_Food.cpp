@@ -33,6 +33,7 @@ AEO_Food::AEO_Food()
 	changeMeshComp->SetVisibility(false);
 
 	bReplicates = true;
+	SetReplicateMovement(true);
 }
 
 // Called when the game starts or when spawned

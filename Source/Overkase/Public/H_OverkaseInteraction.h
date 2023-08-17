@@ -53,11 +53,11 @@ public:
 	UFUNCTION(Server, Unreliable)
 	void ServerCtrlCompleted();
 
-	UFUNCTION(NetMulticast, Unreliable)
-	void MulticastCtrlCompleted();
-	
 	UFUNCTION(Server, Unreliable)
 	void ServerGetFood(class USceneComponent* playerSceneComp);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastGetFood(class USceneComponent* playerSceneComp);
 
 	UFUNCTION(Server, Unreliable)
 	void ServerWashHand();
@@ -107,7 +107,7 @@ public:
 	bool bIsDoingInteraction = false;
 	bool bPressedCtrl = false;
 	bool bSoundPlay = false;
-	UPROPERTY(Replicated)
+	//UPROPERTY(Replicated)
 	bool bIsInteraction = false;
 private:
 

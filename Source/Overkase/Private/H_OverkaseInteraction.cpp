@@ -94,7 +94,8 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	if (blockActor.IsEmpty() == false) {
 		if (bIsDoingInteraction)
 		{
-			block->Interaction();
+			SetOwnerToActor(block);
+			block->ServerInteraction();
 
 			if (blockActor[closestBlockIndex]->GetName().Contains(FString("Sink")))
 			{
@@ -274,7 +275,6 @@ void UH_OverkaseInteraction::MulticastItemOnPlayer_Implementation()
 					//bHasItem = true;
 				}
 
-
 				/*FTimerHandle getHandler;
 				GetWorld()->GetTimerManager().SetTimer(getHandler, FTimerDelegate::CreateLambda([&]() {block->ServerGetItem(me->interactionPosition); }), 0.3f, false);*/
 			}
@@ -322,11 +322,6 @@ void UH_OverkaseInteraction::MulticastNoItem_Implementation()
 }
 
 void UH_OverkaseInteraction::ServerCtrlCompleted_Implementation()
-{
-	MulticastCtrlCompleted();
-}
-
-void UH_OverkaseInteraction::MulticastCtrlCompleted_Implementation()
 {
 	bPressedCtrl = false;
 }
@@ -384,6 +379,12 @@ void UH_OverkaseInteraction::OnComponentEndOverlap(UPrimitiveComponent* Overlapp
 
 void UH_OverkaseInteraction::ServerGetFood_Implementation(class USceneComponent* playerSceneComp)
 {
+	MulticastGetFood(playerSceneComp);
+}
+
+
+void UH_OverkaseInteraction::MulticastGetFood_Implementation(class USceneComponent* playerSceneComp)
+{
 	Food = Cast<AEO_Food>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Food::StaticClass()));
 	if (Food)
 	{
@@ -398,7 +399,6 @@ void UH_OverkaseInteraction::ServerGetFood_Implementation(class USceneComponent*
 		}
 	}
 }
-
 
 void UH_OverkaseInteraction::ServerWashHand_Implementation()
 {
@@ -465,5 +465,5 @@ void UH_OverkaseInteraction::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UH_OverkaseInteraction, bIsInteraction);
+	//DOREPLIFETIME(UH_OverkaseInteraction, bIsInteraction);
 }
