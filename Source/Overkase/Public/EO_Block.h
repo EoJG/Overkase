@@ -70,9 +70,12 @@ public:
 	virtual void MulticastGetItem(class USceneComponent* playerSceneComp);
 
 	UFUNCTION(Server, Reliable)
+	virtual void ServerInteraction();
+	UFUNCTION(NetMulticast, Reliable)
+	virtual void MulticastInteraction();
+
+	UFUNCTION(Server, Reliable)
 	void ServerOnSpawnPlate();
 	UFUNCTION(Server, Reliable)
 	void ServerPutSpawnPlate();
-	
-
 };

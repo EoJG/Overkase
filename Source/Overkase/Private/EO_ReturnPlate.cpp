@@ -49,3 +49,37 @@ void AEO_ReturnPlate::SpawnPlate()
 
 	bOnItem = true;
 }
+
+void AEO_ReturnPlate::ServerOnItem(class AActor* item)
+{
+	
+}
+
+void AEO_ReturnPlate::ServerGetItem(class USceneComponent* playerSceneComp)
+{
+	MulticastGetItem(playerSceneComp);
+}
+
+void AEO_ReturnPlate::MulticastGetItem(class USceneComponent* playerSceneComp)
+{
+	if (bOnItem)
+	{
+		TArray<AActor*> items;
+		GetAttachedActors(items);
+
+		items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+		if (plateCount <= 0)
+			bOnItem = false;
+	}
+}
+
+void AEO_ReturnPlate::ServerSpawnPlate_Implementation()
+{
+	AEO_Plate* plateTemp = GetWorld()->SpawnActor<AEO_Plate>(rPlate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation());
+	plateTemp->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	plateTemp->bDirty = true;
+	plateCount++;
+
+	bOnItem = true;
+}

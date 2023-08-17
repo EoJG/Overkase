@@ -353,6 +353,16 @@ void AEO_Block::MulticastGetItem_Implementation(class USceneComponent* playerSce
 	}
 }
 
+void AEO_Block::ServerInteraction_Implementation()
+{
+	
+}
+
+void AEO_Block::MulticastInteraction_Implementation()
+{
+	
+}
+
 void AEO_Block::ServerOnSpawnPlate_Implementation()
 {
 	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);

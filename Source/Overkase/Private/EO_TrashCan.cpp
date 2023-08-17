@@ -24,3 +24,17 @@ void AEO_TrashCan::OnItem(class AActor* item)
 		item->Destroy();
 	}
 }
+
+void AEO_TrashCan::ServerOnItem(class AActor* item)
+{
+	MulticastOnItem(item);
+}
+
+void AEO_TrashCan::MulticastOnItem(class AActor* item)
+{
+	if (!bOnItem)
+	{
+		item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		item->Destroy();
+	}
+}

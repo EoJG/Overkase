@@ -53,3 +53,28 @@ void AEO_OrderTable::OnItem(class AActor* item)
 		}
 	}
 }
+
+void AEO_OrderTable::ServerOnItem(class AActor* item)
+{
+	MulticastOnItem(item);
+}
+
+void AEO_OrderTable::MulticastOnItem(class AActor* item)
+{
+	if (AEO_Plate* plateTemp = Cast<AEO_Plate>(item))
+	{
+		if (!bOnItem && plateTemp->bIsComplete)
+		{
+			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+			TArray<AActor*> items;
+			item->GetAttachedActors(items);
+			menuInter->SubmitMenu(items[0]->Tags[0]);
+
+			items[0]->Destroy();
+			item->Destroy();
+
+			wReturnPlate->SpawnPlate();
+		}
+	}
+}

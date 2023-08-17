@@ -32,4 +32,10 @@ private:
 public:
 	virtual void OnItem(class AActor* item) override;
 	virtual void Interaction() override;
+
+	virtual void ServerOnItem(class AActor* item) override;
+	virtual void MulticastOnItem(class AActor* item) override;
+
+	virtual void ServerInteraction() override;
+	virtual void MulticastInteraction() override;
 };

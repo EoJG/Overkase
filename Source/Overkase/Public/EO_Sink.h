@@ -34,4 +34,16 @@ public:
 	virtual void GetItem(class USceneComponent* playerSceneComp) override;
 	virtual void Interaction() override;
 	void SpawnPlate();
+
+	virtual void ServerOnItem(class AActor* item) override;
+	virtual void MulticastOnItem(class AActor* item) override;
+
+	virtual void ServerGetItem(class USceneComponent* playerSceneComp) override;
+	virtual void MulticastGetItem(class USceneComponent* playerSceneComp) override;
+
+	virtual void ServerInteraction() override;
+	virtual void MulticastInteraction() override;
+
+	UFUNCTION(Server, Reliable)
+	void ServerSpawnPlate();
 };

@@ -31,4 +31,7 @@ public:
 
 public:
 	virtual void OnItem(class AActor* item) override;
+
+	virtual void ServerOnItem(class AActor* item) override;
+	virtual void MulticastOnItem(class AActor* item) override;
 };
