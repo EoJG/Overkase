@@ -72,7 +72,6 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	// me 와 가까운 블록의 거리를 저장
 	closestBlockIndex = FindClosestBlock();
 
-
 	if (blockActor.Num() != 0) 
 	{
 		block = Cast<AEO_Block>(blockActor[closestBlockIndex]);
@@ -134,7 +133,6 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 		}
 	}
 
-	
 	
 	me->GetAttachedActors(items);
 
@@ -461,9 +459,10 @@ int32 UH_OverkaseInteraction::FindClosestFood()
 	return ClosestIndex; // 제일 가까운 인덱스 번호를 저장
 }
 
-void UH_OverkaseInteraction::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	//DOREPLIFETIME(UH_OverkaseInteraction, bIsInteraction);
-}
+//void UH_OverkaseInteraction::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+//{
+//	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+//
+//	DOREPLIFETIME(UH_OverkaseInteraction, foodActor);
+//}
