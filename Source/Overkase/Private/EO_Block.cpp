@@ -10,6 +10,7 @@
 #include "EO_Plate.h"
 #include <UMG/Public/Components/WidgetComponent.h>
 #include "EO_Progressbar.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AEO_Block::AEO_Block()
@@ -60,6 +61,9 @@ AEO_Block::AEO_Block()
 	{
 		pot = potTemp.Class;
 	}
+
+	bReplicates = true;
+
 }
 
 // Called when the game starts or when spawned
@@ -216,5 +220,30 @@ void AEO_Block::GetItem(class USceneComponent* playerSceneComp)
 void AEO_Block::Interaction()
 {
 	
+}
+
+void AEO_Block::TestGetItem(class USceneComponent* sceneCompN)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Owner: %s"), GetOwner() != nullptr ? *GetOwner()->GetName() : *FString("None"));
+	ServerGetItem(sceneCompN);
+}
+
+void AEO_Block::ServerGetItem_Implementation(class USceneComponent* playerSceneComp)
+{
+	UE_LOG(LogTemp,Warning,TEXT("server on"));
+	MulticastGetItem(playerSceneComp);
+}
+
+void AEO_Block::MulticastGetItem_Implementation(class USceneComponent* playerSceneComp)
+{
+	UE_LOG(LogTemp, Warning, TEXT("multicast on"));
+	if (bOnItem)
+	{
+		TArray<AActor*> items;
+		GetAttachedActors(items);
+
+		items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		bOnItem = false;
+	}
 }
 

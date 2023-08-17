@@ -88,4 +88,8 @@ private:
 	int32 closestBlockIndex = 0;
 
 	TArray<AActor*> items;
+
+	UFUNCTION(Server, Reliable)
+	void SetOwnerToActor(AActor* sibling);
+
 };
