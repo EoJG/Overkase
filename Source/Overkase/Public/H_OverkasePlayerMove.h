@@ -35,6 +35,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
 	class USoundBase* dashSound;
 
+	
+
 	UPROPERTY(VisibleAnywhere)
 	class UH_OverkaseInteraction* space;
 	//좌우이동
@@ -44,6 +46,7 @@ public:
 	//대쉬
 	UFUNCTION(Server, UnReliable)
 	void ServerDashMove();
+
 
 	bool bIsWalk = false;
 private:

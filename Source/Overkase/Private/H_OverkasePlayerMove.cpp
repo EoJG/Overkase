@@ -6,6 +6,7 @@
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
 #include "H_PlayerCameraActor.h"
 #include <Kismet/GameplayStatics.h>
+#include <Particles/ParticleSystem.h>
 
 
 UH_OverkasePlayerMove::UH_OverkasePlayerMove()
@@ -27,6 +28,7 @@ UH_OverkasePlayerMove::UH_OverkasePlayerMove()
 		dashSound = TempSound.Object;
 	}
 
+	
 
 }
 
@@ -109,18 +111,21 @@ void UH_OverkasePlayerMove::Move(const FInputActionValue& value)
 	me->AddMovementInput(rightVectorOfController, mValue.X);
 	me->AddMovementInput(forwardVectorOfController, mValue.Y);
 
-	
-	
 }
 
 void UH_OverkasePlayerMove::ServerDashMove_Implementation()
 {
 	if (!bIsDash) {
+
 		UGameplayStatics::PlaySound2D(GetWorld(), dashSound);
+		me->MulticastOnParticle();
+
 		// 3. 대쉬중이아니면 대쉬를 한다.
 		bIsDash = true;
 		currentTime = 0;
 
 	}
 }
+
+
 

@@ -38,6 +38,8 @@ public:
 private:
 	UPROPERTY()
 	class UEO_Menu* menuSlot;
+	UPROPERTY()
+	class AH_OverkaseCharacter* me;
 
 	UPROPERTY()
 	TArray<class UEO_Menu*> cucumberArr;
@@ -48,34 +50,54 @@ private:
 
 	UPROPERTY()
 	int menuCount = 0;
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	int score = 0;
 
 	UPROPERTY(Replicated)
 	float curTime = 0;
+
+
 	UPROPERTY()
 	float limitTime = 240;
+
 	UPROPERTY(Replicated)
-	float menuCurTime = 0;
-	UPROPERTY()
+	float menuCurTime = 1;
+
+	UPROPERTY(Replicated)
 	float menuCoolTime = 2;
 
 private:
 	UFUNCTION()
 	void SetTimerUI();
 
+
 public:
 	UFUNCTION(Server, Reliable)
-	void ServerSpawnMenu();
+	void ServerCase0();
+	UFUNCTION(Server, Reliable)
+	void ServerCase1();
+	UFUNCTION(Server, Reliable)
+	void ServerCase2();
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastSpawnMenu();
+	void MulticastCase0();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastCase1();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastCase2();
+
+	UFUNCTION(Server, Reliable)
+	void ServerSpawnMenu();
+
+	void SpawnMenu(int random);
 	UFUNCTION()
 	void SubmitMenu(FName foodTag);
 	UFUNCTION()
 	void AddScore();
 	UFUNCTION()
 	void SetTimer(float settingTime);
-
+	
 private:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+
+	int randomNum = 0;
 };

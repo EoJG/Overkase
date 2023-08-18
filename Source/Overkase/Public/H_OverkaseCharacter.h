@@ -18,6 +18,8 @@ public:
 	// Sets default values for this character's properties
 	AH_OverkaseCharacter();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void SendMulticast(int32 random);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -60,10 +62,24 @@ public:
 	//Enhanced Input resources
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* imc;
+	UPROPERTY(EditDefaultsOnly, Category = Effect )
+	class UParticleSystem* effect;
 
-
-	UPROPERTY(VisibleAnywhere, Category="EO")
+	UPROPERTY(VisibleAnywhere, Category = "EO")
 	TSubclassOf<class UEO_InGameInterface> inGameUIClass;
 	UPROPERTY(VisibleAnywhere, Category = "EO")
 	class UEO_InGameInterface* inGameUI;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnParticle();
+
+	UFUNCTION(Server, Reliable)
+	void ServerOnScreenMenu();
+	UFUNCTION(NetMulticast, Reliable)
+	void  MulticastOnScreenMenu();
+
+	UFUNCTION(Server,Reliable)
+	void SetOwnerToActor(class UUserWidget* sibling);
+
+	float currentTime = 0;
 };

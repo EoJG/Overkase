@@ -11,6 +11,8 @@
 #include "InputMappingContext.h"
 #include "EO_AnimationComponent.h"
 #include "EO_InGameInterface.h"
+#include <Kismet/GameplayStatics.h>
+#include "Particles/ParticleSystem.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -96,13 +98,26 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	bReplicates = true;
 
-
 	// 서버부터는 플레이어가 각자 UI를 생성하여야 하여 추가함
 	ConstructorHelpers::FClassFinder<UEO_InGameInterface> inUITemp(TEXT("'/Game/Eo/Blueprints/UI/BP_UI_InGameInterface.BP_UI_InGameInterface_C'"));
 	if (inUITemp.Succeeded())
 	{
 		inGameUIClass = inUITemp.Class;
 	}
+	
+	ConstructorHelpers::FObjectFinder<UParticleSystem> TempPart(TEXT("/Script/Engine.ParticleSystem'/Game/HanSeunghui/Effect/P_Explosion.P_Explosion'"));
+
+	if (TempPart.Succeeded())
+	{
+		effect = TempPart.Object;
+	}
+}
+
+void AH_OverkaseCharacter::SendMulticast_Implementation(int32 random)
+{
+	UE_LOG(LogTemp, Warning, TEXT("SendMulticast_Implementation and NetMode : %d"), GetNetMode());
+	inGameUI->SpawnMenu(random);
+
 }
 
 // Called when the game starts or when spawned
@@ -121,6 +136,8 @@ void AH_OverkaseCharacter::BeginPlay()
 
 	inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
 	inGameUI->AddToViewport();
+
+	//SetOwnerToActor(inGameUI);
 }
 		
 
@@ -133,6 +150,15 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);
 
+	currentTime+=DeltaTime;
+	if(currentTime>=5)
+	{
+		if (HasAuthority())
+		{
+			inGameUI->ServerSpawnMenu();
+		}
+		currentTime=0;
+	}
 }
 
 // Called to bind functionality to input
@@ -143,5 +169,34 @@ void AH_OverkaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 	//델리게이트 한번 호출
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
 
+}
+
+void AH_OverkaseCharacter::MulticastOnParticle_Implementation()
+{
+	
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), effect,GetActorLocation(), GetActorRotation(), GetActorRelativeScale3D());
+}
+
+
+void AH_OverkaseCharacter::ServerOnScreenMenu_Implementation()
+{
+	if (HasAuthority()) 
+	{
+		inGameUI->ServerSpawnMenu();
+		MulticastOnScreenMenu();
+	}
+}
+
+void AH_OverkaseCharacter::MulticastOnScreenMenu_Implementation()
+{
+	
+		inGameUI->ServerSpawnMenu();
+	
+}
+
+void AH_OverkaseCharacter::SetOwnerToActor_Implementation(class UUserWidget* sibling)
+{
+	APlayerController* pc = GetWorld()->GetFirstPlayerController();
+	sibling->SetOwningPlayer(pc);
 }
 

@@ -50,4 +50,9 @@ public:
 public:
 	UFUNCTION(BlueprintCallable)
 	void ShootFood(FVector forward);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void PickUpItem();
+	UFUNCTION(NetMulticast, Reliable)
+	void DropItem();
 };

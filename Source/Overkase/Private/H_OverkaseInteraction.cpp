@@ -52,6 +52,8 @@ UH_OverkaseInteraction::UH_OverkaseInteraction()
 	{
 		chopSound = TempChop.Object;
 	}
+
+	
 }
 
 void UH_OverkaseInteraction::BeginPlay()
@@ -282,15 +284,10 @@ void UH_OverkaseInteraction::MulticastItemOnPlayer_Implementation()
 
 void UH_OverkaseInteraction::ServerNoItem_Implementation()
 {
-	MulticastNoItem();
-}
-
-void UH_OverkaseInteraction::MulticastNoItem_Implementation()
-{
-	//AEO_Plate* plate = Cast<AEO_Plate>(items[0]);
-		//AEO_Pot* pot = Cast<AEO_Pot>(items[0]);
-
-		// 만약 아이템을 손에 들고있으면
+	if (Food)
+	{
+		
+	}
 	if (bHasItem) {
 		// 만약 근처에 블록이 없다면
 		if (blockActor.IsEmpty())
@@ -298,8 +295,8 @@ void UH_OverkaseInteraction::MulticastNoItem_Implementation()
 			// 만약 0번이 있다면
 			if (items.IsValidIndex(0))
 			{
+				Food->DropItem();
 				// 아이템을 내려놓아라
-				Food->boxComp->SetSimulatePhysics(true);
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 			}
 			//bHasItem = false;
@@ -317,6 +314,15 @@ void UH_OverkaseInteraction::MulticastNoItem_Implementation()
 			}
 		}
 	}
+}
+
+void UH_OverkaseInteraction::MulticastNoItem_Implementation()
+{
+	//AEO_Plate* plate = Cast<AEO_Plate>(items[0]);
+		//AEO_Pot* pot = Cast<AEO_Pot>(items[0]);
+
+		// 만약 아이템을 손에 들고있으면
+	
 }
 
 void UH_OverkaseInteraction::ServerCtrlCompleted_Implementation()
@@ -377,13 +383,15 @@ void UH_OverkaseInteraction::OnComponentEndOverlap(UPrimitiveComponent* Overlapp
 
 void UH_OverkaseInteraction::ServerGetFood_Implementation(class USceneComponent* playerSceneComp)
 {
-	MulticastGetFood(playerSceneComp);
-}
-
-
-void UH_OverkaseInteraction::MulticastGetFood_Implementation(class USceneComponent* playerSceneComp)
-{
+	
 	Food = Cast<AEO_Food>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Food::StaticClass()));
+
+	SetOwnerToActor(Food);
+	UE_LOG(LogTemp, Warning, TEXT("Food Connection : %s"), Food->GetNetConnection() == nullptr?TEXT("NULL"):TEXT("Valid"));
+	if (GetNetMode() == NM_Client)
+	{
+	}
+
 	if (Food)
 	{
 		if (!bHasItem)
@@ -391,11 +399,20 @@ void UH_OverkaseInteraction::MulticastGetFood_Implementation(class USceneCompone
 			if (foodActor.IsEmpty()) {
 				return;
 			}
-			foodActor[closestFoodIndex]->boxComp->SetSimulatePhysics(false);
+
+			foodActor[closestFoodIndex]->PickUpItem();
 			foodActor[closestFoodIndex]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			bHasItem = true;
 		}
 	}
+	//MulticastGetFood(playerSceneComp);
+}
+
+
+void UH_OverkaseInteraction::MulticastGetFood_Implementation(class USceneComponent* playerSceneComp)
+{
+		UE_LOG(LogTemp, Warning, TEXT("PC : %s, netmode : %d"), me->Controller == nullptr?TEXT("NULL"):TEXT("valid"), GetNetMode());
+	
 }
 
 void UH_OverkaseInteraction::ServerWashHand_Implementation()

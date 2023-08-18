@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "EO_InGameInterface.h"
+#include "EO_OrderTable.h"
 #include "Stage1GameModeBase.generated.h"
 
 /**
@@ -21,8 +23,5 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(VisibleAnywhere, Category="WidgetSettings")
-	TSubclassOf<class UEO_InGameInterface> menuInterface;
-	UPROPERTY(VisibleAnywhere, Category="WidgetSettings")
-	TSubclassOf<class AEO_OrderTable> orderTable;
+
 };

@@ -59,3 +59,17 @@ void AEO_Food::ShootFood(FVector forward)
 	boxComp->AddImpulse(dir);
 }
 
+void AEO_Food::PickUpItem_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("PickUpItem_Implementation, NetMode : %d"), GetNetMode());
+	boxComp->SetSimulatePhysics(false);
+
+}
+
+void AEO_Food::DropItem_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("DropItem_Implementation, NetMode : %d"), GetNetMode());
+	boxComp->SetSimulatePhysics(true);
+
+}
+
