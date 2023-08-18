@@ -46,6 +46,9 @@ public:
 	FFindButtonSignature onFindButtonActivation;
 
 public:
+	bool wasSuccessful = false;
+
+public:
 	void CreateMySession(FText roomName);
 
 	void OnCreateMySession(FName sessionName, bool bWasSuccessful);
@@ -58,5 +61,5 @@ public:
 
 	void OnJoinSelectedSession(FName sessionName, EOnJoinSessionCompleteResult::Type result);
 
-
+	void TravelServer();
 };

@@ -461,9 +461,9 @@ int32 UH_OverkaseInteraction::FindClosestFood()
 	return ClosestIndex; // 제일 가까운 인덱스 번호를 저장
 }
 
-void UH_OverkaseInteraction::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	//DOREPLIFETIME(UH_OverkaseInteraction, bIsInteraction);
-}
+//void UH_OverkaseInteraction::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+//{
+//	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+//
+//	//DOREPLIFETIME(UH_OverkaseInteraction, bIsInteraction);
+//}
