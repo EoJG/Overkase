@@ -3,14 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
-#include "H_OverLobbyBase.generated.h"
+#include "GameFramework/GameStateBase.h"
+#include "EO_GameStateBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OVERKASE_API AH_OverLobbyBase : public AGameModeBase
+class OVERKASE_API AEO_GameStateBase : public AGameStateBase
 {
 	GENERATED_BODY()
+	
 };

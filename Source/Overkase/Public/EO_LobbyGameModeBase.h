@@ -4,13 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "H_OverLobbyBase.generated.h"
+#include "EO_LobbyGameModeBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class OVERKASE_API AH_OverLobbyBase : public AGameModeBase
+class OVERKASE_API AEO_LobbyGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
+	
+protected:
+	AEO_LobbyGameModeBase();
+	virtual void Tick(float DeltaSeconds) override;
 };

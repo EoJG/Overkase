@@ -41,18 +41,17 @@ void UH_OverGameInstance::CreateMySession(FText roomName)
 
 	sessionSettings.Set(FName("ROOM_NAME"), roomName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 	sessionSettings.Set(FName("HOST_NAME"), overSessionName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-	sessionInterface->CreateSession(0, FName("Over Room"), sessionSettings);
-
+	sessionInterface->CreateSession(0, FName(roomName.ToString()), sessionSettings);
 }
 
 void UH_OverGameInstance::OnCreateMySession(FName sessionName, bool bWasSuccessful)
 {
-	
 	if (bWasSuccessful)
 	{
-		bool result = GetWorld()->ServerTravel("/Game/OverCook?Listen");
+		wasSuccessful = true;
+		UE_LOG(LogTemp,Warning,TEXT("bWasSuccessful complete"));
+		bool result = GetWorld()->ServerTravel("/Game/Maps/EO_UI?Listen", true);
 		UE_LOG(LogTemp, Warning, TEXT("Travel Result: %s"), result ? *FString("Success") : *FString("Failed..."));
-
 	}
 }
 
@@ -159,4 +158,11 @@ void UH_OverGameInstance::OnJoinSelectedSession(FName sessionName, EOnJoinSessio
 	default:
 		break;
 	}
+}
+
+void UH_OverGameInstance::TravelServer()
+{
+	UE_LOG(LogTemp,Warning,TEXT("%d"), )
+	bool result = GetWorld()->ServerTravel("/Game/OverCook?Listen");
+	UE_LOG(LogTemp, Warning, TEXT("Travel Result: %s"), result ? *FString("Success") : *FString("Failed..."));
 }

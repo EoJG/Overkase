@@ -11,20 +11,39 @@
 
 void UH_OverLoginWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
+
 	ogi = GetGameInstance<UH_OverGameInstance>();
 
 	btn_CreateSession->OnClicked.AddDynamic(this, &UH_OverLoginWidget::OnClickCreateButton);
 	btn_CreateSelection->OnClicked.AddDynamic(this, &UH_OverLoginWidget::OnClickedCreateSelection);
-	btn_FindSelection->OnClicked.AddDynamic(this, &UH_OverLoginWidget::OnClickedFindSelection);
+	//btn_FindSelection->OnClicked.AddDynamic(this, &UH_OverLoginWidget::OnClickedFindSelection);
 	btn_FindSession->OnClicked.AddDynamic(this, &UH_OverLoginWidget::OnClickFindButton);
 	btn_BackFromCreate->OnClicked.AddDynamic(this, &UH_OverLoginWidget::BackToFirstCanvas);
-	btn_BackFromFind->OnClicked.AddDynamic(this, &UH_OverLoginWidget::BackToFirstCanvas);
+	//btn_BackFromFind->OnClicked.AddDynamic(this, &UH_OverLoginWidget::BackToFirstCanvas);
+	btn_GameStart->OnClicked.AddDynamic(this, &UH_OverLoginWidget::OnClickStartButton);
 
 	if (ogi != nullptr)
 	{
 		ogi->onSearchCompleted.AddDynamic(this, &UH_OverLoginWidget::AddRoomSlot);
 		ogi->onFindButtonActivation.AddDynamic(this, &UH_OverLoginWidget::ChangeButtonActivation);
 	}
+
+	if (ogi->wasSuccessful)
+	{
+		ws_Host->SetActiveWidgetIndex(1);
+	}
+}
+
+void UH_OverLoginWidget::NativeTick(const FGeometry& Geometry, float DeltaTime)
+{
+	Super::NativeTick(Geometry,DeltaTime);
+
+	/*if (ogi->wasSuccessful == true)
+	{
+		if(ws_CreateSession->GetActiveWidgetIndex() == 1)
+			ws_CreateSession->SetActiveWidgetIndex(0);
+	}*/
 }
 
 void UH_OverLoginWidget::OnClickCreateButton()
@@ -37,8 +56,8 @@ void UH_OverLoginWidget::OnClickCreateButton()
 
 void UH_OverLoginWidget::OnClickedCreateSelection()
 {
-	SwitchCanvas(1);
-
+	//SwitchCanvas(1);
+	ws_CreateSession->SetActiveWidgetIndex(1);
 }
 
 void UH_OverLoginWidget::OnClickedFindSelection()
@@ -65,8 +84,8 @@ void UH_OverLoginWidget::ChangeButtonActivation(bool bIsActivation)
 
 void UH_OverLoginWidget::BackToFirstCanvas()
 {
-	ws_SessionUISwitch->SetActiveWidgetIndex(0);
-
+	//ws_SessionUISwitch->SetActiveWidgetIndex(0);
+	ws_CreateSession->SetActiveWidgetIndex(0);
 }
 
 void UH_OverLoginWidget::SwitchCanvas(int32 index)
@@ -89,5 +108,13 @@ void UH_OverLoginWidget::AddRoomSlot(FSessionSlotInfo slotInfo)
 
 		// 생성한 슬롯 위젯을 스크롤 박스에 자식으로 추가한다.
 		sb_RoomListBox->AddChild(sessionSlot);
+	}
+}
+
+void UH_OverLoginWidget::OnClickStartButton()
+{
+	if (ogi->wasSuccessful)
+	{
+		ogi->TravelServer();
 	}
 }

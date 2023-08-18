@@ -16,6 +16,7 @@ class OVERKASE_API UH_OverLoginWidget : public UUserWidget
 	
 protected:
 	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
@@ -36,14 +37,24 @@ public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
 	class UButton* btn_CreateSelection;
 
-	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
-	class UButton* btn_FindSelection;
+	/*UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_FindSelection;*/
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
 	class UButton* btn_BackFromCreate;
 
+	/*UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_BackFromFind;*/
+
+	//EO
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
-	class UButton* btn_BackFromFind;
+	class UWidgetSwitcher* ws_CreateSession; 
+		
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget), Category = MySettings)
+	class UWidgetSwitcher* ws_Host;
+
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
+	class UButton* btn_GameStart;
 
 	UFUNCTION()
 	void OnClickCreateButton();
@@ -75,5 +86,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category=MySettings)
 	TSubclassOf<class UH_SessionInfoWidget> sessionInfoWidget;
+
 public:
+	//EO
+	UFUNCTION()
+	void OnClickStartButton();
 };
