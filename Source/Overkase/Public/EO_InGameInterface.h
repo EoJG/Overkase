@@ -48,8 +48,6 @@ private:
 	UPROPERTY()
 	TArray<class UEO_Menu*> octopusArr;
 
-	UPROPERTY()
-	int menuCount = 0;
 	UPROPERTY(Replicated)
 	int score = 0;
 
@@ -66,6 +64,10 @@ private:
 	UPROPERTY(Replicated)
 	float menuCoolTime = 2;
 
+public:
+	UPROPERTY(Replicated)
+	int menuCount = 0;
+
 private:
 	UFUNCTION()
 	void SetTimerUI();
@@ -73,21 +75,9 @@ private:
 
 public:
 	UFUNCTION(Server, Reliable)
-	void ServerCase0();
-	UFUNCTION(Server, Reliable)
-	void ServerCase1();
-	UFUNCTION(Server, Reliable)
-	void ServerCase2();
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastCase0();
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastCase1();
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastCase2();
-
-	UFUNCTION(Server, Reliable)
 	void ServerSpawnMenu();
 
+	UFUNCTION()
 	void SpawnMenu(int random);
 	UFUNCTION()
 	void SubmitMenu(FName foodTag);
@@ -95,6 +85,12 @@ public:
 	void AddScore();
 	UFUNCTION()
 	void SetTimer(float settingTime);
+
+	UFUNCTION(Server, Reliable)
+	void ServerSubmitMenu(FName foodTag);
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastSubmitMenu(FName foodTag);
+
 	
 private:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;

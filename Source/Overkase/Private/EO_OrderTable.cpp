@@ -69,7 +69,7 @@ void AEO_OrderTable::MulticastOnItem(class AActor* item)
 
 			TArray<AActor*> items;
 			item->GetAttachedActors(items);
-			menuInter->SubmitMenu(items[0]->Tags[0]);
+			Cast<AH_OverkaseCharacter>(GetOwner())->inGameUI->ServerSubmitMenu(items[0]->Tags[0]);
 
 			items[0]->Destroy();
 			item->Destroy();

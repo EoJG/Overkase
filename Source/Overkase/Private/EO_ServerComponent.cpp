@@ -25,8 +25,6 @@ void UEO_ServerComponent::BeginPlay()
 	if (me->HasAuthority())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *me->GetName());
-		//me->inGameUI->ServerSpawnMenu();
-		//me->inGameUI->SetTimer(240);
 	}
 }
 

@@ -13,6 +13,8 @@
 #include "EO_InGameInterface.h"
 #include <Kismet/GameplayStatics.h>
 #include "Particles/ParticleSystem.h"
+#include <UMG/Public/Blueprint/WidgetBlueprintLibrary.h>
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -117,7 +119,6 @@ void AH_OverkaseCharacter::SendMulticast_Implementation(int32 random)
 {
 	UE_LOG(LogTemp, Warning, TEXT("SendMulticast_Implementation and NetMode : %d"), GetNetMode());
 	inGameUI->SpawnMenu(random);
-
 }
 
 // Called when the game starts or when spawned
@@ -136,12 +137,7 @@ void AH_OverkaseCharacter::BeginPlay()
 
 	inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
 	inGameUI->AddToViewport();
-
-	//SetOwnerToActor(inGameUI);
 }
-		
-
-
 
 // Called every frame
 void AH_OverkaseCharacter::Tick(float DeltaTime)
@@ -149,16 +145,23 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);
-
-	currentTime+=DeltaTime;
-	if(currentTime>=5)
+	if(HasAuthority())
 	{
-		if (HasAuthority())
+		if(GetLocalRole()==ROLE_Authority && GetRemoteRole()==ROLE_AutonomousProxy)
 		{
-			inGameUI->ServerSpawnMenu();
+			currentTime += DeltaTime;
+			if(currentTime >= 5)
+			{
+				if (inGameUI->menuCount < 5)
+				{
+					inGameUI->ServerSpawnMenu();
+				}
+				currentTime=0;
+			}
 		}
-		currentTime=0;
 	}
+
+	//UE_LOG(LogTemp,Warning,TEXT("%s"),HasAuthority()?TEXT("Authority"):TEXT("Remote"));
 }
 
 // Called to bind functionality to input
@@ -168,35 +171,22 @@ void AH_OverkaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 	//델리게이트 한번 호출
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
-
 }
 
 void AH_OverkaseCharacter::MulticastOnParticle_Implementation()
 {
-	
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), effect,GetActorLocation(), GetActorRotation(), GetActorRelativeScale3D());
 }
 
-
-void AH_OverkaseCharacter::ServerOnScreenMenu_Implementation()
+void AH_OverkaseCharacter::spawn()
 {
-	if (HasAuthority()) 
-	{
-		inGameUI->ServerSpawnMenu();
-		MulticastOnScreenMenu();
-	}
+	inGameUI->ServerSpawnMenu();
 }
 
-void AH_OverkaseCharacter::MulticastOnScreenMenu_Implementation()
+void AH_OverkaseCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
-	
-		inGameUI->ServerSpawnMenu();
-	
-}
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-void AH_OverkaseCharacter::SetOwnerToActor_Implementation(class UUserWidget* sibling)
-{
-	APlayerController* pc = GetWorld()->GetFirstPlayerController();
-	sibling->SetOwningPlayer(pc);
+	DOREPLIFETIME(AH_OverkaseCharacter, currentTime);
 }
 

@@ -73,13 +73,8 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastOnParticle();
 
-	UFUNCTION(Server, Reliable)
-	void ServerOnScreenMenu();
-	UFUNCTION(NetMulticast, Reliable)
-	void  MulticastOnScreenMenu();
-
-	UFUNCTION(Server,Reliable)
-	void SetOwnerToActor(class UUserWidget* sibling);
-
+	UPROPERTY(Replicated)
 	float currentTime = 0;
+
+	void spawn();
 };
