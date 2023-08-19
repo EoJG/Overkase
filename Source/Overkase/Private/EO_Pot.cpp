@@ -26,6 +26,7 @@ AEO_Pot::AEO_Pot()
 	meshComp->SetupAttachment(RootComponent);
 
 	bReplicates = true;
+	meshComp->SetIsReplicated(true);
 }
 
 // Called when the game starts or when spawned

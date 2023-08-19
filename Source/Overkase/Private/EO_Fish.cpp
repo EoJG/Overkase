@@ -26,12 +26,19 @@ AEO_Fish::AEO_Fish()
 		changeMeshComp->SetRelativeLocation(FVector(0, 0, -12));
 		changeMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> platedMeshTemp(TEXT("'/Game/00/Food/SF_Slice_Fish2.SF_Slice_Fish2'"));
+	if (platedMeshTemp.Succeeded())
+	{
+		platedMeshComp->SetStaticMesh(platedMeshTemp.Object);
+		platedMeshComp->SetRelativeLocation(FVector(0, 0, -20));
+	}
 }
 
 void AEO_Fish::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bIsOrigin = true;
 	bCanChop = true;
 	coolTime = 3;
 }

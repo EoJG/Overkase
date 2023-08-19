@@ -18,6 +18,8 @@ public:
 
 public:
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category="TimerSettings")
+	class UWidgetSwitcher* ws_InGameSwitcher; 
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category="TimerSettings")
 	class UTextBlock* text_Minute;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category="TimerSettings")
 	class UTextBlock* text_Second;
@@ -51,10 +53,6 @@ private:
 	UPROPERTY(Replicated)
 	int score = 0;
 
-	UPROPERTY(Replicated)
-	float curTime = 0;
-
-
 	UPROPERTY()
 	float limitTime = 240;
 
@@ -65,6 +63,9 @@ private:
 	float menuCoolTime = 2;
 
 public:
+	UPROPERTY(Replicated)
+	float curTime = 0;
+
 	UPROPERTY(Replicated)
 	int menuCount = 0;
 
@@ -90,6 +91,11 @@ public:
 	void ServerSubmitMenu(FName foodTag);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastSubmitMenu(FName foodTag);
+	
+	UFUNCTION(Server, Reliable)
+	void ServerTestFunc();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastTestFunc();
 
 	
 private:

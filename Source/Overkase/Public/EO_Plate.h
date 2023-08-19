@@ -12,15 +12,12 @@ class OVERKASE_API AEO_Plate : public AActor
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	AEO_Plate();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 public:
@@ -32,12 +29,22 @@ public:
 	class USceneComponent* sceneComp;
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = "MiddleFood")
+	TSubclassOf<class AEO_Food> riceCucumber;
+	UPROPERTY(VisibleAnywhere, Category = "MiddleFood")
+	TSubclassOf<class AEO_Food> riceFish;
+	UPROPERTY(VisibleAnywhere, Category = "MiddleFood")
+	TSubclassOf<class AEO_Food> seaweedCucumber;
+	UPROPERTY(VisibleAnywhere, Category = "MiddleFood")
+	TSubclassOf<class AEO_Food> seaweedFish;
+	UPROPERTY(VisibleAnywhere, Category = "MiddleFood")
+	TSubclassOf<class AEO_Food> seaweedRice;
 	UPROPERTY(VisibleAnywhere, Category = "CompleteFood")
-	TSubclassOf<class AEO_CucumberSushi> cucumberSushi;
+	TSubclassOf<class AEO_Food> cucumberSushi;
 	UPROPERTY(VisibleAnywhere, Category = "CompleteFood")
-	TSubclassOf<class AEO_FishSushi> fishSushi;
+	TSubclassOf<class AEO_Food> fishSushi;
 	UPROPERTY(VisibleAnywhere, Category = "CompleteFood")
-	TSubclassOf<class AEO_OctopusSushi> octopusSushi;
+	TSubclassOf<class AEO_Food> octopusSushi;
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Recipe")
@@ -64,4 +71,7 @@ public:
 	void CheckRecipe(FName foodTag);
 	UFUNCTION()
 	bool CheckOnFood(FName foodTag);
+
+	UFUNCTION()
+	void ReplateFood(TArray<AActor*> foods, TSubclassOf<class AEO_Food> spawnFood);
 };

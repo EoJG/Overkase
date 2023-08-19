@@ -93,9 +93,11 @@ void AEO_Stove::OnItem(class AActor* item)
 			}
 			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
 			{
-				if (!plateTemp->CheckOnFood(pFood->Tags[0]))
+				if (!plateTemp->bDirty && !plateTemp->CheckOnFood(pFood->Tags[0]))
 				{
 					item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					if (pFood->bIsOrigin)
+						pFood->PlatedVisible();
 
 					plateTemp->CheckRecipe(item->Tags[0]);
 				}
@@ -147,6 +149,8 @@ void AEO_Stove::OnItem(class AActor* item)
 				{
 					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					foodTemp->AttachToComponent(pPlate->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+					if (foodTemp->bIsOrigin)
+						foodTemp->PlatedVisible();
 
 					pPlate->CheckRecipe(foodTemp->Tags[0]);
 				}

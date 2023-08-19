@@ -48,7 +48,7 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	if (bIsDash) {
 		// 2. 대쉬중이면 인풋값을 받지않는다
-		UE_LOG(LogTemp,Warning,TEXT("in"));
+		//UE_LOG(LogTemp,Warning,TEXT("in"));
 		moveComp->MaxWalkSpeed = FMath::Lerp(2000, 350, 0.2f);
 	}
 

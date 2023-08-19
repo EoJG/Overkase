@@ -34,6 +34,11 @@ void AEO_OrderTable::BeginPlay()
 	wReturnPlate = Cast<AEO_ReturnPlate>(UGameplayStatics::GetActorOfClass(GetWorld(), returnPlate));
 }
 
+void AEO_OrderTable::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 void AEO_OrderTable::OnItem(class AActor* item)
 {
 	if (AEO_Plate* plateTemp = Cast<AEO_Plate>(item))

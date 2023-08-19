@@ -30,10 +30,14 @@ public:
 	class UStaticMeshComponent* meshComp;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* changeMeshComp;
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* platedMeshComp;
 
 public:
 	UPROPERTY(VisibleAnywhere, Category="Check")
 	bool bIsCooked = false;
+	UPROPERTY(VisibleAnywhere, Category = "Check")
+	bool bIsOrigin = false;
 	UPROPERTY(VisibleAnywhere, Category="Check")
 	bool bIsComplete = false;
 
@@ -55,4 +59,11 @@ public:
 	void PickUpItem();
 	UFUNCTION(NetMulticast, Reliable)
 	void DropItem();
+
+	UFUNCTION()
+	void FoodVisible();
+	UFUNCTION()
+	void ChangeVisible();
+	UFUNCTION()
+	void PlatedVisible();
 };

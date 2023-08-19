@@ -15,6 +15,7 @@
 #include "Particles/ParticleSystem.h"
 #include <UMG/Public/Blueprint/WidgetBlueprintLibrary.h>
 #include "Net/UnrealNetwork.h"
+#include "EO_Camera.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -135,8 +136,18 @@ void AH_OverkaseCharacter::BeginPlay()
 		}
 	}
 
+	AActor* cam = nullptr;
+	cam = UGameplayStatics::GetActorOfClass(GetWorld(), ACameraActor::StaticClass());
+	if (cam != nullptr)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("Set camera"));
+		GetWorld()->GetFirstPlayerController()->SetViewTarget(cam);
+	}
+
 	inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
 	inGameUI->AddToViewport();
+
+	eoCam = Cast<AEO_Camera>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Camera::StaticClass()));
 }
 
 // Called every frame
@@ -147,17 +158,24 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);
 	if(HasAuthority())
 	{
-		if(GetLocalRole()==ROLE_Authority && GetRemoteRole()==ROLE_AutonomousProxy)
+		if(GetLocalRole() == ROLE_Authority && GetRemoteRole() == ROLE_AutonomousProxy)
 		{
 			currentTime += DeltaTime;
 			if(currentTime >= 5)
 			{
-				if (inGameUI->menuCount < 5)
-				{
-					inGameUI->ServerSpawnMenu();
-				}
-				currentTime=0;
+				//ServerTestFunc();
+				inGameUI->ServerSpawnMenu();
+				currentTime = 0;
 			}
+		}
+	}
+
+	if(GetWorld()->GetFirstPlayerController() != GetController())
+	{
+		if (inGameUI->curTime < 0)
+		{
+			//UE_LOG(LogTemp, Warning, TEXT("%f"), inGameUI->progress_Timer->GetPercent());
+			GetWorld()->GetFirstPlayerController()->SetViewTarget(eoCam);
 		}
 	}
 
@@ -178,9 +196,9 @@ void AH_OverkaseCharacter::MulticastOnParticle_Implementation()
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), effect,GetActorLocation(), GetActorRotation(), GetActorRelativeScale3D());
 }
 
-void AH_OverkaseCharacter::spawn()
+void AH_OverkaseCharacter::MulticastTestFunc_Implementation(FName foodTag)
 {
-	inGameUI->ServerSpawnMenu();
+	 inGameUI->SubmitMenu(foodTag);
 }
 
 void AH_OverkaseCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

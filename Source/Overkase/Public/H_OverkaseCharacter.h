@@ -76,5 +76,10 @@ public:
 	UPROPERTY(Replicated)
 	float currentTime = 0;
 
-	void spawn();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastTestFunc(FName foodTag);
+
+	//EO
+	UPROPERTY()
+	class AEO_Camera* eoCam;
 };

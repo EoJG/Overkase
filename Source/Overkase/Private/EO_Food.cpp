@@ -32,8 +32,16 @@ AEO_Food::AEO_Food()
 	changeMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
 	changeMeshComp->SetVisibility(false);
 
+	platedMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlatedMeshComponent"));
+	platedMeshComp->SetupAttachment(RootComponent);
+	platedMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
+	platedMeshComp->SetVisibility(false);
+
 	bReplicates = true;
 	SetReplicateMovement(true);
+	meshComp->SetIsReplicated(true);
+	changeMeshComp->SetIsReplicated(true);
+	platedMeshComp->SetIsReplicated(true);
 }
 
 // Called when the game starts or when spawned
@@ -71,5 +79,26 @@ void AEO_Food::DropItem_Implementation()
 	UE_LOG(LogTemp, Warning, TEXT("DropItem_Implementation, NetMode : %d"), GetNetMode());
 	boxComp->SetSimulatePhysics(true);
 
+}
+
+void AEO_Food::FoodVisible()
+{
+	meshComp->SetVisibility(true);
+	changeMeshComp->SetVisibility(false);
+	platedMeshComp->SetVisibility(false);
+}
+
+void AEO_Food::ChangeVisible()
+{
+	meshComp->SetVisibility(false);
+	changeMeshComp->SetVisibility(true);
+	platedMeshComp->SetVisibility(false);
+}
+
+void AEO_Food::PlatedVisible()
+{
+	meshComp->SetVisibility(false);
+	changeMeshComp->SetVisibility(false);
+	platedMeshComp->SetVisibility(true);
 }
 

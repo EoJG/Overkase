@@ -11,6 +11,7 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "H_OverkaseCharacter.h"
+#include <UMG/Public/Components/WidgetSwitcher.h>
 
 
 void UEO_InGameInterface::NativeConstruct()
@@ -26,14 +27,22 @@ void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSecon
 {
 	Super::NativeTick(Geometry, DeltaSeconds);
 	
-	curTime -= DeltaSeconds;
+	if(curTime>0)
+	{
+		curTime -= DeltaSeconds;
+	}
+	else
+	{
+		ws_InGameSwitcher->SetActiveWidgetIndex(1);
+	}
+
 	SetTimerUI();
 }
 
 void UEO_InGameInterface::SetTimerUI()
 {
 	int minute = curTime / 60;
-	int second = FMath::Fmod(curTime, 60);
+	int second = FMath::CeilToInt(FMath::Fmod(curTime, 60));
 
 	text_Minute->SetText(FText::FromString(FString::Printf(TEXT("%02d"), minute)));
 	text_Second->SetText(FText::FromString(FString::Printf(TEXT("%02d"), second)));
@@ -43,7 +52,7 @@ void UEO_InGameInterface::SetTimerUI()
 
 void UEO_InGameInterface::ServerSpawnMenu_Implementation()
 {
-	UE_LOG(LogTemp,Warning,TEXT("server"));
+	//UE_LOG(LogTemp,Warning,TEXT("server"));
 	randomNum = FMath::RandRange(0, 2);
 	auto pawn = Cast<AH_OverkaseCharacter>(GetOwningPlayer()->GetPawn());
 
@@ -52,24 +61,27 @@ void UEO_InGameInterface::ServerSpawnMenu_Implementation()
 
 void UEO_InGameInterface::SpawnMenu(int random)
 {
-	switch (random)
+	if(menuCount<5)
 	{
-	case 0:
-		menuSlot = CreateWidget<UEO_Menu>(GetWorld(), cucumberSushiMenu);
-		cucumberArr.Add(menuSlot);
-		break;
-	case 1:
-		menuSlot = CreateWidget<UEO_Menu>(GetWorld(), fishSushiMenu);
-		fishArr.Add(menuSlot);
-		break;
-	case 2:
-		menuSlot = CreateWidget<UEO_Menu>(GetWorld(), octopusSushiMenu);
-		octopusArr.Add(menuSlot);
-		break;
-	}
+		switch (random)
+		{
+		case 0:
+			menuSlot = CreateWidget<UEO_Menu>(GetWorld(), cucumberSushiMenu);
+			cucumberArr.Add(menuSlot);
+			break;
+		case 1:
+			menuSlot = CreateWidget<UEO_Menu>(GetWorld(), fishSushiMenu);
+			fishArr.Add(menuSlot);
+			break;
+		case 2:
+			menuSlot = CreateWidget<UEO_Menu>(GetWorld(), octopusSushiMenu);
+			octopusArr.Add(menuSlot);
+			break;
+		}
 	
-	st_MenuList->AddChild(menuSlot);
-	menuCount++;
+		st_MenuList->AddChild(menuSlot);
+		menuCount++;
+	}
 }
 
 
@@ -146,12 +158,14 @@ void UEO_InGameInterface::SetTimer(float settingTime)
 
 void UEO_InGameInterface::ServerSubmitMenu_Implementation(FName foodTag)
 {
-	MulticastSubmitMenu(foodTag);
+	UE_LOG(LogTemp,Warning,TEXT("Server"));
+	auto pawn = Cast<AH_OverkaseCharacter>(GetOwningPlayer()->GetPawn());
+	pawn->MulticastTestFunc(foodTag);
 }
 
 void UEO_InGameInterface::MulticastSubmitMenu_Implementation(FName foodTag)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s"), foodTag);
+	UE_LOG(LogTemp, Warning, TEXT("Multicast"));
 	if (foodTag == TEXT("CucumberSushi"))
 	{
 		if (cucumberArr.Num() != 0)
@@ -190,6 +204,19 @@ void UEO_InGameInterface::MulticastSubmitMenu_Implementation(FName foodTag)
 	}
 }
 
+
+void UEO_InGameInterface::ServerTestFunc_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ServerCall"));
+
+	MulticastTestFunc();
+}
+
+void UEO_InGameInterface::MulticastTestFunc_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("MulticastCall"));
+}
+
 void UEO_InGameInterface::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -202,10 +229,4 @@ void UEO_InGameInterface::GetLifetimeReplicatedProps(TArray<class FLifetimePrope
 	/*DOREPLIFETIME(UEO_InGameInterface, cucumberArr);
 	DOREPLIFETIME(UEO_InGameInterface, fishArr);
 	DOREPLIFETIME(UEO_InGameInterface, octopusArr);*/
-	/*DOREPLIFETIME(UEO_InGameInterface, cucumberArr);
-	DOREPLIFETIME(UEO_InGameInterface, fishArr);
-	DOREPLIFETIME(UEO_InGameInterface, octopusArr);
-	DOREPLIFETIME(UEO_InGameInterface, cucumberSushiMenu);
-	DOREPLIFETIME(UEO_InGameInterface, fishSushiMenu);
-	DOREPLIFETIME(UEO_InGameInterface, octopusSushiMenu);*/
 }

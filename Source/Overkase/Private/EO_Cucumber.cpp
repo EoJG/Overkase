@@ -25,12 +25,19 @@ AEO_Cucumber::AEO_Cucumber()
 		changeMeshComp->SetRelativeLocation(FVector(0, 0, -12));
 		changeMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> platedMeshTemp(TEXT("'/Game/00/Food/SF_Slice_Cucumber.SF_Slice_Cucumber'"));
+	if (platedMeshTemp.Succeeded())
+	{
+		platedMeshComp->SetStaticMesh(platedMeshTemp.Object);
+		platedMeshComp->SetRelativeLocation(FVector(0, 0, -15));
+	}
 }
 
 void AEO_Cucumber::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bIsOrigin = true;
 	bCanChop = true;
 	coolTime = 3;
 }

@@ -33,23 +33,51 @@ AEO_Plate::AEO_Plate()
 	sceneComp->SetupAttachment(meshComp);
 	sceneComp->SetRelativeLocation(FVector(0, 0, 25));
 
-	ConstructorHelpers::FClassFinder<AEO_CucumberSushi> cSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_CucumberSushi.BP_CucumberSushi_C'");
+	ConstructorHelpers::FClassFinder<AEO_Food> cSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_CucumberSushi.BP_CucumberSushi_C'");
 	if (cSushiTemp.Succeeded())
 	{
 		cucumberSushi = cSushiTemp.Class;
 	}
-	ConstructorHelpers::FClassFinder<AEO_FishSushi> fSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_FishSushi.BP_FishSushi_C'");
+	ConstructorHelpers::FClassFinder<AEO_Food> fSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_FishSushi.BP_FishSushi_C'");
 	if (fSushiTemp.Succeeded())
 	{
 		fishSushi = fSushiTemp.Class;
 	}
-	ConstructorHelpers::FClassFinder<AEO_OctopusSushi> oSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_OctopusSushi.BP_OctopusSushi_C'");
+	ConstructorHelpers::FClassFinder<AEO_Food> oSushiTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_OctopusSushi.BP_OctopusSushi_C'");
 	if (oSushiTemp.Succeeded())
 	{
 		octopusSushi = oSushiTemp.Class;
 	}
 
+	ConstructorHelpers::FClassFinder<AEO_Food> rcTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_RiceAndCucumber.BP_RiceAndCucumber_C'");
+	if (rcTemp.Succeeded())
+	{
+		riceCucumber = rcTemp.Class;
+	}
+	ConstructorHelpers::FClassFinder<AEO_Food> rfTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_RiceAndFish.BP_RiceAndFish_C'");
+	if (rfTemp.Succeeded())
+	{
+		riceFish = rfTemp.Class;
+	}
+	ConstructorHelpers::FClassFinder<AEO_Food> scTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_SeaweedAndCucumber.BP_SeaweedAndCucumber_C'");
+	if (scTemp.Succeeded())
+	{
+		seaweedCucumber = scTemp.Class;
+	}
+	ConstructorHelpers::FClassFinder<AEO_Food> sfTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_SeaweedAndFish.BP_SeaweedAndFish_C'");
+	if (sfTemp.Succeeded())
+	{
+		seaweedFish = sfTemp.Class;
+	}
+	ConstructorHelpers::FClassFinder<AEO_Food> srTemp = TEXT("'/Game/Eo/Blueprints/Food/BP_SeaweedAndRice.BP_SeaweedAndRice_C'");
+	if (srTemp.Succeeded())
+	{
+		seaweedRice = srTemp.Class;
+	}
+
 	bReplicates = true;
+	meshComp->SetIsReplicated(true);
+	changeMeshComp->SetIsReplicated(true);
 }
 
 // Called when the game starts or when spawned
@@ -85,41 +113,69 @@ void AEO_Plate::MakeCompleteFood()
 {
 	if (bIsRice && bIsSeaweed)
 	{
+		TArray<AActor*> foods;
+		GetAttachedActors(foods);
 		if (bIsCucumber)
 		{
-			TArray<AActor*> foods;
-			GetAttachedActors(foods);
-			for (AActor* food : foods)
-			{
-				food->Destroy();
-			}
-			GetWorld()->SpawnActor<AEO_CucumberSushi>(cucumberSushi, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			ReplateFood(foods, cucumberSushi);
 
 			bIsComplete = true;
 		}
 		else if (bIsFish)
 		{
-			TArray<AActor*> foods;
-			GetAttachedActors(foods);
-			for (AActor* food : foods)
-			{
-				food->Destroy();
-			}
-			GetWorld()->SpawnActor<AEO_FishSushi>(fishSushi, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			ReplateFood(foods, fishSushi);
 
 			bIsComplete = true;
 		}
 		else if (bIsOctopus)
 		{
-			TArray<AActor*> foods;
-			GetAttachedActors(foods);
+			ReplateFood(foods, octopusSushi);
+
+			bIsComplete = true;
+		}
+		else
+		{
+			ReplateFood(foods, seaweedRice);
+		}
+	}
+	else if (bIsRice)
+	{
+		TArray<AActor*> foods;
+		GetAttachedActors(foods);
+		if (bIsCucumber)
+		{
+			ReplateFood(foods, riceCucumber);
+		}
+		else if (bIsFish)
+		{
+			ReplateFood(foods, riceFish);
+		}
+		else if (bIsOctopus)
+		{
 			for (AActor* food : foods)
 			{
 				food->Destroy();
 			}
-			GetWorld()->SpawnActor<AEO_OctopusSushi>(octopusSushi, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
-			bIsComplete = true;
+		}
+	}
+	else if (bIsSeaweed)
+	{
+		TArray<AActor*> foods;
+		GetAttachedActors(foods);
+		if (bIsCucumber)
+		{
+			ReplateFood(foods, seaweedCucumber);
+		}
+		else if (bIsFish)
+		{
+			ReplateFood(foods, seaweedFish);
+		}
+		else if (bIsOctopus)
+		{
+			for (AActor* food : foods)
+			{
+				food->Destroy();
+			}
 		}
 	}
 }
@@ -181,5 +237,14 @@ bool AEO_Plate::CheckOnFood(FName foodTag)
 	}
 
 	return false;
+}
+
+void AEO_Plate::ReplateFood(TArray<AActor*> foods, TSubclassOf<class AEO_Food> spawnFood)
+{
+	for (AActor* food : foods)
+	{
+		food->Destroy();
+	}
+	GetWorld()->SpawnActor<AEO_Food>(spawnFood, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
