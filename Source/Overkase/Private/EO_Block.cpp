@@ -63,6 +63,7 @@ AEO_Block::AEO_Block()
 	}
 
 	bReplicates = true;
+	//widgetComp
 }
 
 // Called when the game starts or when spawned
