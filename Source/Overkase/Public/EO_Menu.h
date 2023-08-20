@@ -24,7 +24,7 @@ public:
 	UPROPERTY()
 	float curTime;
 	UPROPERTY()
-	float coolTime = 20;
+	float coolTime = 120;
 
 public:
 	UFUNCTION()

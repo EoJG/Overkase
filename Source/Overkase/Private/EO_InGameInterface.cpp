@@ -12,6 +12,7 @@
 #include "TimerManager.h"
 #include "H_OverkaseCharacter.h"
 #include <UMG/Public/Components/WidgetSwitcher.h>
+#include "EO_Menu.h"
 
 
 void UEO_InGameInterface::NativeConstruct()
