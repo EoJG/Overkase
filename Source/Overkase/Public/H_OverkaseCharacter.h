@@ -64,6 +64,23 @@ public:
 	class UInputMappingContext* imc;
 	UPROPERTY(EditDefaultsOnly, Category = Effect )
 	class UParticleSystem* effect;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "dashFX")
+    class UNiagaraSystem* dashEffect;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "dashFX")
+	class UNiagaraComponent* NiagaraComponent;
+	 UPROPERTY(EditAnywhere, Category = "dashFX")
+    bool bShouldUseNiagara = false;
+
+   UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* dashSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* pickUpSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* putDownSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* throwSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* chopSound;
 
 	UPROPERTY(VisibleAnywhere, Category = "EO")
 	TSubclassOf<class UEO_InGameInterface> inGameUIClass;
@@ -73,11 +90,40 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastOnParticle();
 
-	UPROPERTY(Replicated)
-	float currentTime = 0;
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnVFX();
+
+	UFUNCTION(Server, Reliable)
+	void ServerEndVFX();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastEndVFX();
 
 	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnDashSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnPickUpSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnPutDownSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnThrowSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnChopSound();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastAddScore();
+
+	UPROPERTY(Replicated)
+	float currentTime = 0;
+	UPROPERTY(Replicated)
+	float travelTime = 0;
+	
+	UFUNCTION(NetMulticast, Reliable)
 	void MulticastTestFunc(FName foodTag);
+
+
+
+	bool bSoundPlay = false;
+
 
 	//EO
 	UPROPERTY()

@@ -22,11 +22,7 @@ UH_OverkasePlayerMove::UH_OverkasePlayerMove()
 	{
 		ia_dash = TempDash.Object;
 	}
-	ConstructorHelpers::FObjectFinder<USoundBase> TempSound(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Dash1.Dash1'"));
-	if (TempSound.Succeeded())
-	{
-		dashSound = TempSound.Object;
-	}
+	
 
 	
 
@@ -54,6 +50,7 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	if (currentTime > 0.3) {
 		moveComp->MaxWalkSpeed = 600;
+		me->ServerEndVFX();
 		bIsDash = false;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%f"), me->GetCharacterMovement()->Velocity.Length()));
@@ -116,10 +113,11 @@ void UH_OverkasePlayerMove::Move(const FInputActionValue& value)
 void UH_OverkasePlayerMove::ServerDashMove_Implementation()
 {
 	if (!bIsDash) {
+		UE_LOG(LogTemp, Warning, TEXT("ServerVFX"));
 
-		UGameplayStatics::PlaySound2D(GetWorld(), dashSound);
-		me->MulticastOnParticle();
-
+		me->MulticastOnDashSound();
+		//me->MulticastOnParticle();
+		me->MulticastOnVFX();
 		// 3. 대쉬중이아니면 대쉬를 한다.
 		bIsDash = true;
 		currentTime = 0;

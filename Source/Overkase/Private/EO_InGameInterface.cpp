@@ -20,7 +20,8 @@ void UEO_InGameInterface::NativeConstruct()
 
 	me = Cast<AH_OverkaseCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AH_OverkaseCharacter::StaticClass()));
 
-	SetTimer(180);
+	SetTimer(SetTime);
+	text_Score->SetText(FText::AsNumber(0));
 }
 
 void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
@@ -59,6 +60,33 @@ void UEO_InGameInterface::ServerSpawnMenu_Implementation()
 	pawn->SendMulticast(randomNum);
 }
 
+void UEO_InGameInterface::AddScore()
+{
+	int random = FMath::RandRange(1, 4);
+	int plusPoint = 0;
+
+	switch (random)
+	{
+	case 1:
+		plusPoint = 5;
+		break;
+	case 2:
+		plusPoint = 6;
+		break;
+	case 3:
+		plusPoint = 7;
+		break;
+	case 4:
+		plusPoint = 8;
+		break;
+	}
+
+	score += 60 + plusPoint;
+	text_Score->SetText(FText::AsNumber(score));
+
+	UE_LOG(LogTemp, Warning, TEXT("%d"), score);
+}
+
 void UEO_InGameInterface::SpawnMenu(int random)
 {
 	if(menuCount<5)
@@ -94,8 +122,7 @@ void UEO_InGameInterface::SubmitMenu(FName foodTag)
 		{
 			st_MenuList->RemoveChild(cucumberArr[0]);
 			cucumberArr.RemoveAt(0);
-			AddScore();
-			text_Score->SetText(FText::AsNumber(score));
+			ServerAddScore();
 
 			menuCount--;
 		}
@@ -106,8 +133,7 @@ void UEO_InGameInterface::SubmitMenu(FName foodTag)
 		{
 			st_MenuList->RemoveChild(fishArr[0]);
 			fishArr.RemoveAt(0);
-			AddScore();
-			text_Score->SetText(FText::AsNumber(score));
+			ServerAddScore();
 
 			menuCount--;
 		}
@@ -118,36 +144,21 @@ void UEO_InGameInterface::SubmitMenu(FName foodTag)
 		{
 			st_MenuList->RemoveChild(octopusArr[0]);
 			octopusArr.RemoveAt(0);
-			AddScore();
-			text_Score->SetText(FText::AsNumber(score));
+			auto pawn = Cast<AH_OverkaseCharacter>(GetOwningPlayer()->GetPawn());
+			ServerAddScore();
 
 			menuCount--;
 		}
 	}
 }
 
-void UEO_InGameInterface::AddScore()
+void UEO_InGameInterface::ServerAddScore_Implementation()
 {
-	int random = FMath::RandRange(1, 4);
-	int plusPoint = 0;
-
-	switch (random)
+	auto pawn = Cast<AH_OverkaseCharacter>(GetOwningPlayer()->GetPawn());
+	if (pawn)
 	{
-	case 1:
-		plusPoint = 5;
-		break;
-	case 2:
-		plusPoint = 6;
-		break;
-	case 3:
-		plusPoint = 7;
-		break;
-	case 4:
-		plusPoint = 8;
-		break;
+	pawn->MulticastAddScore();
 	}
-
-	score += 60 + plusPoint;
 }
 
 void UEO_InGameInterface::SetTimer(float settingTime)
@@ -172,7 +183,7 @@ void UEO_InGameInterface::MulticastSubmitMenu_Implementation(FName foodTag)
 		{
 			st_MenuList->RemoveChild(cucumberArr[0]);
 			cucumberArr.RemoveAt(0);
-			AddScore();
+			ServerAddScore();
 			text_Score->SetText(FText::AsNumber(score));
 
 			menuCount--;
@@ -184,7 +195,7 @@ void UEO_InGameInterface::MulticastSubmitMenu_Implementation(FName foodTag)
 		{
 			st_MenuList->RemoveChild(fishArr[0]);
 			fishArr.RemoveAt(0);
-			AddScore();
+			ServerAddScore();
 			text_Score->SetText(FText::AsNumber(score));
 
 			menuCount--;
@@ -196,12 +207,13 @@ void UEO_InGameInterface::MulticastSubmitMenu_Implementation(FName foodTag)
 		{
 			st_MenuList->RemoveChild(octopusArr[0]);
 			octopusArr.RemoveAt(0);
-			AddScore();
+			ServerAddScore();
 			text_Score->SetText(FText::AsNumber(score));
 
 			menuCount--;
 		}
 	}
+	
 }
 
 
@@ -223,7 +235,7 @@ void UEO_InGameInterface::GetLifetimeReplicatedProps(TArray<class FLifetimePrope
 
 	DOREPLIFETIME(UEO_InGameInterface, curTime);
 	DOREPLIFETIME(UEO_InGameInterface, menuCurTime);
-	DOREPLIFETIME(UEO_InGameInterface, score);
+	//DOREPLIFETIME(UEO_InGameInterface, score);
 	DOREPLIFETIME(UEO_InGameInterface, menuCoolTime);
 	DOREPLIFETIME(UEO_InGameInterface, menuCount);
 	/*DOREPLIFETIME(UEO_InGameInterface, cucumberArr);

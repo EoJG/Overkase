@@ -13,8 +13,7 @@
 #include "EO_Pot.h"
 #include "EO_FoodBox.h"
 #include "EO_ChopTable.h"
-#include "TimerManager.h"
-#include "Components/AudioComponent.h"
+
 #include "Net/UnrealNetwork.h"
 
 UH_OverkaseInteraction::UH_OverkaseInteraction()
@@ -29,28 +28,6 @@ UH_OverkaseInteraction::UH_OverkaseInteraction()
 	if (TempCtrl.Succeeded())
 	{
 		ia_ctrl_Interaction = TempCtrl.Object;
-	}
-
-	ConstructorHelpers::FObjectFinder<USoundBase> TempPick(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Item_PickUp_02.Item_PickUp_02'"));
-	if (TempPick.Succeeded())
-	{
-		pickUpSound = TempPick.Object;
-	}
-
-	ConstructorHelpers::FObjectFinder<USoundBase> TempPut(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Item_PutDown_01.Item_PutDown_01'"));
-	if (TempPut.Succeeded())
-	{
-		putDownSound = TempPut.Object;
-	}
-	ConstructorHelpers::FObjectFinder<USoundBase> TempThrow(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Throw1.Throw1'"));
-	if (TempThrow.Succeeded())
-	{
-		throwSound = TempThrow.Object;
-	}
-	ConstructorHelpers::FObjectFinder<USoundBase> TempChop(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/KnifeChop.KnifeChop'"));
-	if (TempChop.Succeeded())
-	{
-		chopSound = TempChop.Object;
 	}
 
 	
@@ -113,7 +90,7 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 				if (!bIsInteraction) {
 					//ChopHand();
 				}
-				if (!bSoundPlay) {
+				if (!me->bSoundPlay) {
 					SoundPlay();
 				}
 			}
@@ -181,7 +158,7 @@ void UH_OverkaseInteraction::MulticastSpaceInput_Implementation()
 	{
 		// 블록을 가져와라
 		ServerItemOnPlayer();
-		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+		me->MulticastOnPickUpSound();
 
 	}
 	// 만약 아이템이 없고 근처에 푸드가 있으면
@@ -189,7 +166,7 @@ void UH_OverkaseInteraction::MulticastSpaceInput_Implementation()
 	{
 		//푸드를 가져와라
 		ServerGetFood(me->interactionPosition);
-		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+		me->MulticastOnPickUpSound();
 
 	}
 	// 만약 아이템이 없고 블록의 거리가 푸드의 거리보다 가까우면
@@ -197,7 +174,8 @@ void UH_OverkaseInteraction::MulticastSpaceInput_Implementation()
 	{
 		// 블록을 가져와라
 		ServerItemOnPlayer();
-		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+		//UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+		me->MulticastOnPickUpSound();
 
 	}
 	// 만약 아이템이 없고 푸드의 거리가 블록의 거리보다 가까우면
@@ -205,7 +183,7 @@ void UH_OverkaseInteraction::MulticastSpaceInput_Implementation()
 	{
 		//푸드를 가져와라
 		ServerGetFood(me->interactionPosition);
-		UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+		//UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
 
 	}
 	// 아이템이 없으면
@@ -213,8 +191,8 @@ void UH_OverkaseInteraction::MulticastSpaceInput_Implementation()
 	{
 		// 손에 든것을 내려놓아라
 		ServerNoItem();
-		UGameplayStatics::PlaySound2D(GetWorld(), putDownSound);
-
+		//UGameplayStatics::PlaySound2D(GetWorld(), putDownSound);
+		me->MulticastOnPickUpSound();
 	}
 }
 
@@ -235,7 +213,7 @@ void UH_OverkaseInteraction::MulicastCtrlInput_Implementation()
 			{
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				Food->ShootFood(me->GetActorForwardVector());
-				UGameplayStatics::PlaySound2D(GetWorld(), throwSound);
+				me->MulticastOnThrowSound();
 
 			}
 		}
@@ -298,6 +276,7 @@ void UH_OverkaseInteraction::ServerNoItem_Implementation()
 				Food->DropItem();
 				// 아이템을 내려놓아라
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+				me->MulticastOnPutDownSound();
 			}
 			//bHasItem = false;
 		}
@@ -310,6 +289,8 @@ void UH_OverkaseInteraction::ServerNoItem_Implementation()
 				if (items.IsEmpty())
 				{
 					//bHasItem = false;
+					me->MulticastOnPutDownSound();
+
 				}
 			}
 		}
@@ -332,17 +313,7 @@ void UH_OverkaseInteraction::ServerCtrlCompleted_Implementation()
 
 void UH_OverkaseInteraction::SoundPlay()
 {
-	bSoundPlay = true;
-
-	UAudioComponent* AudioComp = UGameplayStatics::SpawnSound2D(this, chopSound);
-	FTimerHandle soundTimerHandle;
-	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
-	
-	TimerManager.SetTimer(soundTimerHandle, [this, AudioComp]()
-		{
-			AudioComp->Stop();
-			bSoundPlay = false;
-		}, 0.2f, false);
+	me->MulticastOnChopSound();
 }
 
 void UH_OverkaseInteraction::SetOwnerToActor_Implementation(class AActor* sibling)

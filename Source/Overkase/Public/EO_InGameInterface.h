@@ -50,8 +50,7 @@ private:
 	UPROPERTY()
 	TArray<class UEO_Menu*> octopusArr;
 
-	UPROPERTY(Replicated)
-	int score = 0;
+	
 
 	UPROPERTY()
 	float limitTime = 240;
@@ -63,6 +62,12 @@ private:
 	float menuCoolTime = 2;
 
 public:
+	UPROPERTY(EditAnywhere)
+	int SetTime = 180;
+	
+	UPROPERTY()
+	int score = 0;
+
 	UPROPERTY(Replicated)
 	float curTime = 0;
 
@@ -78,12 +83,14 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerSpawnMenu();
 
+
+	void AddScore();
 	UFUNCTION()
 	void SpawnMenu(int random);
 	UFUNCTION()
 	void SubmitMenu(FName foodTag);
-	UFUNCTION()
-	void AddScore();
+	UFUNCTION(Server, Reliable)
+	void ServerAddScore();
 	UFUNCTION()
 	void SetTimer(float settingTime);
 

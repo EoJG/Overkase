@@ -16,6 +16,10 @@
 #include <UMG/Public/Blueprint/WidgetBlueprintLibrary.h>
 #include "Net/UnrealNetwork.h"
 #include "EO_Camera.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "TimerManager.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -114,6 +118,50 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	{
 		effect = TempPart.Object;
 	}
+
+	ConstructorHelpers::FObjectFinder<USoundBase> TempSound(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Dash1.Dash1'"));
+	if (TempSound.Succeeded())
+	{
+		dashSound = TempSound.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<USoundBase> TempPick(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Item_PickUp_02.Item_PickUp_02'"));
+	if (TempPick.Succeeded())
+	{
+		pickUpSound = TempPick.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<USoundBase> TempPut(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Item_PutDown_01.Item_PutDown_01'"));
+	if (TempPut.Succeeded())
+	{
+		putDownSound = TempPut.Object;
+	}
+	ConstructorHelpers::FObjectFinder<USoundBase> TempThrow(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Throw1.Throw1'"));
+	if (TempThrow.Succeeded())
+	{
+		throwSound = TempThrow.Object;
+	}
+	ConstructorHelpers::FObjectFinder<USoundBase> TempChop(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/KnifeChop.KnifeChop'"));
+	if (TempChop.Succeeded())
+	{
+		chopSound = TempChop.Object;
+	}
+
+
+	// Niagara 컴포넌트 생성
+	NiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
+
+	// Niagara 에셋 할당
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NiagaraSystemAsset(TEXT("/Script/Niagara.NiagaraSystem'/Game/HanSeunghui/Effect/Blast_Particle.Blast_Particle'"));
+	if (NiagaraSystemAsset.Succeeded())
+	{
+		NiagaraComponent->SetAsset(NiagaraSystemAsset.Object);
+	}
+
+	// Niagara 컴포넌트를 액터에 부착
+	NiagaraComponent->SetupAttachment(crocodileMesh);
+	NiagaraComponent->SetRelativeLocation(FVector(0, -60, 0));
+	//NiagaraComponent->ActivateSystem(false);
 }
 
 void AH_OverkaseCharacter::SendMulticast_Implementation(int32 random)
@@ -148,6 +196,9 @@ void AH_OverkaseCharacter::BeginPlay()
 	inGameUI->AddToViewport();
 
 	eoCam = Cast<AEO_Camera>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Camera::StaticClass()));
+
+	NiagaraComponent->SetVisibility(false);
+
 }
 
 // Called every frame
@@ -155,6 +206,8 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
+	
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);
 	if(HasAuthority())
 	{
@@ -175,7 +228,17 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 		if (inGameUI->curTime < 0)
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("%f"), inGameUI->progress_Timer->GetPercent());
-			GetWorld()->GetFirstPlayerController()->SetViewTarget(eoCam);
+			GetWorld()->GetFirstPlayerController()->SetViewTargetWithBlend(eoCam, 2.0f);
+
+			travelTime += DeltaTime;
+			//GetWorld()->ServerTravel(TEXT("/Game/Maps/EO_UI"));
+			if (travelTime > 5)
+			{
+				GetWorld()->ServerTravel(TEXT("/Game/Maps/EO_UI"));
+				//ServerTravelUI();
+				travelTime = 0;
+			}
+			
 		}
 	}
 
@@ -193,7 +256,90 @@ void AH_OverkaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void AH_OverkaseCharacter::MulticastOnParticle_Implementation()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), effect,GetActorLocation(), GetActorRotation(), GetActorRelativeScale3D());
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), effect,GetActorLocation(), GetActorRotation(), FVector(0.3f));
+}
+
+void AH_OverkaseCharacter::MulticastOnVFX_Implementation()
+{
+	UE_LOG(LogTemp,Warning,TEXT("VFX"));
+	NiagaraComponent->SetVisibility(true);
+
+	/*FString NiagaraAssetPath = TEXT("/Game/HanSeunghui/Effect/Blast_Particle");
+
+	UNiagaraSystem* NiagaraSystem = LoadObject<UNiagaraSystem>(nullptr, *NiagaraAssetPath);
+
+	if (NiagaraSystem)
+	{
+		UNiagaraComponent* NiagaraComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), NiagaraSystem, GetActorLocation(), GetActorRotation());
+
+		if (NiagaraComponent)
+		{
+			FTimerHandle TimerHandle;
+			float DelayInSeconds = 0.3f;
+			GetWorldTimerManager().SetTimer(TimerHandle, [NiagaraComponent]() {
+				if (NiagaraComponent)
+				{
+					NiagaraComponent->Deactivate();
+					NiagaraComponent->DestroyComponent();
+				}
+			}, DelayInSeconds, false);
+		}
+	}*/
+	
+}
+
+void AH_OverkaseCharacter::ServerEndVFX_Implementation()
+{
+	MulticastEndVFX();
+}
+
+void AH_OverkaseCharacter::MulticastEndVFX_Implementation()
+{
+	NiagaraComponent->SetVisibility(false);
+}
+
+void AH_OverkaseCharacter::MulticastOnDashSound_Implementation()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), dashSound);
+}
+
+void AH_OverkaseCharacter::MulticastOnPickUpSound_Implementation()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), pickUpSound);
+}
+
+
+void AH_OverkaseCharacter::MulticastOnPutDownSound_Implementation()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), putDownSound);
+}
+
+void AH_OverkaseCharacter::MulticastOnThrowSound_Implementation()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), throwSound);
+}
+
+void AH_OverkaseCharacter::MulticastOnChopSound_Implementation()
+{
+	bSoundPlay = true;
+
+	UAudioComponent* AudioComp = UGameplayStatics::SpawnSound2D(this, chopSound);
+	FTimerHandle soundTimerHandle;
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+
+	TimerManager.SetTimer(soundTimerHandle, [this, AudioComp]()
+		{
+			AudioComp->Stop();
+			bSoundPlay = false;
+		}, 0.2f, false);
+}
+
+
+void AH_OverkaseCharacter::MulticastAddScore_Implementation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("MulticastAddScore"));
+
+	inGameUI->AddScore();
 }
 
 void AH_OverkaseCharacter::MulticastTestFunc_Implementation(FName foodTag)
@@ -201,10 +347,12 @@ void AH_OverkaseCharacter::MulticastTestFunc_Implementation(FName foodTag)
 	 inGameUI->SubmitMenu(foodTag);
 }
 
+
 void AH_OverkaseCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AH_OverkaseCharacter, currentTime);
+	DOREPLIFETIME(AH_OverkaseCharacter, travelTime);
 }
 

@@ -32,8 +32,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_dash;
 
-	UPROPERTY(EditDefaultsOnly, Category = Sound)
-	class USoundBase* dashSound;
+	
 
 	
 
