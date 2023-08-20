@@ -8,7 +8,7 @@ AEO_ReturnPlate::AEO_ReturnPlate()
 {
 	Tags[0] = TEXT("ReturnPlate");
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/Dishoutlet.Dishoutlet'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/01/Interior/Dishoutlet.Dishoutlet'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);

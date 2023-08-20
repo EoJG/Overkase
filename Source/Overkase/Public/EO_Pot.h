@@ -28,6 +28,8 @@ public:
 	class USceneComponent* sceneComp;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* meshComp;
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* waterMeshComp;
 
 
 public:

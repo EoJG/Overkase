@@ -29,7 +29,7 @@ AEO_Block::AEO_Block()
 	meshComp->SetupAttachment(RootComponent);
 	meshComp->SetRelativeLocationAndRotation(FVector(0, 0, -45), FRotator(0, -90, 0));
 	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/Desk.Desk'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/01/Interior/Desk.Desk'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
@@ -129,7 +129,7 @@ void AEO_Block::OnItem(class AActor* item)
 			}
 			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
 			{
-				if (!plateTemp->CheckOnFood(pFood->Tags[0]))
+				if (!plateTemp->CheckOnFood(pFood->Tags[0]) && !plateTemp->bDirty && pFood->bIsCooked)
 				{
 					item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
@@ -162,7 +162,7 @@ void AEO_Block::OnItem(class AActor* item)
 			}
 			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
 			{
-				if (pFood->bCanBoil && !potTemp->bInFood)
+				if (pFood->bCanBoil && !potTemp->bInFood && !pFood->bIsCooked)
 				{
 					item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
@@ -176,7 +176,7 @@ void AEO_Block::OnItem(class AActor* item)
 		{
 			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
 			{
-				if (!pPlate->bDirty && !pPlate->CheckOnFood(foodTemp->Tags[0]))
+				if (!pPlate->bDirty && !pPlate->CheckOnFood(foodTemp->Tags[0]) && foodTemp->bIsCooked)
 				{
 					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					foodTemp->AttachToComponent(pPlate->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
@@ -186,7 +186,7 @@ void AEO_Block::OnItem(class AActor* item)
 			}
 			else if (AEO_Pot* pPot = Cast<AEO_Pot>(item))
 			{
-				if (foodTemp->bCanBoil && !pPot->bInFood)
+				if (foodTemp->bCanBoil && !pPot->bInFood && !foodTemp->bIsCooked)
 				{
 					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					foodTemp->AttachToActor(pPot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);

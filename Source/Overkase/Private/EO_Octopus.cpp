@@ -11,17 +11,18 @@ AEO_Octopus::AEO_Octopus()
 
 	boxComp->SetBoxExtent(FVector(32, 20, 13));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/Models/Re/Food_/SF_Octorpus.SF_Octorpus'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/FBX/Food/SF_Octorpus.SF_Octorpus'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);
 		meshComp->SetRelativeLocation(FVector(0, -10, -12));
+		meshComp->SetRelativeRotation(FRotator(0, 90, 0));
 	}
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/Models/Re/Food_/SF_Slice_Octorpus.SF_Slice_Octorpus'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> changeMeshTemp(TEXT("'/Game/FBX/Food/SF_Slice_Octorpus.SF_Slice_Octorpus'"));
 	if (changeMeshTemp.Succeeded())
 	{
 		changeMeshComp->SetStaticMesh(changeMeshTemp.Object);
-		changeMeshComp->SetRelativeLocation(FVector(-25, 0, -10));
+		changeMeshComp->SetRelativeLocation(FVector(0, 0, -10));
 		changeMeshComp->SetRelativeRotation(FRotator(0, 100, 0));
 	}
 }

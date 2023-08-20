@@ -50,7 +50,7 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	if (currentTime > 0.3) {
 		moveComp->MaxWalkSpeed = 600;
-		me->ServerEndVFX();
+		//me->ServerEndVFX();
 		bIsDash = false;
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%f"), me->GetCharacterMovement()->Velocity.Length()));

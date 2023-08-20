@@ -152,10 +152,10 @@ void AEO_Plate::MakeCompleteFood()
 		}
 		else if (bIsOctopus)
 		{
-			for (AActor* food : foods)
+			/*for (AActor* food : foods)
 			{
 				food->Destroy();
-			}
+			}*/
 		}
 	}
 	else if (bIsSeaweed)
@@ -172,10 +172,10 @@ void AEO_Plate::MakeCompleteFood()
 		}
 		else if (bIsOctopus)
 		{
-			for (AActor* food : foods)
+			/*for (AActor* food : foods)
 			{
 				food->Destroy();
-			}
+			}*/
 		}
 	}
 }

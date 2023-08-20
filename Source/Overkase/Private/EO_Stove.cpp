@@ -11,7 +11,7 @@ AEO_Stove::AEO_Stove()
 
 	Tags[0] = TEXT("Stove");
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/00/Interior/Stove.Stove'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshTemp(TEXT("'/Game/01/Interior/Stove.Stove'"));
 	if (MeshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(MeshTemp.Object);
@@ -93,7 +93,7 @@ void AEO_Stove::OnItem(class AActor* item)
 			}
 			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
 			{
-				if (!plateTemp->bDirty && !plateTemp->CheckOnFood(pFood->Tags[0]))
+				if (!plateTemp->bDirty && !plateTemp->CheckOnFood(pFood->Tags[0]) && pFood->bIsCooked)
 				{
 					item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					if (pFood->bIsOrigin)
@@ -128,7 +128,7 @@ void AEO_Stove::OnItem(class AActor* item)
 			}
 			else if (AEO_Food* pFood = Cast<AEO_Food>(item))
 			{
-				if (pFood->bCanBoil && !potTemp->bInFood)
+				if (pFood->bCanBoil && !potTemp->bInFood && !pFood->bIsCooked)
 				{
 					item->AttachToActor(potTemp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					Cast<AEO_Food>(item)->meshComp->SetVisibility(false);
@@ -145,7 +145,7 @@ void AEO_Stove::OnItem(class AActor* item)
 		{
 			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
 			{
-				if (!pPlate->bDirty && !pPlate->CheckOnFood(foodTemp->Tags[0]))
+				if (!pPlate->bDirty && !pPlate->CheckOnFood(foodTemp->Tags[0]) && foodTemp->bIsCooked)
 				{
 					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					foodTemp->AttachToComponent(pPlate->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
@@ -157,7 +157,7 @@ void AEO_Stove::OnItem(class AActor* item)
 			}
 			else if (AEO_Pot* pPot = Cast<AEO_Pot>(item))
 			{
-				if (foodTemp->bCanBoil && !pPot->bInFood)
+				if (foodTemp->bCanBoil && !pPot->bInFood && !foodTemp->bIsCooked)
 				{
 					item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 					foodTemp->AttachToActor(pPot, FAttachmentTransformRules::SnapToTargetNotIncludingScale);

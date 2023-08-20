@@ -25,6 +25,18 @@ AEO_Pot::AEO_Pot()
 	}
 	meshComp->SetupAttachment(RootComponent);
 
+	waterMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WaterMeshComponent"));
+	waterMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> waterMeshTemp(TEXT("'/Game/01/Interior/Pot_W.Pot_W'"));
+	if (waterMeshTemp.Succeeded())
+	{
+		waterMeshComp->SetStaticMesh(waterMeshTemp.Object);
+		waterMeshComp->SetRelativeLocation(FVector(0, 0, 90));
+		waterMeshComp->SetRelativeRotation(FRotator(0, 90, 0));
+		waterMeshComp->SetRelativeScale3D(FVector(1.5f));
+	}
+	waterMeshComp->SetupAttachment(RootComponent);
+
 	bReplicates = true;
 	meshComp->SetIsReplicated(true);
 }
@@ -41,5 +53,6 @@ void AEO_Pot::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	waterMeshComp->SetVisibility(bInFood);
 }
 

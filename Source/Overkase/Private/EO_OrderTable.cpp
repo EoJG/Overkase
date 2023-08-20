@@ -13,7 +13,7 @@ AEO_OrderTable::AEO_OrderTable()
 
 	boxComp->SetBoxExtent(FVector(75, 150, 45));
 
-	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/Servingrail.Servingrail'"));
+	ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/01/Interior/Servingrail.Servingrail'"));
 	if (meshTemp.Succeeded())
 	{
 		meshComp->SetStaticMesh(meshTemp.Object);

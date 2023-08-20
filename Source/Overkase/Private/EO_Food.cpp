@@ -62,7 +62,7 @@ void AEO_Food::ShootFood(FVector forward)
 {
 	FVector dir = forward * 30000;
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *boxComp->GetOwner()->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("%s"), *boxComp->GetOwner()->GetName());
 	boxComp->SetSimulatePhysics(true);
 	boxComp->AddImpulse(dir);
 }
