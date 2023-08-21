@@ -24,6 +24,7 @@ public:
 public:	
 	class AEO_Food* sFoodTemp;
 
+	class UH_OverkaseInteraction* inter;
 public:
 	UPROPERTY(VisibleAnywhere, Category = "Check")
 	bool bCanCook = false;
@@ -32,8 +33,17 @@ public:
 	virtual void OnItem(class AActor* item) override;
 	virtual void GetItem(class USceneComponent* playerSceneComp);
 
-	virtual void ServerOnItem(class AActor* item) override;
-	virtual void MulticastOnItem(class AActor* item) override;
+	UFUNCTION(Server, Reliable)
+	void ServerOnItem2(class AActor* item);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnItem2(class AActor* item);
+
+	UFUNCTION(Server, Reliable)
+	void ServerOnIteminTick(float DeltaTime);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnIteminTick(float DeltaTime);
 
 	virtual void ServerGetItem(class USceneComponent* playerSceneComp) override;
 	virtual void MulticastGetItem(class USceneComponent* playerSceneComp) override;

@@ -162,6 +162,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	NiagaraComponent->SetupAttachment(crocodileMesh);
 	NiagaraComponent->SetRelativeLocation(FVector(0, -60, 0));
 	//NiagaraComponent->ActivateSystem(false);
+
 }
 
 void AH_OverkaseCharacter::SendMulticast_Implementation(int32 random)
@@ -196,7 +197,7 @@ void AH_OverkaseCharacter::BeginPlay()
 	inGameUI->AddToViewport();
 
 	eoCam = Cast<AEO_Camera>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Camera::StaticClass()));
-
+	//NiagaraComponent->SetIsReplicated(true);
 	NiagaraComponent->SetVisibility(false);
 
 }
@@ -261,7 +262,7 @@ void AH_OverkaseCharacter::MulticastOnParticle_Implementation()
 
 void AH_OverkaseCharacter::MulticastOnVFX_Implementation()
 {
-	UE_LOG(LogTemp,Warning,TEXT("VFX"));
+	//UE_LOG(LogTemp,Warning,TEXT("VFX"));
 	NiagaraComponent->SetVisibility(true);
 
 	/*FString NiagaraAssetPath = TEXT("/Game/HanSeunghui/Effect/Blast_Particle");
@@ -290,12 +291,20 @@ void AH_OverkaseCharacter::MulticastOnVFX_Implementation()
 
 void AH_OverkaseCharacter::ServerEndVFX_Implementation()
 {
-	MulticastEndVFX();
+	UE_LOG(LogTemp, Warning, TEXT("ServerEndVFX"));
+
+	//MulticastEndVFX();
+	NiagaraComponent->SetVisibility(false);
+
 }
 
 void AH_OverkaseCharacter::MulticastEndVFX_Implementation()
 {
-	NiagaraComponent->SetVisibility(false);
+	//UE_LOG(LogTemp,Warning,TEXT("%s"), *GetOwner()->GetName());
+
+
+	/*if (HasAuthority()) {
+	}*/
 }
 
 void AH_OverkaseCharacter::MulticastOnDashSound_Implementation()
