@@ -182,31 +182,38 @@ void AH_OverkaseCharacter::BeginPlay()
 		if (subSystem) {
 			subSystem->AddMappingContext(imc, 0);
 		}
-	}
 
-	AActor* cam = nullptr;
-	cam = UGameplayStatics::GetActorOfClass(GetWorld(), ACameraActor::StaticClass());
-	if (cam != nullptr)
-	{
-		UE_LOG(LogTemp,Warning,TEXT("Set camera"));
-		GetWorld()->GetFirstPlayerController()->SetViewTarget(cam);
 	}
 
 	inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
 	inGameUI->AddToViewport();
 
+	//SetTargetCamera();
+	AActor* cam = nullptr;
+	cam = UGameplayStatics::GetActorOfClass(GetWorld(), ACameraActor::StaticClass());
+	if (cam != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetWorld()->GetFirstPlayerController()->GetCharacter()->GetName());
+		GetWorld()->GetFirstPlayerController()->SetViewTarget(cam);
+	}
+
+	mainCam = UGameplayStatics::GetActorOfClass(GetWorld(), ACameraActor::StaticClass());
 	eoCam = Cast<AEO_Camera>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Camera::StaticClass()));
 
 	NiagaraComponent->SetVisibility(false);
-
 }
 
 // Called every frame
 void AH_OverkaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
+	
+	if (mainCam != nullptr && GetWorld()->GetFirstPlayerController()->GetViewTarget() != mainCam)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetWorld()->GetFirstPlayerController()->GetCharacter()->GetName());
+		GetWorld()->GetFirstPlayerController()->SetViewTarget(mainCam);
+		mainCam = nullptr;
+	}
 	
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);
 	if(HasAuthority())
@@ -231,11 +238,9 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 			GetWorld()->GetFirstPlayerController()->SetViewTargetWithBlend(eoCam, 2.0f);
 
 			travelTime += DeltaTime;
-			//GetWorld()->ServerTravel(TEXT("/Game/Maps/EO_UI"));
 			if (travelTime > 5)
 			{
 				GetWorld()->ServerTravel(TEXT("/Game/Maps/EO_UI"));
-				//ServerTravelUI();
 				travelTime = 0;
 			}
 			
@@ -256,7 +261,7 @@ void AH_OverkaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 
 void AH_OverkaseCharacter::MulticastOnParticle_Implementation()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), effect,GetActorLocation(), GetActorRotation(), FVector(0.3f));
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), effect, GetActorLocation(), GetActorRotation(), FVector(0.3f));
 }
 
 void AH_OverkaseCharacter::MulticastOnVFX_Implementation()
@@ -335,11 +340,35 @@ void AH_OverkaseCharacter::MulticastOnChopSound_Implementation()
 }
 
 
-void AH_OverkaseCharacter::MulticastAddScore_Implementation()
+void AH_OverkaseCharacter::MulticastAddScore_Implementation(int score)
 {
 	UE_LOG(LogTemp, Warning, TEXT("MulticastAddScore"));
+	UE_LOG(LogTemp, Warning, TEXT("Player: %s"), *GetName());
 
-	inGameUI->AddScore();
+	//inGameUI->AddScore();
+	/*int random = FMath::RandRange(1, 4);
+	int plusPoint = 0;
+
+	switch (random)
+	{
+	case 1:
+		plusPoint = 5;
+		break;
+	case 2:
+		plusPoint = 6;
+		break;
+	case 3:
+		plusPoint = 7;
+		break;
+	case 4:
+		plusPoint = 8;
+		break;
+	}*/
+
+	inGameUI->score += 60 + score;
+	inGameUI->text_Score->SetText(FText::AsNumber(inGameUI->score));
+	/*score += 60 + plusPoint;
+	text_Score->SetText(FText::AsNumber(score));*/	
 }
 
 void AH_OverkaseCharacter::MulticastTestFunc_Implementation(FName foodTag)
@@ -347,6 +376,30 @@ void AH_OverkaseCharacter::MulticastTestFunc_Implementation(FName foodTag)
 	 inGameUI->SubmitMenu(foodTag);
 }
 
+void AH_OverkaseCharacter::ServerAddScore_Implementation()
+{
+	//여기서 점수 먹이고 넘겨야함
+	int random = FMath::RandRange(1, 4);
+	int plusPoint = 0;
+
+	switch (random)
+	{
+	case 1:
+		plusPoint = 5;
+		break;
+	case 2:
+		plusPoint = 6;
+		break;
+	case 3:
+		plusPoint = 7;
+		break;
+	case 4:
+		plusPoint = 8;
+		break;
+	}
+
+	MulticastAddScore(plusPoint);
+}
 
 void AH_OverkaseCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {

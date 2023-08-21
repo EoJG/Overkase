@@ -91,6 +91,8 @@ public:
 	void SubmitMenu(FName foodTag);
 	UFUNCTION(Server, Reliable)
 	void ServerAddScore();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastAddScore();
 	UFUNCTION()
 	void SetTimer(float settingTime);
 
@@ -103,6 +105,9 @@ public:
 	void ServerTestFunc();
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastTestFunc();
+
+	UFUNCTION()
+	void TestScore();
 
 	
 private:

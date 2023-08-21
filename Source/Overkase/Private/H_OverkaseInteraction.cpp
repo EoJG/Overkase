@@ -346,7 +346,7 @@ void UH_OverkaseInteraction::OnComponentEndOverlap(UPrimitiveComponent* Overlapp
 
 	if (AEO_Food* food = Cast<AEO_Food>(OtherActor))
 	{
-		UE_LOG(LogTemp,Warning, TEXT("GetFood"));
+		//UE_LOG(LogTemp,Warning, TEXT("GetFood"));
 		foodActor.Remove(food);
 		foodDistance.RemoveAt(0);
 	}

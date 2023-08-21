@@ -110,7 +110,7 @@ public:
 	void MulticastOnChopSound();
 
 	UFUNCTION(NetMulticast, Reliable)
-	void MulticastAddScore();
+	void MulticastAddScore(int score);
 
 	UPROPERTY(Replicated)
 	float currentTime = 0;
@@ -128,4 +128,8 @@ public:
 	//EO
 	UPROPERTY()
 	class AEO_Camera* eoCam;
+	UPROPERTY()
+	class AActor* mainCam;
+	UFUNCTION(Server, Reliable)
+	void ServerAddScore();
 };
