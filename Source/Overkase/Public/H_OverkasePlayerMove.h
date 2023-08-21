@@ -46,7 +46,6 @@ public:
 	UFUNCTION(Server, UnReliable)
 	void ServerDashMove();
 
-
 	bool bIsWalk = false;
 private:
 	bool bIsDash = false;

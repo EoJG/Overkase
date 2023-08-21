@@ -44,15 +44,14 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 	if (bIsDash) {
 		// 2. 대쉬중이면 인풋값을 받지않는다
-		//UE_LOG(LogTemp,Warning,TEXT("in"));
 		moveComp->MaxWalkSpeed = FMath::Lerp(2000, 350, 0.2f);
+		if (currentTime > 0.3) {
+			moveComp->MaxWalkSpeed = 600;
+			me->ServerEndVFX();
+			bIsDash = false;
+		}
 	}
 
-	if (currentTime > 0.3) {
-		moveComp->MaxWalkSpeed = 600;
-		//me->ServerEndVFX();
-		bIsDash = false;
-	}
 	//GEngine->AddOnScreenDebugMessage(-1, 0.1, FColor::Emerald, FString::Printf(TEXT("%f"), me->GetCharacterMovement()->Velocity.Length()));
 	if (me->GetCharacterMovement()->Velocity.Length() > 0) 
 	{
@@ -64,26 +63,6 @@ void UH_OverkasePlayerMove::TickComponent(float DeltaTime, ELevelTick TickType, 
 	}
 
 	space = Cast<UH_OverkaseInteraction>(me->overPlayerInteraction);
-
-	//애니메이션 if문
-	if (bIsWalk && space->bHasItem == false)
-	{
-		//me->AnimationComponent->CallWalk(true);
-	}
-	else if (bIsWalk && space->bHasItem == true)
-	{
-		//me->AnimationComponent->UpHand();
-	}
-	else if(!bIsWalk && space->bHasItem == false)
-	{
-		/*me->AnimationComponent->CallWalk(false);
-		me->AnimationComponent->DownHand();*/
-	}
-	else if (!bIsWalk && space->bHasItem == true)
-	{
-		//me->AnimationComponent->UpHand();
-	}
-
 
 }
 
@@ -113,7 +92,7 @@ void UH_OverkasePlayerMove::Move(const FInputActionValue& value)
 void UH_OverkasePlayerMove::ServerDashMove_Implementation()
 {
 	if (!bIsDash) {
-		UE_LOG(LogTemp, Warning, TEXT("ServerVFX"));
+		//UE_LOG(LogTemp, Warning, TEXT("ServerVFX"));
 
 		me->MulticastOnDashSound();
 		//me->MulticastOnParticle();
@@ -124,6 +103,4 @@ void UH_OverkasePlayerMove::ServerDashMove_Implementation()
 
 	}
 }
-
-
 

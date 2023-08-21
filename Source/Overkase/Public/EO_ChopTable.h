@@ -33,9 +33,14 @@ public:
 	virtual void OnItem(class AActor* item) override;
 	virtual void Interaction() override;
 
-	virtual void ServerOnItem(class AActor* item) override;
-	virtual void MulticastOnItem(class AActor* item) override;
+	UFUNCTION(Server, Unreliable)
+	void ServerOnItem2(class AActor* item);
 
-	virtual void ServerInteraction() override;
-	virtual void MulticastInteraction() override;
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastOnItem2(class AActor* item);
+
+	UFUNCTION(Server, Unreliable)
+	void ServerInteraction2();
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastInteraction2();
 };

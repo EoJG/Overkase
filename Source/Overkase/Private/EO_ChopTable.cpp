@@ -166,13 +166,18 @@ void AEO_ChopTable::OnItem(class AActor* item)
 
 void AEO_ChopTable::Interaction()
 {
+	
+	UE_LOG(LogTemp, Warning, TEXT("Owner"));
+
 	if (bOnItem && !food->bIsCooked && food->bCanChop)
 	{
 		food->curTime += GetWorld()->GetDeltaSeconds();
 		progressWidget->curTime = food->curTime;
+		//UE_LOG(LogTemp, Warning, TEXT("Owner: %s"), GetOwner() != nullptr ? *FString("Have") : *FString("None"));
 		if (food->curTime >= food->coolTime)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Maked"));
+			//
+			UE_LOG(LogTemp, Warning, TEXT("Maked 2"));
 			food->bIsCooked = true;
 			food->changeMeshComp->SetVisibility(true);
 			food->meshComp->SetVisibility(false);
@@ -186,12 +191,12 @@ void AEO_ChopTable::Interaction()
 	}
 }
 
-void AEO_ChopTable::ServerOnItem(class AActor* item)
+void AEO_ChopTable::ServerOnItem2_Implementation(class AActor* item)
 {
-	MulticastOnItem(item);
+	MulticastOnItem2(item);
 }
 
-void AEO_ChopTable::MulticastOnItem(class AActor* item)
+void AEO_ChopTable::MulticastOnItem2_Implementation(class AActor* item)
 {
 	if (!bOnItem)
 	{
@@ -311,17 +316,19 @@ void AEO_ChopTable::MulticastOnItem(class AActor* item)
 	}
 }
 
-void AEO_ChopTable::ServerInteraction()
+void AEO_ChopTable::ServerInteraction2_Implementation()
 {
-	MulticastInteraction();
+	MulticastInteraction2();
 }
 
-void AEO_ChopTable::MulticastInteraction()
+void AEO_ChopTable::MulticastInteraction2_Implementation()
 {
+	//UE_LOG(LogTemp, Warning, TEXT("food: %s"), food != nullptr ? *FString("Has") : *FString("None"));
+	//UE_LOG(LogTemp, Warning, TEXT("bOnItem = %s, bIsCooked = %s, bCanChop = %s"), bOnItem ? *FString("true") : *FString("false"), food->bIsCooked ? *FString("true") : *FString("false"), food->bCanChop ? *FString("true") : *FString("false"));
 	if (bOnItem && !food->bIsCooked && food->bCanChop)
 	{
 		food->curTime += GetWorld()->GetDeltaSeconds();
-		progressWidget->curTime = food->curTime;
+		progressWidget->curTime += GetWorld()->GetDeltaSeconds();
 		if (food->curTime >= food->coolTime)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Maked"));

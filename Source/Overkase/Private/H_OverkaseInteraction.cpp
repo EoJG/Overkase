@@ -15,6 +15,7 @@
 #include "EO_ChopTable.h"
 
 #include "Net/UnrealNetwork.h"
+#include "EO_Stove.h"
 
 UH_OverkaseInteraction::UH_OverkaseInteraction()
 {
@@ -73,7 +74,16 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 		if (bIsDoingInteraction)
 		{
 			SetOwnerToActor(block);
-			block->ServerInteraction();
+			
+			if (Cast<AEO_ChopTable>(block))
+			{
+			Cast<AEO_ChopTable>(block)->ServerInteraction2();
+
+			}
+			else
+			{
+				block->ServerInteraction();
+			}
 
 			if (blockActor[closestBlockIndex]->GetName().Contains(FString("Sink")))
 			{
@@ -147,6 +157,8 @@ void UH_OverkaseInteraction::ServerSpaceInput_Implementation()
 
 void UH_OverkaseInteraction::MulticastSpaceInput_Implementation()
 {
+	SetOwnerToActor(me);
+	
 	// 만약 가까이에 아무것도 있지 않으면 
 	if (blockDistance.IsEmpty() && foodDistance.IsEmpty())
 	{
@@ -285,7 +297,18 @@ void UH_OverkaseInteraction::ServerNoItem_Implementation()
 			if (!items.IsEmpty())
 			{
 				SetOwnerToActor(block);
-				block->ServerOnItem(items[0]);
+				if (Cast<AEO_ChopTable>(block))
+				{
+				Cast<AEO_ChopTable>(block)->ServerOnItem2(items[0]);
+				}
+				else if (Cast<AEO_Stove>(block))
+				{
+					Cast<AEO_Stove>(block)->ServerOnItem2(items[0]);
+				}
+				else
+				{
+					block->ServerOnItem(items[0]);
+				}
 				if (items.IsEmpty())
 				{
 					//bHasItem = false;

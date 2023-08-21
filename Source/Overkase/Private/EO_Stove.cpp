@@ -21,7 +21,8 @@ AEO_Stove::AEO_Stove()
 
 void AEO_Stove::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime);	
+	//ServerOnIteminTick(DeltaTime);
 
 	if (bCanCook)
 	{
@@ -40,6 +41,7 @@ void AEO_Stove::Tick(float DeltaTime)
 			progressWidget->BindProgressFunc();
 		}
 	}
+	
 }
 
 void AEO_Stove::OnItem(class AActor* item)
@@ -184,12 +186,12 @@ void AEO_Stove::GetItem(class USceneComponent* playerSceneComp)
 	bCanCook = false;
 }
 
-void AEO_Stove::ServerOnItem(class AActor* item)
+void AEO_Stove::ServerOnItem2_Implementation(class AActor* item)
 {
-	MulticastOnItem(item);
+	MulticastOnItem2(item);
 }
 
-void AEO_Stove::MulticastOnItem(class AActor* item)
+void AEO_Stove::MulticastOnItem2_Implementation(class AActor* item)
 {
 	if (!bOnItem)
 	{
@@ -200,6 +202,7 @@ void AEO_Stove::MulticastOnItem(class AActor* item)
 				TArray<AActor*> items;
 				potItem->GetAttachedActors(items);
 				sFoodTemp = Cast<AEO_Food>(items[0]);
+				UE_LOG(LogTemp, Warning, TEXT("sFoodTemp: %s"), sFoodTemp != nullptr ? *FString("Has") : *FString("None"));
 				progressWidget->coolTime = sFoodTemp->coolTime;
 
 				bCanCook = true;
@@ -319,6 +322,16 @@ void AEO_Stove::MulticastOnItem(class AActor* item)
 	}
 }
 
+void AEO_Stove::ServerOnIteminTick_Implementation(float DeltaTime)
+{
+	
+}
+
+void AEO_Stove::MulticastOnIteminTick_Implementation(float DeltaTime)
+{
+	
+}
+
 void AEO_Stove::ServerGetItem(class USceneComponent* playerSceneComp)
 {
 	MulticastGetItem(playerSceneComp);
@@ -331,3 +344,4 @@ void AEO_Stove::MulticastGetItem(class USceneComponent* playerSceneComp)
 	sFoodTemp = nullptr;
 	bCanCook = false;
 }
+
