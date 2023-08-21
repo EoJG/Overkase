@@ -39,6 +39,7 @@ AEO_Pot::AEO_Pot()
 
 	bReplicates = true;
 	meshComp->SetIsReplicated(true);
+	waterMeshComp->SetIsReplicated(true);
 }
 
 // Called when the game starts or when spawned
@@ -54,5 +55,12 @@ void AEO_Pot::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	waterMeshComp->SetVisibility(bInFood);
+}
+
+void AEO_Pot::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(AEO_Pot, bInFood);
 }
 

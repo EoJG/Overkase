@@ -33,6 +33,6 @@ public:
 
 
 public:
-	UPROPERTY(VisibleAnywhere, Category = "Settings")
+	UPROPERTY(VisibleAnywhere, Replicated, Category = "Settings")
 	bool bInFood = false;
 };
