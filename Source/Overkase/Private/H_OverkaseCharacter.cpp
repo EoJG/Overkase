@@ -298,15 +298,15 @@ void AH_OverkaseCharacter::ServerEndVFX_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("ServerEndVFX"));
 
-	//MulticastEndVFX();
-	NiagaraComponent->SetVisibility(false);
+	MulticastEndVFX();
+	
 
 }
 
 void AH_OverkaseCharacter::MulticastEndVFX_Implementation()
 {
 	//UE_LOG(LogTemp,Warning,TEXT("%s"), *GetOwner()->GetName());
-
+	NiagaraComponent->SetVisibility(false);
 
 	/*if (HasAuthority()) {
 	}*/
