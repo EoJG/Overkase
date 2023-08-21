@@ -298,11 +298,18 @@ void UH_OverkaseInteraction::ServerNoItem_Implementation()
 				SetOwnerToActor(block);
 				if (Cast<AEO_ChopTable>(block))
 				{
-				Cast<AEO_ChopTable>(block)->ServerOnItem2(items[0]);
+					if (!items.IsEmpty()) {
+						Cast<AEO_ChopTable>(block)->ServerOnItem2(items[0]);
+
+					}
 				}
 				else if (Cast<AEO_Stove>(block))
 				{
-					Cast<AEO_Stove>(block)->ServerOnItem2(items[0]);
+					if (!items.IsEmpty())
+					{
+						Cast<AEO_Stove>(block)->ServerOnItem2(items[0]);
+
+					}
 				}
 				else
 				{

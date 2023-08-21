@@ -193,6 +193,7 @@ void AEO_Stove::ServerOnItem2_Implementation(class AActor* item)
 
 void AEO_Stove::MulticastOnItem2_Implementation(class AActor* item)
 {
+	
 	if (!bOnItem)
 	{
 		if (AEO_Pot* potItem = Cast<AEO_Pot>(item))
@@ -219,6 +220,8 @@ void AEO_Stove::MulticastOnItem2_Implementation(class AActor* item)
 		TArray<AActor*> items;
 		GetAttachedActors(items);
 		// 테이블 위에 아이템이 접시 일 때
+		if (!items.IsEmpty())
+		{
 		if (AEO_Plate* plateTemp = Cast<AEO_Plate>(items[0]))
 		{
 			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
@@ -246,7 +249,6 @@ void AEO_Stove::MulticastOnItem2_Implementation(class AActor* item)
 				if (!plateTemp->CheckOnFood(pFood->Tags[0]))
 				{
 					item->AttachToComponent(plateTemp->sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-
 					plateTemp->CheckRecipe(item->Tags[0]);
 				}
 			}
@@ -320,6 +322,8 @@ void AEO_Stove::MulticastOnItem2_Implementation(class AActor* item)
 			}
 		}
 	}
+}
+	
 }
 
 void AEO_Stove::ServerOnIteminTick_Implementation(float DeltaTime)
