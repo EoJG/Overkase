@@ -328,7 +328,7 @@ void AEO_ChopTable::MulticastInteraction2_Implementation()
 	if (bOnItem && !food->bIsCooked && food->bCanChop)
 	{
 		food->curTime += GetWorld()->GetDeltaSeconds();
-		progressWidget->curTime += GetWorld()->GetDeltaSeconds();
+		progressWidget->curTime = food->curTime;
 		if (food->curTime >= food->coolTime)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Maked"));
