@@ -7,7 +7,8 @@
 #include "Components/EditableText.h"
 #include "Components/ScrollBox.h"
 #include "Components/WidgetSwitcher.h"
-
+#include "Components/TextBlock.h"
+#include "H_SessionInfoWidget.h"
 
 void UH_OverLoginWidget::NativeConstruct()
 {
