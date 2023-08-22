@@ -58,6 +58,8 @@ public:
 
 	UPROPERTY(Replicated)
 	bool bIsOnGround = false;
+	UPROPERTY(VisibleAnywhere, Category=HandSetting)
+	bool bIsOnHand = false;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -72,6 +74,11 @@ public:
 	void ServerOverlapItemOnBlock(USceneComponent* sceneComp);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastOverlapItemOnBlock(USceneComponent* sceneComp);
+
+	UFUNCTION(Server, Reliable)
+	void ServerCheckOnHand();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastCheckOnHand();
 
 	UFUNCTION()
 	void FoodVisible();

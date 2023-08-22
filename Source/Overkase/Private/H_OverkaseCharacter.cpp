@@ -21,12 +21,15 @@
 #include "TimerManager.h"
 #include "Components/AudioComponent.h" 
 #include "Components/TextBlock.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	//GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Block);
 
 	handR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HandR"));
 	handR->SetupAttachment(RootComponent);

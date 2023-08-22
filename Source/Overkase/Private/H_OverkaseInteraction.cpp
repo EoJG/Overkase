@@ -362,6 +362,10 @@ void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* Overla
 		foodDistance.Add(0);
 		if (!bHasItem)
 		{
+			if (food->bIsOnHand)
+			{
+				return;
+			}
 			if (food->bIsOnGround == false)
 			{
 				ServerGetFood(me->interactionPosition);

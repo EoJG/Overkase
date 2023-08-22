@@ -59,7 +59,7 @@ void AEO_Food::BeginPlay()
 // Called every frame
 void AEO_Food::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime); 
 
 	FVector CharacterLocation = GetActorLocation();
 
@@ -82,6 +82,26 @@ void AEO_Food::Tick(float DeltaTime)
 
 
 	DrawDebugLine(GetWorld(), StartPos, EndPos, FColor::Green, false, -1, 0, 1);
+
+	//ServerCheckOnHand();
+	FVector End1Pos = CharacterLocation + GetActorRightVector() * -100;
+
+	FHitResult Hit1Result;
+	FCollisionQueryParams Collision1Params;
+	Collision1Params.AddIgnoredActor(this);
+	bool b1Hit = GetWorld()->LineTraceSingleByChannel(Hit1Result, StartPos, End1Pos, ECC_Visibility, Collision1Params);
+
+	if (b1Hit)
+	{
+		bIsOnHand = true;
+	}
+	else
+	{
+		bIsOnHand = false;
+	}
+
+
+	DrawDebugLine(GetWorld(), StartPos, End1Pos, FColor::Black, false, -1, 0, 1);
 	
 }
 
@@ -118,10 +138,39 @@ void AEO_Food::MulticastOverlapItemOnBlock_Implementation(USceneComponent* scene
 	boxComp->SetSimulatePhysics(false);
 	this->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	
-
 }
 
 
+
+void AEO_Food::ServerCheckOnHand_Implementation()
+{
+	MulticastCheckOnHand();
+}
+
+void AEO_Food::MulticastCheckOnHand_Implementation()
+{
+	FVector CharacterLocation = GetActorLocation();
+
+	FVector StartPos = CharacterLocation;
+	FVector End1Pos = CharacterLocation + GetActorRightVector() * -100;
+
+	FHitResult Hit1Result;
+	FCollisionQueryParams Collision1Params;
+	Collision1Params.AddIgnoredActor(this);
+	bool b1Hit = GetWorld()->LineTraceSingleByChannel(Hit1Result, StartPos, End1Pos, ECC_Visibility, Collision1Params);
+
+	if (b1Hit)
+	{
+		bIsOnHand = true;
+	}
+	else
+	{
+		bIsOnHand = false;
+	}
+
+
+	DrawDebugLine(GetWorld(), StartPos, End1Pos, FColor::Black, false, -1, 0, 1);
+}
 
 void AEO_Food::FoodVisible()
 {
@@ -178,4 +227,5 @@ void AEO_Food::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetime
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AEO_Food, bIsOnGround);
+	//DOREPLIFETIME(AEO_Food, bIsOnHand);
 }
