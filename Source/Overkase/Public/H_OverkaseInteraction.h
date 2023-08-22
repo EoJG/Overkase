@@ -81,8 +81,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = Foods)
 	TArray<AEO_Food*> foodActor;
 
-	UPROPERTY(EditAnywhere, Category = Foods)
-	bool bHasItem = false;
+	
 
 	TArray<float> foodDistance;
 

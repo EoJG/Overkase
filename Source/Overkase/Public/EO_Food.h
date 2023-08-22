@@ -33,6 +33,11 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* platedMeshComp;
 
+	UPROPERTY()
+	class AH_OverkaseCharacter* me;
+	//UPROPERTY()
+	//class AEO_Block* block;
+
 public:
 	UPROPERTY(VisibleAnywhere, Category="Check")
 	bool bIsCooked = false;
@@ -60,10 +65,19 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void DropItem();
 
+	UFUNCTION(Server, Reliable)
+	void ServerOverlapItemOnBlock(USceneComponent* sceneComp);
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOverlapItemOnBlock(USceneComponent* sceneComp);
+
+
 	UFUNCTION()
 	void FoodVisible();
 	UFUNCTION()
 	void ChangeVisible();
 	UFUNCTION()
 	void PlatedVisible();
+
+	UFUNCTION()
+	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

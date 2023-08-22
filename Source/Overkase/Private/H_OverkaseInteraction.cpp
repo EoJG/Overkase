@@ -362,7 +362,14 @@ void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* Overla
 	{
 		foodActor.Add(food);
 		foodDistance.Add(0);
+		if (!bHasItem)
+		{
+			ServerGetFood(me->interactionPosition);
+			//foodDistance.RemoveAt(0);
+		}
 	}
+	
+
 }
 
 void UH_OverkaseInteraction::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

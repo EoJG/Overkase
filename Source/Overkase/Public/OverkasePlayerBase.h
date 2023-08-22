@@ -40,7 +40,9 @@ public:
 
 	UPROPERTY()
 	class AEO_Food* Food;
-		
+
+	UPROPERTY(EditAnywhere, Category = Foods)
+	bool bHasItem = false;
 public:
 	virtual void SetupInputBinding(class UInputComponent* PlayerInputComponent) {}
 };

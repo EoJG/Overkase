@@ -3,6 +3,9 @@
 
 #include "EO_Food.h"
 #include <Components/BoxComponent.h>
+#include "EO_Block.h"
+#include "H_OverkaseCharacter.h"
+#include "H_OverkaseInteraction.h"
 
 // Sets default values
 AEO_Food::AEO_Food()
@@ -48,7 +51,9 @@ AEO_Food::AEO_Food()
 void AEO_Food::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	boxComp->OnComponentBeginOverlap.AddDynamic(this, &AEO_Food::OnComponentBeginOverlap);
+
+
 }
 
 // Called every frame
@@ -81,6 +86,18 @@ void AEO_Food::DropItem_Implementation()
 
 }
 
+void AEO_Food::ServerOverlapItemOnBlock_Implementation(USceneComponent* sceneComp)
+{
+	MulticastOverlapItemOnBlock(sceneComp);
+}
+
+void AEO_Food::MulticastOverlapItemOnBlock_Implementation(USceneComponent* sceneComp)
+{
+	this->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	boxComp->SetSimulatePhysics(false);
+
+}
+
 void AEO_Food::FoodVisible()
 {
 	meshComp->SetVisibility(true);
@@ -100,5 +117,22 @@ void AEO_Food::PlatedVisible()
 	meshComp->SetVisibility(false);
 	changeMeshComp->SetVisibility(false);
 	platedMeshComp->SetVisibility(true);
+}
+
+void AEO_Food::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	
+	
+		if (auto block = Cast<AEO_Block>(OtherActor))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("block Overlap"));
+			//if (block->bOnItem == false)
+			//{
+			//block->ServerOnItem(this);
+			
+			//}
+			ServerOverlapItemOnBlock(block->sceneComp);
+		}
+
 }
 
