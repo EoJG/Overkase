@@ -93,8 +93,9 @@ void AEO_Food::ServerOverlapItemOnBlock_Implementation(USceneComponent* sceneCom
 
 void AEO_Food::MulticastOverlapItemOnBlock_Implementation(USceneComponent* sceneComp)
 {
-	this->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	boxComp->SetSimulatePhysics(false);
+	this->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	
 
 }
 

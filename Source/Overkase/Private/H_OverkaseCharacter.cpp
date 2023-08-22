@@ -19,7 +19,8 @@
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
 #include "TimerManager.h"
-#include "Components/AudioComponent.h"
+#include "Components/AudioComponent.h" 
+#include "Components/TextBlock.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
