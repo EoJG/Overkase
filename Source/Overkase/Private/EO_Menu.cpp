@@ -16,6 +16,7 @@ void UEO_Menu::NativeTick(const FGeometry& Geometry, float DeltaTime)
 
 	curTime -= DeltaTime;
 	BindPercent();
+	TimeOver();
 }
 
 void UEO_Menu::BindPercent()
@@ -32,5 +33,10 @@ void UEO_Menu::BindPercent()
 	{
 		progress_Timer->SetFillColorAndOpacity(FColor(255, (percent * 2) * 255, 0, 255));
 	}
+}
+
+void UEO_Menu::TimeOver()
+{
+	
 }
 

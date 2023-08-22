@@ -40,6 +40,31 @@ void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSecon
 
 	SetTimerUI();
 
+	if (!cucumberArr.IsEmpty() && cucumberArr[0]->curTime <= 0)
+	{
+		UEO_Menu* temp;
+		temp = cucumberArr[0];
+		cucumberArr.RemoveAt(0);
+		cucumberArr.Add(temp);
+		cucumberArr[cucumberArr.Num() - 1]->curTime = cucumberArr[cucumberArr.Num() - 1]->coolTime;
+	}
+	else if (!fishArr.IsEmpty() && fishArr[0]->curTime <= 0)
+	{
+		UEO_Menu* temp;
+		temp = fishArr[0];
+		fishArr.RemoveAt(0);
+		fishArr.Add(temp);
+		fishArr[fishArr.Num() - 1]->curTime = fishArr[fishArr.Num() - 1]->coolTime;
+	}
+	else if (!octopusArr.IsEmpty() && octopusArr[0]->curTime <= 0)
+	{
+		UEO_Menu* temp;
+		temp = octopusArr[0];
+		octopusArr.RemoveAt(0);
+		octopusArr.Add(temp);
+		octopusArr[octopusArr.Num() - 1]->curTime = octopusArr[octopusArr.Num() - 1]->coolTime;
+	}
+
 	/*if(!cucumberArr.IsEmpty() || !fishArr.IsEmpty() || !octopusArr.IsEmpty())
 	{
 		if (cucumberArr[0]->curTime <= 0)
