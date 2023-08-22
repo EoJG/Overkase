@@ -117,7 +117,6 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 			me->AnimationComponent->DownHand();*/
 			bIsInteraction = false;
 
-
 		}
 	}
 
@@ -132,8 +131,7 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	{
 		bHasItem = true;
 	}
-	
-}
+	}
 
 void UH_OverkaseInteraction::SetupInputBinding(class UInputComponent* PlayerInputComponent)
 {	
@@ -225,7 +223,7 @@ void UH_OverkaseInteraction::MulicastCtrlInput_Implementation()
 				items[0]->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				Food->ShootFood(me->GetActorForwardVector());
 				me->MulticastOnThrowSound();
-
+				//Food->bIsShooting = true;
 			}
 		}
 	}
@@ -364,8 +362,11 @@ void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* Overla
 		foodDistance.Add(0);
 		if (!bHasItem)
 		{
-			ServerGetFood(me->interactionPosition);
-			//foodDistance.RemoveAt(0);
+			if (food->bIsOnGround == false)
+			{
+				ServerGetFood(me->interactionPosition);
+				//foodDistance.RemoveAt(0);
+			}
 		}
 	}
 	

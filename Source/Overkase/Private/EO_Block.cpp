@@ -106,6 +106,8 @@ void AEO_Block::OnItem(class AActor* item)
 		TArray<AActor*> items;
 		GetAttachedActors(items);
 		// 테이블 위에 아이템이 접시 일 때
+		if(!items.IsEmpty())
+		{
 		if (AEO_Plate* plateTemp = Cast<AEO_Plate>(items[0]))
 		{
 			if (AEO_Plate* pPlate = Cast<AEO_Plate>(item))
@@ -200,6 +202,7 @@ void AEO_Block::OnItem(class AActor* item)
 			{
 				return;
 			}
+		}
 		}
 	}
 }

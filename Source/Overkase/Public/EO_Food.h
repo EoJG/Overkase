@@ -56,6 +56,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category="Recipe")
 	float coolTime = 0;
 
+	UPROPERTY(Replicated)
+	bool bIsOnGround = false;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void ShootFood(FVector forward);
@@ -69,7 +72,6 @@ public:
 	void ServerOverlapItemOnBlock(USceneComponent* sceneComp);
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastOverlapItemOnBlock(USceneComponent* sceneComp);
-
 
 	UFUNCTION()
 	void FoodVisible();

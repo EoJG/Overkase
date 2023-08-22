@@ -61,6 +61,28 @@ void AEO_Food::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector CharacterLocation = GetActorLocation();
+
+	FVector StartPos = CharacterLocation;
+	FVector EndPos = CharacterLocation - FVector(0, 0, 20); 
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartPos, EndPos, ECC_Visibility, CollisionParams);
+
+	if (bHit)
+	{
+		bIsOnGround = true;
+	}
+	else
+	{
+		bIsOnGround = false;
+	}
+
+
+	DrawDebugLine(GetWorld(), StartPos, EndPos, FColor::Green, false, -1, 0, 1);
+	
 }
 
 void AEO_Food::ShootFood(FVector forward)
@@ -99,6 +121,8 @@ void AEO_Food::MulticastOverlapItemOnBlock_Implementation(USceneComponent* scene
 
 }
 
+
+
 void AEO_Food::FoodVisible()
 {
 	meshComp->SetVisibility(true);
@@ -123,7 +147,6 @@ void AEO_Food::PlatedVisible()
 void AEO_Food::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	
-	
 		if (auto block = Cast<AEO_Block>(OtherActor))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("block Overlap"));
@@ -132,8 +155,27 @@ void AEO_Food::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			//block->ServerOnItem(this);
 			
 			//}
-			ServerOverlapItemOnBlock(block->sceneComp);
+			if (block->bOnItem == true)
+			{
+				return;
+			}
+			if (block->bOnItem == false)
+			{
+				if (!bIsOnGround)
+				{
+					ServerOverlapItemOnBlock(block->sceneComp);
+					//block->ServerOnItem(this);
+					//boxComp->SetSimulatePhysics(false);
+					block->bOnItem = true;
+				}
+			}
 		}
 
 }
 
+void AEO_Food::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{	
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AEO_Food, bIsOnGround);
+}
