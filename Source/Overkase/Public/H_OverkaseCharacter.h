@@ -83,7 +83,14 @@ public:
 	class USoundBase* chopSound;
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
 	class USoundBase* catchSound;
-	
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* BGMSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* endingSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* timeOutSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class UAudioComponent* BGMAudio;
 
 	UPROPERTY(VisibleAnywhere, Category = "EO")
 	TSubclassOf<class UEO_InGameInterface> inGameUIClass;
@@ -116,7 +123,7 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastOnCatchSound();
 	
-
+	
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastAddScore(int score);
 
@@ -128,10 +135,11 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastTestFunc(FName foodTag);
 
-
-
+	void TimeOutSound();
+	void EndingSound();
+	bool bEndingplay = false;
 	bool bSoundPlay = false;
-
+	bool bTimeOutPlay = false;
 
 	//EO
 	UPROPERTY()
@@ -140,4 +148,5 @@ public:
 	class AActor* mainCam;
 	UFUNCTION(Server, Reliable)
 	void ServerAddScore();
+	
 };

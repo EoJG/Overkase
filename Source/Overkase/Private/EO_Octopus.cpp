@@ -2,6 +2,8 @@
 
 
 #include "EO_Octopus.h"
+#include <Components/BoxComponent.h>
+
 
 AEO_Octopus::AEO_Octopus()
 {

@@ -10,17 +10,17 @@ AStage1GameModeBase::AStage1GameModeBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	ConstructorHelpers::FObjectFinder<USoundBase> TempBGM(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/Throw1.Throw1'"));
+	/*ConstructorHelpers::FObjectFinder<USoundBase> TempBGM(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/y2mate_com-Overcooked-2-Soundtrack-Sushi-City.y2mate_com-Overcooked-2-Soundtrack-Sushi-City'"));
 	if (TempBGM.Succeeded())
 	{
 		BGMSound = TempBGM.Object;
-	}
+	}*/
 }
 
 void AStage1GameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	UGameplayStatics::PlaySound2D(this, BGMSound);
+	//UGameplayStatics::PlaySound2D(this, BGMSound);
 	
 }
 

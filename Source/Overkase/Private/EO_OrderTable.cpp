@@ -5,6 +5,8 @@
 #include <Kismet/GameplayStatics.h>
 #include <UMG/Public/Blueprint/WidgetBlueprintLibrary.h>
 #include "EO_ReturnPlate.h"
+#include "EO_Plate.h"
+
 
 AEO_OrderTable::AEO_OrderTable()
 {

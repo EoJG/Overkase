@@ -23,6 +23,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	UPROPERTY(EditDefaultsOnly, Category = Sound)
-	class USoundBase* BGMSound;
+	/*UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* BGMSound;*/
 };

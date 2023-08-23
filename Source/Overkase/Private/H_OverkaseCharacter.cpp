@@ -155,7 +155,21 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	{
 		catchSound = TempCatch1.Object;
 	}
-
+	ConstructorHelpers::FObjectFinder<USoundBase> TempBGM1(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/Sound/y2mate_com-Overcooked-2-Soundtrack-Sushi-City.y2mate_com-Overcooked-2-Soundtrack-Sushi-City'"));
+	if (TempBGM1.Succeeded())
+	{
+		BGMSound = TempBGM1.Object;
+	}
+	ConstructorHelpers::FObjectFinder<USoundBase> TempEnding(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/BetaSound/CityLiving.CityLiving'"));
+	if (TempEnding.Succeeded())
+	{
+		endingSound = TempEnding.Object;
+	}
+	ConstructorHelpers::FObjectFinder<USoundBase> TempTimeOut(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/BetaSound/TimesUpSting.TimesUpSting'"));
+	if (TempTimeOut.Succeeded())
+	{
+		timeOutSound = TempTimeOut.Object;
+	}
 	// Niagara 컴포넌트 생성
 	NiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
 
@@ -194,6 +208,8 @@ void AH_OverkaseCharacter::BeginPlay()
 
 	}
 
+	BGMAudio = UGameplayStatics::SpawnSound2D(GetWorld(), BGMSound);
+
 	inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
 	inGameUI->AddToViewport();
 
@@ -217,6 +233,26 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	if (inGameUI->curTime < 1)
+	{
+		if (!bTimeOutPlay)
+		{
+			TimeOutSound();
+		}
+	}
+
+	if (inGameUI->curTime < 0)
+	{
+		if (BGMAudio)
+		{
+			BGMAudio->Stop();
+		}
+		if (!bEndingplay) 
+		{
+			EndingSound();
+		}
+	}
+
 	if (mainCam != nullptr && GetWorld()->GetFirstPlayerController()->GetViewTarget() != mainCam)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetWorld()->GetFirstPlayerController()->GetCharacter()->GetName());
@@ -402,6 +438,18 @@ void AH_OverkaseCharacter::MulticastAddScore_Implementation(int score)
 void AH_OverkaseCharacter::MulticastTestFunc_Implementation(FName foodTag)
 {
 	 inGameUI->SubmitMenu(foodTag);
+}
+
+void AH_OverkaseCharacter::TimeOutSound()
+{
+	bTimeOutPlay = true;
+	UGameplayStatics::PlaySound2D(GetWorld(), timeOutSound);
+}
+
+void AH_OverkaseCharacter::EndingSound()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), endingSound);
+	bEndingplay = true;
 }
 
 void AH_OverkaseCharacter::ServerAddScore_Implementation()
