@@ -35,5 +35,13 @@ public:
 	UFUNCTION(Server, Reliable)
 	void ServerSpawnPlate();
 
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* spawnSound;
+
+	UFUNCTION(Server, Reliable)
+	void ServerOnSpawnSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnSpawnSound();
+
 	float plateCount = 0;
 };

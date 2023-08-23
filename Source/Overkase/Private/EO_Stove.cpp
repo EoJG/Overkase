@@ -4,7 +4,7 @@
 #include "EO_Stove.h"
 #include "EO_Food.h"
 #include "EO_Pot.h"
-#include "EO_Progressbar.h"
+#include <Components/AudioComponent.h>
 
 
 AEO_Stove::AEO_Stove()
@@ -19,6 +19,23 @@ AEO_Stove::AEO_Stove()
 		meshComp->SetStaticMesh(MeshTemp.Object);
 		meshComp->SetRelativeLocation(FVector(0, 0, -45));
 	}
+
+	/*ConstructorHelpers::FObjectFinder<USoundBase> TempSizzle(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/BetaSound/PanSizzleStart.PanSizzleStart'"));
+	if (TempSizzle.Succeeded())
+	{
+		sizzleSound = TempSizzle.Object;
+	}*/
+
+	ConstructorHelpers::FObjectFinder<USoundBase> TempService(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/BetaSound/ServiceBell.ServiceBell'"));
+	if (TempService.Succeeded())
+	{
+		serviceSound = TempService.Object;
+	}
+
+	sizzleSound = CreateDefaultSubobject<UAudioComponent>(TEXT("Sizzle_AudioComponent"));
+	sizzleSound->SetupAttachment(RootComponent); 
+	sizzleSound->bAutoActivate = false;
+	sizzleSound->SetIsReplicated(true);
 }
 
 void AEO_Stove::Tick(float DeltaTime)
@@ -33,12 +50,16 @@ void AEO_Stove::Tick(float DeltaTime)
 		UE_LOG(LogTemp, Warning, TEXT("%f"), sFoodTemp->curTime);
 		if (sFoodTemp->curTime >= sFoodTemp->coolTime)
 		{
+			//StopSizzleSound();
+			ServerOnServiceSound();
 			UE_LOG(LogTemp, Warning, TEXT("IsCoocked"));
 			sFoodTemp->bIsCooked = true;
 			widgetComp->SetVisibility(false);
 		}
 		else
 		{
+			//StartSizzleSound();
+			StopSizzleSound();
 			widgetComp->SetVisibility(true);
 			progressWidget->BindProgressFunc();
 		}
@@ -186,6 +207,28 @@ void AEO_Stove::GetItem(class USceneComponent* playerSceneComp)
 
 	sFoodTemp = nullptr;
 	bCanCook = false;
+}
+
+
+void AEO_Stove::StartSizzleSound()
+{
+	sizzleSound->Activate(true);
+}
+
+void AEO_Stove::StopSizzleSound()
+{
+	sizzleSound->Activate(false);
+}
+
+void AEO_Stove::ServerOnServiceSound_Implementation()
+{
+	MulticastOnServiceSound();
+}
+
+void AEO_Stove::MulticastOnServiceSound_Implementation()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Emerald, FString::Printf(TEXT("Service")));
+	UGameplayStatics::PlaySound2D(GetWorld(), serviceSound);
 }
 
 void AEO_Stove::ServerOnItem2_Implementation(class AActor* item)
@@ -350,4 +393,11 @@ void AEO_Stove::MulticastGetItem(class USceneComponent* playerSceneComp)
 	sFoodTemp = nullptr;
 	bCanCook = false;
 }
+
+//void AEO_Stove::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+//{
+//	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+//
+//	DOREPLIFETIME(AEO_Stove, sizzleSound);
+//}
 

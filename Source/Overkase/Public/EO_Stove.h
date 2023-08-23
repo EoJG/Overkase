@@ -25,6 +25,12 @@ public:
 	class AEO_Food* sFoodTemp;
 
 	class UH_OverkaseInteraction* inter;
+
+	UPROPERTY(EditAnywhere)
+	class UAudioComponent* sizzleSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* serviceSound;
 public:
 	UPROPERTY(VisibleAnywhere, Category = "Check")
 	bool bCanCook = false;
@@ -32,6 +38,14 @@ public:
 public:
 	virtual void OnItem(class AActor* item) override;
 	virtual void GetItem(class USceneComponent* playerSceneComp);
+
+	void StartSizzleSound();
+	void StopSizzleSound();
+	
+	UFUNCTION(Server, Reliable)
+	void ServerOnServiceSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnServiceSound();
 
 	UFUNCTION(Server, Reliable)
 	void ServerOnItem2(class AActor* item);

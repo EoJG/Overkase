@@ -13,4 +13,14 @@ UCLASS()
 class OVERKASE_API AH_OverLobbyBase : public AGameModeBase
 {
 	GENERATED_BODY()
+
+
+public:
+
+	AH_OverLobbyBase();
+
+	virtual void BeginPlay() override;
+
+	
+	
 };

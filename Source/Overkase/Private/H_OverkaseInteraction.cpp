@@ -366,7 +366,7 @@ void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* Overla
 			{
 				return;
 			}
-			if (food->bIsOnGround == false)
+			if (food->bIsOnGround == false && food->GetName().Contains(TEXT("Cucumber")) && food->GetName().Contains(TEXT("Fish")) && food->GetName().Contains(TEXT("Octupus")) && food->GetName().Contains(TEXT("Seaweed")) && food->GetName().Contains(TEXT("Rice")))
 			{
 				ServerGetFood(me->interactionPosition);
 				me->MulticastOnCatchSound();

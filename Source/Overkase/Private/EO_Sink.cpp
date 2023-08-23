@@ -5,6 +5,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "EO_Block.h"
 #include "EO_Progressbar.h"
+#include "Components/WidgetComponent.h"
 
 
 AEO_Sink::AEO_Sink()
@@ -97,7 +98,6 @@ void AEO_Sink::SpawnPlate()
 {
 	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	compleCount++;
-	ServerOnDishSound();
 	bOnItem = true;
 }
 
@@ -169,6 +169,7 @@ void AEO_Sink::ServerSpawnPlate_Implementation()
 {
 	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	compleCount++;
+	ServerOnDishSound();
 
 	bOnItem = true;
 }

@@ -2,6 +2,7 @@
 
 
 #include "EO_ReturnPlate.h"
+#include <Kismet/GameplayStatics.h>
 
 
 AEO_ReturnPlate::AEO_ReturnPlate()
@@ -18,6 +19,12 @@ AEO_ReturnPlate::AEO_ReturnPlate()
 	if (plateTemp.Succeeded())
 	{
 		rPlate = plateTemp.Class;
+	}
+
+	ConstructorHelpers::FObjectFinder<USoundBase> Tempspawn(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/BetaSound/WashedPlate.WashedPlate'"));
+	if (Tempspawn.Succeeded())
+	{
+		spawnSound = Tempspawn.Object;
 	}
 }
 
@@ -80,6 +87,16 @@ void AEO_ReturnPlate::ServerSpawnPlate_Implementation()
 	plateTemp->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	plateTemp->bDirty = true;
 	plateCount++;
-
+	ServerOnSpawnSound();
 	bOnItem = true;
+}
+
+void AEO_ReturnPlate::ServerOnSpawnSound_Implementation()
+{
+	MulticastOnSpawnSound();
+}
+
+void AEO_ReturnPlate::MulticastOnSpawnSound_Implementation()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), spawnSound);
 }

@@ -31,8 +31,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* waterMeshComp;
 
-
 public:
-	UPROPERTY(VisibleAnywhere, Replicated, Category = "Settings")
+	//UPROPERTY(VisibleAnywhere, Replicated, Category = "Settings")
+	UPROPERTY(Replicated)
 	bool bInFood = false;
 };

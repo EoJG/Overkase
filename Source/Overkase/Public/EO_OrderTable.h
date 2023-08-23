@@ -29,7 +29,8 @@ public:
 	TSubclassOf<class AEO_ReturnPlate> returnPlate;
 	UPROPERTY(VisibleAnywhere)
 	class AEO_ReturnPlate* wReturnPlate;
-
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* orderSound;
 public:
 	virtual void OnItem(class AActor* item) override;
 

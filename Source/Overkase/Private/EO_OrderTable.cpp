@@ -26,6 +26,11 @@ AEO_OrderTable::AEO_OrderTable()
 	{
 		returnPlate = rpTemp.Class;
 	}
+	ConstructorHelpers::FObjectFinder<USoundBase> TempOrder(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/BetaSound/SuccessfulDelivery.SuccessfulDelivery'"));
+	if (TempOrder.Succeeded())
+	{
+		orderSound = TempOrder.Object;
+	}
 }
 
 void AEO_OrderTable::BeginPlay()
@@ -51,7 +56,7 @@ void AEO_OrderTable::OnItem(class AActor* item)
 			TArray<AActor*> items;
 			item->GetAttachedActors(items);
 			menuInter->SubmitMenu(items[0]->Tags[0]);
-
+			UGameplayStatics::PlaySound2D(GetWorld(), orderSound);
 			items[0]->Destroy();
 			item->Destroy();
 

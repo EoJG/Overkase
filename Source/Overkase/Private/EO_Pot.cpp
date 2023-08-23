@@ -2,6 +2,7 @@
 
 
 #include "EO_Pot.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AEO_Pot::AEO_Pot()
@@ -61,6 +62,8 @@ void AEO_Pot::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLif
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
+	//DOREPLIFETIME(AEO_Pot, bInFood);
 	DOREPLIFETIME(AEO_Pot, bInFood);
+
 }
 
