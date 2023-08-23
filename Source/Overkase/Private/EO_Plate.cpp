@@ -3,6 +3,7 @@
 
 #include "EO_Plate.h"
 #include "Components/SceneComponent.h"
+#include "EO_Food.h"
 
 // Sets default values
 AEO_Plate::AEO_Plate()

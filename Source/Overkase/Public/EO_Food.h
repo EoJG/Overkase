@@ -56,9 +56,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category="Recipe")
 	float coolTime = 0;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(VisibleAnywhere, Replicated ,Category = LineTraceSet)
 	bool bIsOnGround = false;
-	UPROPERTY(VisibleAnywhere, Category=HandSetting)
+	UPROPERTY(VisibleAnywhere, Replicated ,Category = LineTraceSet)
 	bool bIsOnHand = false;
 
 public:
@@ -79,6 +79,10 @@ public:
 	void ServerCheckOnHand();
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastCheckOnHand();
+	UFUNCTION(Server, Reliable)
+	void ServerCheckOnGround();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastCheckOnGround();
 
 	UFUNCTION()
 	void FoodVisible();

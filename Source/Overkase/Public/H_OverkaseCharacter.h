@@ -81,6 +81,9 @@ public:
 	class USoundBase* throwSound;
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
 	class USoundBase* chopSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* catchSound;
+	
 
 	UPROPERTY(VisibleAnywhere, Category = "EO")
 	TSubclassOf<class UEO_InGameInterface> inGameUIClass;
@@ -108,6 +111,11 @@ public:
 	void MulticastOnThrowSound();
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastOnChopSound();
+	UFUNCTION(Server, Reliable)
+	void ServerOnCatchSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnCatchSound();
+	
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastAddScore(int score);

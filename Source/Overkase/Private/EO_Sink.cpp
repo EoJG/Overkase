@@ -2,6 +2,10 @@
 
 
 #include "EO_Sink.h"
+#include <Kismet/GameplayStatics.h>
+#include "EO_Block.h"
+#include "EO_Progressbar.h"
+
 
 AEO_Sink::AEO_Sink()
 {
@@ -24,6 +28,12 @@ AEO_Sink::AEO_Sink()
 	if (pTemp.Succeeded())
 	{
 		plate = pTemp.Class;
+	}
+
+	ConstructorHelpers::FObjectFinder<USoundBase> TempDish(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/BetaSound/WashedPlate.WashedPlate'"));
+	if (TempDish.Succeeded())
+	{
+		dishSound = TempDish.Object;
 	}
 }
 
@@ -87,7 +97,7 @@ void AEO_Sink::SpawnPlate()
 {
 	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	compleCount++;
-
+	ServerOnDishSound();
 	bOnItem = true;
 }
 
@@ -162,3 +172,13 @@ void AEO_Sink::ServerSpawnPlate_Implementation()
 
 	bOnItem = true;
 }
+
+void AEO_Sink::ServerOnDishSound_Implementation()
+{
+	MulticastOnDishSound();
+}
+
+void AEO_Sink::MulticastOnDishSound_Implementation()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), dishSound);
+}	

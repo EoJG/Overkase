@@ -150,7 +150,11 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	{
 		chopSound = TempChop.Object;
 	}
-
+	ConstructorHelpers::FObjectFinder<USoundBase> TempCatch1(TEXT("/Script/Engine.SoundWave'/Game/HanSeunghui/BetaSound/Catch1.Catch1'"));
+	if (TempCatch1.Succeeded())
+	{
+		catchSound = TempCatch1.Object;
+	}
 
 	// Niagara 컴포넌트 생성
 	NiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
@@ -350,6 +354,17 @@ void AH_OverkaseCharacter::MulticastOnChopSound_Implementation()
 			AudioComp->Stop();
 			bSoundPlay = false;
 		}, 0.2f, false);
+}
+
+
+void AH_OverkaseCharacter::ServerOnCatchSound_Implementation()
+{
+	MulticastOnCatchSound();
+}
+
+void AH_OverkaseCharacter::MulticastOnCatchSound_Implementation()
+{
+	UGameplayStatics::PlaySound2D(GetWorld(), catchSound);
 }
 
 

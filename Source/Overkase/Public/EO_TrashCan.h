@@ -17,6 +17,13 @@ class OVERKASE_API AEO_TrashCan : public AEO_Block
 public:
 	AEO_TrashCan();
 
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* deleteSound;
+
+	UFUNCTION(Server, Reliable)
+	void ServerOnDeleteSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnDeleteSound();
 public:
 	virtual void OnItem(class AActor* item);
 

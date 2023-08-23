@@ -11,6 +11,9 @@
 #include <UMG/Public/Components/WidgetComponent.h>
 #include "EO_Progressbar.h"
 #include "Net/UnrealNetwork.h"
+#include <UMG/Public/Components/WidgetComponent.h>
+
+
 
 // Sets default values
 AEO_Block::AEO_Block()

@@ -46,4 +46,12 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void ServerSpawnPlate();
+
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class USoundBase* dishSound;
+
+	UFUNCTION(Server, Reliable)
+	void ServerOnDishSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastOnDishSound();
 };

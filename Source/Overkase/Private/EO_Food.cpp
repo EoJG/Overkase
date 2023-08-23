@@ -6,6 +6,7 @@
 #include "EO_Block.h"
 #include "H_OverkaseCharacter.h"
 #include "H_OverkaseInteraction.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 AEO_Food::AEO_Food()
@@ -61,10 +62,13 @@ void AEO_Food::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime); 
 
+	/*ServerCheckOnGround();
+	ServerCheckOnHand();*/
+
 	FVector CharacterLocation = GetActorLocation();
 
 	FVector StartPos = CharacterLocation;
-	FVector EndPos = CharacterLocation - FVector(0, 0, 20); 
+	FVector EndPos = CharacterLocation - FVector(0, 0, 20);
 
 	FHitResult HitResult;
 	FCollisionQueryParams CollisionParams;
@@ -83,7 +87,7 @@ void AEO_Food::Tick(float DeltaTime)
 
 	DrawDebugLine(GetWorld(), StartPos, EndPos, FColor::Green, false, -1, 0, 1);
 
-	//ServerCheckOnHand();
+
 	FVector End1Pos = CharacterLocation + GetActorRightVector() * -100;
 
 	FHitResult Hit1Result;
@@ -168,8 +172,40 @@ void AEO_Food::MulticastCheckOnHand_Implementation()
 		bIsOnHand = false;
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("OnHnad"));
 
 	DrawDebugLine(GetWorld(), StartPos, End1Pos, FColor::Black, false, -1, 0, 1);
+}
+
+void AEO_Food::ServerCheckOnGround_Implementation()
+{
+	MulticastCheckOnGround();
+}
+
+void AEO_Food::MulticastCheckOnGround_Implementation()
+{
+	
+	FVector CharacterLocation = GetActorLocation();
+
+	FVector StartPos = CharacterLocation;
+	FVector EndPos = CharacterLocation - FVector(0, 0, 40);
+
+	FHitResult HitResult;
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartPos, EndPos, ECC_Visibility, CollisionParams);
+
+	if (bHit)
+	{
+		bIsOnGround = true;
+	}
+	else
+	{
+		bIsOnGround = false;
+	}
+	UE_LOG(LogTemp, Warning, TEXT("OnGround"));
+
+	DrawDebugLine(GetWorld(), StartPos, EndPos, FColor::Green, false, -1, 0, 1);
 }
 
 void AEO_Food::FoodVisible()
@@ -212,10 +248,13 @@ void AEO_Food::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			{
 				if (!bIsOnGround)
 				{
-					ServerOverlapItemOnBlock(block->sceneComp);
-					//block->ServerOnItem(this);
-					//boxComp->SetSimulatePhysics(false);
-					block->bOnItem = true;
+					if (!bIsOnHand) {
+						ServerOverlapItemOnBlock(block->sceneComp);
+						//block->ServerOnItem(this);
+						//boxComp->SetSimulatePhysics(false);
+						block->bOnItem = true;
+
+					}
 				}
 			}
 		}
@@ -223,9 +262,9 @@ void AEO_Food::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 }
 
 void AEO_Food::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{	
+{
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AEO_Food, bIsOnGround);
-	//DOREPLIFETIME(AEO_Food, bIsOnHand);
+	DOREPLIFETIME(AEO_Food, bIsOnHand);
 }

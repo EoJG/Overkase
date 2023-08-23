@@ -369,6 +369,7 @@ void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* Overla
 			if (food->bIsOnGround == false)
 			{
 				ServerGetFood(me->interactionPosition);
+				me->MulticastOnCatchSound();
 				//foodDistance.RemoveAt(0);
 			}
 		}

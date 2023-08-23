@@ -4,6 +4,8 @@
 #include "EO_Stove.h"
 #include "EO_Food.h"
 #include "EO_Pot.h"
+#include "EO_Progressbar.h"
+
 
 AEO_Stove::AEO_Stove()
 {

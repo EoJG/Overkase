@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "EO_Block.generated.h"
 
+
 UCLASS()
 class OVERKASE_API AEO_Block : public AActor
 {
