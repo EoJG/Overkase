@@ -39,7 +39,11 @@ public:
 	virtual void OnItem(class AActor* item) override;
 	virtual void GetItem(class USceneComponent* playerSceneComp);
 
-	void StartSizzleSound();
+	UFUNCTION(Server, Reliable)
+	void ServerStartSizzleSound();
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastStartSizzleSound();
+
 	void StopSizzleSound();
 	
 	UFUNCTION(Server, Reliable)

@@ -4,6 +4,7 @@
 #include "EO_Plate.h"
 #include "Components/SceneComponent.h"
 #include "EO_Food.h"
+#include <Components/BoxComponent.h>
 
 // Sets default values
 AEO_Plate::AEO_Plate()
@@ -13,8 +14,17 @@ AEO_Plate::AEO_Plate()
 
 	Tags.Add(TEXT("Plate"));
 
+	
+
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	meshComp->SetCollisionProfileName(TEXT("NoCollision"));
+	SetRootComponent(meshComp);
+
+	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	boxComp->SetupAttachment(meshComp);
+	boxComp->SetBoxExtent(FVector(50, 50, 10));
+	boxComp->SetCollisionProfileName(TEXT("Plate"));
+
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> meshTemp(TEXT("'/Game/00/Interior/plate.plate'"));
 	if (meshTemp.Succeeded())
 	{

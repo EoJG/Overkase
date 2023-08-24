@@ -184,7 +184,6 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	NiagaraComponent->SetupAttachment(crocodileMesh);
 	NiagaraComponent->SetRelativeLocation(FVector(0, -60, 0));
 	//NiagaraComponent->ActivateSystem(false);
-
 }
 
 void AH_OverkaseCharacter::SendMulticast_Implementation(int32 random)
@@ -288,7 +287,6 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 				GetWorld()->ServerTravel(TEXT("/Game/Maps/EO_UI"));
 				travelTime = 0;
 			}
-			
 		}
 	}
 

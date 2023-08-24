@@ -7,6 +7,7 @@
 #include "H_OverkaseCharacter.h"
 #include "H_OverkaseInteraction.h"
 #include <Kismet/GameplayStatics.h>
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AEO_Food::AEO_Food()
@@ -234,21 +235,12 @@ void AEO_Food::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent,
 	
 		if (auto block = Cast<AEO_Block>(OtherActor))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("block Overlap"));
-			//if (block->bOnItem == false)
-			//{
-			//block->ServerOnItem(this);
-			
-			//}
-			if (block->bOnItem == true)
-			{
-				return;
-			}
+			//UE_LOG(LogTemp, Warning, TEXT("block Overlap"));
 			if (block->bOnItem == false)
 			{
 				if (!bIsOnGround)
 				{
-					if (!bIsOnHand) {
+					if (!bIsOnHand /*&& this->GetName().Contains(TEXT("Cucumber")) && this->GetName().Contains(TEXT("Fish")) && this->GetName().Contains(TEXT("Octupus")) && this->GetName().Contains(TEXT("Seaweed")) && this->GetName().Contains(TEXT("Rice"))*/) {
 						ServerOverlapItemOnBlock(block->sceneComp);
 						//block->ServerOnItem(this);
 						//boxComp->SetSimulatePhysics(false);
