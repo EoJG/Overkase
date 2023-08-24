@@ -5,6 +5,9 @@
 #include "../Public/EO_Food.h"
 #include "EO_NonePlate.h"
 #include "EO_Progressbar.h"
+#include "EO_Plate.h"
+#include "EO_Pot.h"
+#include <UMG/Public/Components/WidgetComponent.h>
 
 AEO_ChopTable::AEO_ChopTable()
 {

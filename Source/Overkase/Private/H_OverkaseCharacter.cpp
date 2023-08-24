@@ -22,6 +22,7 @@
 #include "Components/AudioComponent.h" 
 #include "Components/TextBlock.h"
 #include "Components/CapsuleComponent.h"
+#include "H_LerpCameraActor.h"
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -220,7 +221,7 @@ void AH_OverkaseCharacter::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetWorld()->GetFirstPlayerController()->GetCharacter()->GetName());
 		GetWorld()->GetFirstPlayerController()->SetViewTarget(cam);
 	}
-
+	h_main_cam = Cast<AH_LerpCameraActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AH_LerpCameraActor::StaticClass()));
 	mainCam = UGameplayStatics::GetActorOfClass(GetWorld(), ACameraActor::StaticClass());
 	eoCam = Cast<AEO_Camera>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Camera::StaticClass()));
 	//NiagaraComponent->SetIsReplicated(true);
@@ -252,11 +253,11 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 		}
 	}
 
-	if (mainCam != nullptr && GetWorld()->GetFirstPlayerController()->GetViewTarget() != mainCam)
+	if (h_main_cam != nullptr && GetWorld()->GetFirstPlayerController()->GetViewTarget() != h_main_cam)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetWorld()->GetFirstPlayerController()->GetCharacter()->GetName());
-		GetWorld()->GetFirstPlayerController()->SetViewTarget(mainCam);
-		mainCam = nullptr;
+		GetWorld()->GetFirstPlayerController()->SetViewTarget(h_main_cam);
+		h_main_cam = nullptr;
 	}
 	
 	//DrawDebugSphere(GetWorld(), GetActorLocation(), 100, 20, FColor::Yellow, false, -1, 0, 2);

@@ -71,6 +71,7 @@ public:
 	 UPROPERTY(EditAnywhere, Category = "dashFX")
     bool bShouldUseNiagara = false;
 
+
    UPROPERTY(EditDefaultsOnly, Category = Sound)
 	class USoundBase* dashSound;
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
@@ -141,6 +142,9 @@ public:
 	bool bSoundPlay = false;
 	bool bTimeOutPlay = false;
 
+
+	UPROPERTY()
+	class AH_LerpCameraActor* h_main_cam;
 	//EO
 	UPROPERTY()
 	class AEO_Camera* eoCam;
