@@ -7,6 +7,7 @@
 #include "H_OverkaseCharacter.h"
 #include "H_OverkaseInteraction.h"
 #include <Kismet/GameplayStatics.h>
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AEO_Food::AEO_Food()

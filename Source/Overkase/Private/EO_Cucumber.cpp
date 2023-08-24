@@ -2,6 +2,7 @@
 
 
 #include "EO_Cucumber.h"
+#include "Components/BoxComponent.h"
 
 AEO_Cucumber::AEO_Cucumber()
 {
