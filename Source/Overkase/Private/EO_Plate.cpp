@@ -129,9 +129,7 @@ void AEO_Plate::MakeCompleteFood()
 		}
 		else if (bIsOctopus)
 		{
-			ReplateFood(foods, octopusSushi);
-
-			bIsComplete = true;
+			
 		}
 		else
 		{
@@ -152,10 +150,9 @@ void AEO_Plate::MakeCompleteFood()
 		}
 		else if (bIsOctopus)
 		{
-			/*for (AActor* food : foods)
-			{
-				food->Destroy();
-			}*/
+			ReplateFood(foods, octopusSushi);
+
+			bIsComplete = true;
 		}
 	}
 	else if (bIsSeaweed)

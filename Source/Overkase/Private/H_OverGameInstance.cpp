@@ -13,7 +13,7 @@ UH_OverGameInstance::UH_OverGameInstance() {
 void UH_OverGameInstance::Init()
 {
 	Super::Init();
-
+	
 	if (IOnlineSubsystem* subsys = IOnlineSubsystem::Get())
 	{
 		//Online Session Interface API 접근용 인스턴스 가져오기

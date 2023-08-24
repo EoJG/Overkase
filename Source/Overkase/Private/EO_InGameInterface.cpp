@@ -13,6 +13,8 @@
 #include "H_OverkaseCharacter.h"
 #include <UMG/Public/Components/WidgetSwitcher.h>
 #include "EO_Menu.h"
+#include <Kismet/KismetMathLibrary.h>
+#include <Kismet/KismetStringLibrary.h>
 
 
 void UEO_InGameInterface::NativeConstruct()
@@ -23,6 +25,8 @@ void UEO_InGameInterface::NativeConstruct()
 
 	SetTimer(SetTime);
 	text_Score->SetText(FText::AsNumber(0));
+
+	PlayAnimation(fadeInAnim);
 }
 
 void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
@@ -64,34 +68,6 @@ void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSecon
 		octopusArr.Add(temp);
 		octopusArr[octopusArr.Num() - 1]->curTime = octopusArr[octopusArr.Num() - 1]->coolTime;
 	}
-
-	/*if(!cucumberArr.IsEmpty() || !fishArr.IsEmpty() || !octopusArr.IsEmpty())
-	{
-		if (cucumberArr[0]->curTime <= 0)
-		{
-			UEO_Menu* temp;
-			temp = cucumberArr[0];
-			cucumberArr.RemoveAt(0);
-			cucumberArr.Add(temp);
-			cucumberArr[cucumberArr.Num() - 1]->curTime = cucumberArr[cucumberArr.Num() - 1]->coolTime;
-		}
-		else if (fishArr[0]->curTime <= 0)
-		{
-			UEO_Menu* temp;
-			temp = fishArr[0];
-			fishArr.RemoveAt(0);
-			fishArr.Add(temp);
-			fishArr[fishArr.Num() - 1]->curTime = fishArr[fishArr.Num() - 1]->coolTime;
-		}
-		else if (octopusArr[0]->curTime <= 0)
-		{
-			UEO_Menu* temp;
-			temp = octopusArr[0];
-			octopusArr.RemoveAt(0);
-			octopusArr.Add(temp);
-			octopusArr[octopusArr.Num() - 1]->curTime = octopusArr[octopusArr.Num() - 1]->coolTime;
-		}
-	}*/
 }
 
 void UEO_InGameInterface::SetTimerUI()
@@ -300,6 +276,39 @@ void UEO_InGameInterface::TestScore()
 {
 	auto pawn = Cast<AH_OverkaseCharacter>(GetOwningPlayer()->GetPawn());
 	pawn->ServerAddScore();
+}
+
+void UEO_InGameInterface::SetWriteText(FString setText)
+{
+	if (!writing)
+	{
+		strWriteText = setText;
+		startTime =	UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
+		text_typingText->SetText(FText::FromString(TEXT(" ")));
+		
+		writing = true;
+	}
+}
+
+void UEO_InGameInterface::WrtingText()
+{
+	charToDisplay = UKismetMathLibrary::Clamp(UKismetMathLibrary::FFloor(UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld()) - startTime), 0, strWriteText.Len());
+	text_typingText->SetText(FText::FromString(UKismetStringLibrary::GetSubstring(strWriteText, 0, charsPerSecond)));
+
+	if (charsPerSecond >= strWriteText.Len())
+	{
+		writing = false;
+	}
+}
+
+void UEO_InGameInterface::PlayFadeInAnim()
+{
+	PlayAnimation(fadeInAnim);
+}
+
+void UEO_InGameInterface::PlayFadeOutAnim()
+{
+	PlayAnimation(fadeOutAnim);
 }
 
 void UEO_InGameInterface::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
