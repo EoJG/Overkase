@@ -51,7 +51,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	if (TempHandLMesh.Succeeded()) {
 		handL->SetStaticMesh(TempHandLMesh.Object);
 	}
-
+	
 	crocodileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Crocodile"));
 	crocodileMesh->SetupAttachment(RootComponent);
 	crocodileMesh->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0, -90, 0));

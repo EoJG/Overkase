@@ -91,4 +91,6 @@ public:
 	//EO
 	UFUNCTION()
 	void OnClickStartButton();
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetAnim), Transient, Category = "WidgetAnimation")
+	class UWidgetAnimation* fadeOutAnim;
 };

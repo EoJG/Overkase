@@ -152,5 +152,4 @@ public:
 	class AActor* mainCam;
 	UFUNCTION(Server, Reliable)
 	void ServerAddScore();
-	
 };
