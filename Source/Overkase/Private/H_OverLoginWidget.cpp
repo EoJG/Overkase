@@ -118,5 +118,6 @@ void UH_OverLoginWidget::OnClickStartButton()
 	if (ogi->wasSuccessful)
 	{
 		ogi->TravelServer();
+
 	}
 }

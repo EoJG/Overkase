@@ -24,11 +24,9 @@ public:
 	UPROPERTY()
 	float curTime;
 	UPROPERTY()
-	float coolTime = 30;//120;
+	float coolTime = 120;
 
 public:
 	UFUNCTION()
 	void BindPercent();
-	UFUNCTION()
-	void TimeOver();
 };

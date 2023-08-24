@@ -27,6 +27,13 @@ public:
 	class UProgressBar* progress_Timer;
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category="ScoreSettings")
 	class UTextBlock* text_Score;
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget), Category="ScoreSettings")
+	class UTextBlock* text_typingText;
+
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetAnim), Transient, Category = "WidgetAnimation")
+	class UWidgetAnimation* fadeInAnim;
+	UPROPERTY(VisibleAnywhere, meta = (BindWidgetAnim), Transient, Category = "WidgetAnimation")
+	class UWidgetAnimation* fadeOutAnim;
 
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category="MenuSettings")
 	class UStackBox* st_MenuList;
@@ -74,6 +81,17 @@ public:
 	UPROPERTY(Replicated)
 	int menuCount = 0;
 
+	UPROPERTY(VisibleAnywhere)
+	float startTime = 0;
+	UPROPERTY(VisibleAnywhere)
+	bool writing = false;
+	UPROPERTY(VisibleAnywhere)
+	FString strWriteText;
+	UPROPERTY(EditDefaultsOnly)
+	float charsPerSecond = 1;
+	UPROPERTY(VisibleAnywhere)
+	int charToDisplay = 0;
+
 private:
 	UFUNCTION()
 	void SetTimerUI();
@@ -109,7 +127,16 @@ public:
 	UFUNCTION()
 	void TestScore();
 
-	
+	UFUNCTION()
+	void SetWriteText(FString setText);
+	UFUNCTION()
+	void WrtingText();
+
+	UFUNCTION()
+	void PlayFadeInAnim();
+	UFUNCTION()
+	void PlayFadeOutAnim();
+		
 private:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
