@@ -65,6 +65,7 @@ public:
 	UFUNCTION(Server, Unreliable)
 	void ServerChopHand();
 
+	void CheckPlateActor();
 public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* ia_Space_Interaction;

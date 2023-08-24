@@ -26,6 +26,12 @@ AEO_Pot::AEO_Pot()
 	}
 	meshComp->SetupAttachment(RootComponent);
 
+	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComponent"));
+	boxComp->SetupAttachment(meshComp);
+	boxComp->SetBoxExtent(FVector(36));
+	boxComp->SetRelativeLocation(FVector(0, 0,33));
+	boxComp->SetCollisionProfileName(TEXT("Plate"));
+
 	waterMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WaterMeshComponent"));
 	waterMeshComp->SetCollisionProfileName(TEXT("NoCollision"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> waterMeshTemp(TEXT("'/Game/01/Interior/Pot_W.Pot_W'"));

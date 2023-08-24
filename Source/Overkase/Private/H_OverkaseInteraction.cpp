@@ -131,7 +131,7 @@ void UH_OverkaseInteraction::TickComponent(float DeltaTime, ELevelTick TickType,
 	{
 		bHasItem = true;
 	}
-	}
+}
 
 void UH_OverkaseInteraction::SetupInputBinding(class UInputComponent* PlayerInputComponent)
 {	
@@ -355,19 +355,27 @@ void UH_OverkaseInteraction::OnComponentBeginOverlap(UPrimitiveComponent* Overla
 		blockActor.Add(temp);
 		blockDistance.Add(0);
 	}
-
+	//if (AEO_Plate* plate = Cast<AEO_Plate>(OtherActor))
+	//{
+	//	return;
+	//}
 	if (AEO_Food* food = Cast<AEO_Food>(OtherActor))
 	{
 		foodActor.Add(food);
 		foodDistance.Add(0);
 		if (!bHasItem)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("%s"),*OtherActor->GetName());
+
 			if (food->bIsOnHand)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("IsOnHand!!"));
+
 				return;
 			}
-			if (food->bIsOnGround == false && food->GetName().Contains(TEXT("Cucumber")) && food->GetName().Contains(TEXT("Fish")) && food->GetName().Contains(TEXT("Octupus")) && food->GetName().Contains(TEXT("Seaweed")) && food->GetName().Contains(TEXT("Rice")))
-			{
+			
+			if (food->bIsOnGround == false && food->GetName().Contains(TEXT("CucumberSushi")) == false && food->GetName().Contains(TEXT("FishSushi")) == false && food->GetName().Contains(TEXT("OctopusSushi")) == false && food->GetName().Contains(TEXT("RiceAndFish")) == false && food->GetName().Contains(TEXT("RiceAndCucumber")) == false && food->GetName().Contains(TEXT("SeaweedAndCucumber")) == false && food->GetName().Contains(TEXT("SeaweedAndFish")) == false && food->GetName().Contains(TEXT("SeaweedAndRice")) == false)
+			{ 
 				ServerGetFood(me->interactionPosition);
 				me->MulticastOnCatchSound();
 				//foodDistance.RemoveAt(0);
@@ -439,6 +447,7 @@ void UH_OverkaseInteraction::ServerChopHand_Implementation()
 	bIsInteraction = true;
 	//me->AnimationComponent->CallChopHand(true);
 }
+
 
 int32 UH_OverkaseInteraction::FindClosestBlock()
 {

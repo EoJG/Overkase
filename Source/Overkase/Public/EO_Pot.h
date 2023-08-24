@@ -30,7 +30,8 @@ public:
 	class UStaticMeshComponent* meshComp;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* waterMeshComp;
-
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* boxComp;
 public:
 	//UPROPERTY(VisibleAnywhere, Replicated, Category = "Settings")
 	UPROPERTY(Replicated)

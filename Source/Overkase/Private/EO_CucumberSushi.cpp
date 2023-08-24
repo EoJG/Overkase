@@ -2,6 +2,7 @@
 
 
 #include "EO_CucumberSushi.h"
+#include "Components/BoxComponent.h"
 
 AEO_CucumberSushi::AEO_CucumberSushi()
 {

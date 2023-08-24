@@ -50,7 +50,7 @@ void AEO_Stove::Tick(float DeltaTime)
 		UE_LOG(LogTemp, Warning, TEXT("%f"), sFoodTemp->curTime);
 		if (sFoodTemp->curTime >= sFoodTemp->coolTime)
 		{
-			//StopSizzleSound();
+			StopSizzleSound();
 			ServerOnServiceSound();
 			UE_LOG(LogTemp, Warning, TEXT("IsCoocked"));
 			sFoodTemp->bIsCooked = true;
@@ -58,8 +58,7 @@ void AEO_Stove::Tick(float DeltaTime)
 		}
 		else
 		{
-			//StartSizzleSound();
-			StopSizzleSound();
+			ServerStartSizzleSound();
 			widgetComp->SetVisibility(true);
 			progressWidget->BindProgressFunc();
 		}
@@ -210,14 +209,19 @@ void AEO_Stove::GetItem(class USceneComponent* playerSceneComp)
 }
 
 
-void AEO_Stove::StartSizzleSound()
+void AEO_Stove::ServerStartSizzleSound_Implementation()
 {
-	sizzleSound->Activate(true);
+	MulticastStartSizzleSound();
+}
+
+void AEO_Stove::MulticastStartSizzleSound_Implementation()
+{
+	sizzleSound->Activate(false);
 }
 
 void AEO_Stove::StopSizzleSound()
 {
-	sizzleSound->Activate(false);
+	sizzleSound->Activate(true);
 }
 
 void AEO_Stove::ServerOnServiceSound_Implementation()

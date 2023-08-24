@@ -22,6 +22,8 @@ public:
 
 public:
 	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* boxComp;
+	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* meshComp;
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* changeMeshComp;
