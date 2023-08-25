@@ -34,7 +34,7 @@ public:
 	TArray<class AH_OverkaseCharacter> overPlayerActors;
 
 	UPROPERTY(EditAnywhere, Category = CameraMoving)
-	float targetArmLength = 1400;
+	float targetArmLength = 1600;
 	UPROPERTY(EditAnywhere, Category = CameraMoving)
 	float targetZoomOutLength = 0;
 	UPROPERTY(EditAnywhere, Category = CameraMoving)

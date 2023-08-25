@@ -32,16 +32,7 @@ AH_LerpCameraActor::AH_LerpCameraActor()
 void AH_LerpCameraActor::BeginPlay()
 {
 	Super::BeginPlay();
-	if (springArm != nullptr)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Black, FString::Printf(TEXT("%s"), *springArm->GetName()));
 	
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Black, FString::Printf(TEXT("nulll")));
-	
-	}
 }
 
 // Called every frame
@@ -64,18 +55,18 @@ void AH_LerpCameraActor::Tick(float DeltaTime)
 	if (PlayerActors.Num() >= 2)
 	{
 		float dist = FVector::Dist(PlayerActors[0]->GetActorLocation(), PlayerActors[1]->GetActorLocation());
-		GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("%f"), dist));
+		//GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Green, FString::Printf(TEXT("%f"), dist));
 		if (dist >= 900)
 		{
 
 			if (springArm != nullptr)
 			{
-				if (targetZoomOutLength < 1600)
+				if (targetZoomOutLength < 1800)
 				{
 					float lerpFloat = FMath::Lerp(4, 1, lerpAlpha);
 					targetZoomOutLength = targetArmLength += lerpFloat;
 					springArm->TargetArmLength = targetZoomOutLength;
-					GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Black, FString::Printf(TEXT("%f"), targetZoomOutLength));
+					//GEngine->AddOnScreenDebugMessage(-1, 0.01f, FColor::Black, FString::Printf(TEXT("%f"), targetZoomOutLength));
 
 				}
 			}
@@ -85,7 +76,7 @@ void AH_LerpCameraActor::Tick(float DeltaTime)
 		{
 			if (springArm != nullptr)
 			{
-				if (targetZoomOutLength > 1200)
+				if (targetZoomOutLength > 1600)
 				{
 					float lerpFloat2 = FMath::Lerp(4, 1, lerpAlpha);
 					targetZoomOutLength = targetArmLength -= lerpFloat2;
