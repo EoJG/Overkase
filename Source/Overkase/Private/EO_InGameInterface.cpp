@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "EO_InGameInterface.h"
@@ -27,6 +27,8 @@ void UEO_InGameInterface::NativeConstruct()
 	text_Score->SetText(FText::AsNumber(0));
 
 	PlayAnimation(fadeInAnim);
+
+	UE_LOG(LogTemp,Warning,TEXT("%s"), UKismetSystemLibrary::IsServer(GetWorld())?TEXT("true"):TEXT("false"));
 }
 
 void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSeconds)
@@ -39,7 +41,7 @@ void UEO_InGameInterface::NativeTick(const FGeometry& Geometry, float DeltaSecon
 	}
 	else
 	{
-		ws_InGameSwitcher->SetActiveWidgetIndex(1);
+		///ws_InGameSwitcher->SetActiveWidgetIndex(1);
 	}
 
 	SetTimerUI();
@@ -283,7 +285,7 @@ void UEO_InGameInterface::SetWriteText(FString setText)
 	if (!writing)
 	{
 		strWriteText = setText;
-		startTime =	UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
+		startTime = UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld());
 		text_typingText->SetText(FText::FromString(TEXT(" ")));
 		
 		writing = true;
@@ -292,12 +294,19 @@ void UEO_InGameInterface::SetWriteText(FString setText)
 
 void UEO_InGameInterface::WrtingText()
 {
-	charToDisplay = UKismetMathLibrary::Clamp(UKismetMathLibrary::FFloor(UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld()) - startTime), 0, strWriteText.Len());
-	text_typingText->SetText(FText::FromString(UKismetStringLibrary::GetSubstring(strWriteText, 0, charsPerSecond)));
+	float value = (UKismetSystemLibrary::GetGameTimeInSeconds(GetWorld()) - startTime) * charsPerSecond;
+	charToDisplay = UKismetMathLibrary::Clamp(UKismetMathLibrary::FFloor(value), 0, strWriteText.Len());
+	text_typingText->SetText(FText::FromString(UKismetStringLibrary::GetSubstring(strWriteText, 0, charToDisplay)));
 
-	if (charsPerSecond >= strWriteText.Len())
+	if (charToDisplay >= strWriteText.Len())
 	{
-		writing = false;
+		textCurTime+=GetWorld()->DeltaTimeSeconds;
+		if(textCurTime>=3)
+		{
+			talkCount += 1;
+			textCurTime = 0;
+			writing = false;
+		}
 	}
 }
 
