@@ -6,6 +6,7 @@
 #include "EO_Block.h"
 #include "EO_Progressbar.h"
 #include "Components/WidgetComponent.h"
+#include <Components/AudioComponent.h>
 
 
 AEO_Sink::AEO_Sink()
@@ -36,6 +37,11 @@ AEO_Sink::AEO_Sink()
 	{
 		dishSound = TempDish.Object;
 	}
+
+	washSound = CreateDefaultSubobject<UAudioComponent>(TEXT("Sizzle_AudioComponent"));
+	washSound->SetupAttachment(RootComponent);
+	washSound->bAutoActivate = false;
+	washSound->SetIsReplicated(true);
 }
 
 void AEO_Sink::BeginPlay()
@@ -150,10 +156,13 @@ void AEO_Sink::MulticastInteraction()
 	{
 		curTime += GetWorld()->DeltaTimeSeconds;
 		progressWidget->curTime = curTime;
+		washSound->Activate(false);
+
 		if (curTime >= coolTime)
 		{
 			ServerSpawnPlate();
 			widgetComp->SetVisibility(false);
+
 			plateCount--;
 			curTime = 0;
 		}
@@ -161,8 +170,14 @@ void AEO_Sink::MulticastInteraction()
 		{
 			widgetComp->SetVisibility(true);
 			progressWidget->BindProgressFunc();
+
 		}
+
 	}
+	if (curTime > 0.1f) 
+	{
+	}
+
 }
 
 void AEO_Sink::ServerSpawnPlate_Implementation()
@@ -170,8 +185,11 @@ void AEO_Sink::ServerSpawnPlate_Implementation()
 	GetWorld()->SpawnActor<AEO_Plate>(plate, sceneComp->GetComponentLocation(), sceneComp->GetComponentRotation())->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	compleCount++;
 	ServerOnDishSound();
+	washSound->bAutoActivate = false;
+	washSound->Activate(true);
 
 	bOnItem = true;
+
 }
 
 void AEO_Sink::ServerOnDishSound_Implementation()

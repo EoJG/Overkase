@@ -30,11 +30,12 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_GameTraceChannel2, ECR_Block);
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
 
 	handR = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HandR"));
 	handR->SetupAttachment(RootComponent);
 	handR->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator( 0.000000, -90.000000, 0.000000));
+	handR->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHandRMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Crocodile_Hand_Open_R.Crocodile_Hand_Open_R'"));
 
@@ -45,6 +46,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	handL = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("handL"));
 	handL->SetupAttachment(RootComponent);
 	handL->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0.000000, -90.000000, 0.000000));
+	handL->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHandLMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Crocodile_Hand_Open_L.Crocodile_Hand_Open_L'"));
 
@@ -55,6 +57,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	crocodileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Crocodile"));
 	crocodileMesh->SetupAttachment(RootComponent);
 	crocodileMesh->SetRelativeLocationAndRotation(FVector(0, 0, -60), FRotator(0, -90, 0));
+	crocodileMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempCrocoMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Body.Body'"));
 
@@ -64,6 +67,8 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	headComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Head"));
 	headComp->SetupAttachment(crocodileMesh);
+	headComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHeadMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Chef_Crocodile_Chef_Crocodile.Chef_Crocodile_Chef_Crocodile'"));
 
@@ -73,6 +78,8 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	hatComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Hat"));
 	hatComp->SetupAttachment(headComp);
+	hatComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh>TempHatMesh(TEXT("/Script/Engine.StaticMesh'/Game/Models/Character/NewFolder/Chef_Crocodile_SubMesh_0.Chef_Crocodile_SubMesh_0'"));
 
@@ -87,7 +94,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	interationDistance = CreateDefaultSubobject<USphereComponent>(TEXT("InteractionDistance"));
 	interationDistance->SetupAttachment(crocodileMesh);
 	//interationDistance->SetBoxExtent(FVector(80, 70, 50));
-	interationDistance->SetSphereRadius(100);
+	interationDistance->SetSphereRadius(50);
 	interationDistance->SetRelativeLocation(FVector(0, 60.000000, 70));
 	interationDistance->SetCollisionProfileName(TEXT("Interaction"));
 

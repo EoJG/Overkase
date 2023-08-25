@@ -54,11 +54,11 @@ void AEO_OrderTable::OnItem(class AActor* item)
 		if (!bOnItem && plateTemp->bIsComplete)
 		{
 			item->AttachToComponent(sceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
-			
+			UGameplayStatics::PlaySound2D(GetWorld(), orderSound);
+
 			TArray<AActor*> items;
 			item->GetAttachedActors(items);
 			menuInter->SubmitMenu(items[0]->Tags[0]);
-			UGameplayStatics::PlaySound2D(GetWorld(), orderSound);
 			items[0]->Destroy();
 			item->Destroy();
 

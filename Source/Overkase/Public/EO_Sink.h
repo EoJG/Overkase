@@ -48,6 +48,8 @@ public:
 	void ServerSpawnPlate();
 
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	class UAudioComponent* washSound;
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
 	class USoundBase* dishSound;
 
 	UFUNCTION(Server, Reliable)
