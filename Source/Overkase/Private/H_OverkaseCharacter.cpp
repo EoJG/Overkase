@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "H_OverkaseCharacter.h"
@@ -23,6 +23,7 @@
 #include "Components/TextBlock.h"
 #include "Components/CapsuleComponent.h"
 #include "H_LerpCameraActor.h"
+#include <UMG/Public/Components/Border.h>
 
 // Sets default values
 AH_OverkaseCharacter::AH_OverkaseCharacter()
@@ -117,7 +118,7 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 
 	bReplicates = true;
 
-	// �������ʹ� �÷��̾ ���� UI�� �����Ͽ��� �Ͽ� �߰���
+	// 서버부터는 플레이어가 각자 UI를 생성하여야 하여 추가함
 	ConstructorHelpers::FClassFinder<UEO_InGameInterface> inUITemp(TEXT("'/Game/Eo/Blueprints/UI/BP_UI_InGameInterface.BP_UI_InGameInterface_C'"));
 	if (inUITemp.Succeeded())
 	{
@@ -178,17 +179,17 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	{
 		timeOutSound = TempTimeOut.Object;
 	}
-	// Niagara ������Ʈ ����
+	// Niagara 컴포넌트 생성
 	NiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
 
-	// Niagara ���� �Ҵ�
+	// Niagara 에셋 할당
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NiagaraSystemAsset(TEXT("/Script/Niagara.NiagaraSystem'/Game/HanSeunghui/Effect/Blast_Particle.Blast_Particle'"));
 	if (NiagaraSystemAsset.Succeeded())
 	{
 		NiagaraComponent->SetAsset(NiagaraSystemAsset.Object);
 	}
 
-	// Niagara ������Ʈ�� ���Ϳ� ����
+	// Niagara 컴포넌트를 액터에 부착
 	NiagaraComponent->SetupAttachment(crocodileMesh);
 	NiagaraComponent->SetRelativeLocation(FVector(0, -60, 0));
 	//NiagaraComponent->ActivateSystem(false);
@@ -205,7 +206,7 @@ void AH_OverkaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	//�츮�� IMC �� ����Ѵٰ� ���
+	//우리가 IMC 를 사용한다고 등록
 	auto pc = Cast<APlayerController>(GetController());
 	if (pc) {
 		auto subSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer());
@@ -216,6 +217,21 @@ void AH_OverkaseCharacter::BeginPlay()
 	}
 
 	BGMAudio = UGameplayStatics::SpawnSound2D(GetWorld(), BGMSound);
+
+	UE_LOG(LogTemp, Warning, TEXT("%s"),*GetWorld()->GetFirstPlayerController()->GetCharacter()->GetName());
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		if(GetRemoteRole() == ROLE_AutonomousProxy)
+		{
+			inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
+			inGameUI->AddToViewport();
+		}
+	}
+	else if (GetLocalRole() == ROLE_AutonomousProxy)
+	{
+		inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
+		inGameUI->AddToViewport();
+	}
 
 	inGameUI = CreateWidget<UEO_InGameInterface>(GetWorld(), inGameUIClass);
 	inGameUI->AddToViewport();
@@ -240,29 +256,31 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (inGameUI->curTime < 1)
+	if(IsValid(inGameUI))
 	{
-		if (!bTimeOutPlay)
+		if (inGameUI->curTime < 1)
 		{
-			TimeOutSound();
+			if (!bTimeOutPlay)
+			{
+				TimeOutSound();
+			}
 		}
-	}
 
-	if (inGameUI->curTime < 0)
-	{
-		if (BGMAudio)
+		if (inGameUI->curTime < 0)
 		{
-			BGMAudio->Stop();
-		}
-		if (!bEndingplay) 
-		{
-			EndingSound();
+			if (BGMAudio)
+			{
+				BGMAudio->Stop();
+			}
+			if (!bEndingplay)
+			{
+				EndingSound();
+			}
 		}
 	}
 
 	if (h_main_cam != nullptr && GetWorld()->GetFirstPlayerController()->GetViewTarget() != h_main_cam)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetWorld()->GetFirstPlayerController()->GetCharacter()->GetName());
 		GetWorld()->GetFirstPlayerController()->SetViewTarget(h_main_cam);
 		h_main_cam = nullptr;
 	}
@@ -287,14 +305,40 @@ void AH_OverkaseCharacter::Tick(float DeltaTime)
 		if (inGameUI->curTime < 0)
 		{
 			//UE_LOG(LogTemp, Warning, TEXT("%f"), inGameUI->progress_Timer->GetPercent());
+			inGameUI->ws_InGameSwitcher->SetActiveWidgetIndex(1);
 			GetWorld()->GetFirstPlayerController()->SetViewTargetWithBlend(eoCam, 2.0f);
 
-			travelTime += DeltaTime;
+			/*travelTime += DeltaTime;
 			if (travelTime > 5)
 			{
 				GetWorld()->ServerTravel(TEXT("/Game/Maps/EO_UI"));
 				travelTime = 0;
+			}*/
+			if (inGameUI->talkCount == 0)
+			{
+				inGameUI->text_human1->SetVisibility(ESlateVisibility::Visible);
+				inGameUI->SetWriteText(FString::Printf(TEXT("짧은 시간 동안 훌륭한 요리 솜씨를 보여주었군요! 그러나 이제부터가 시작입니다, 쉐프.")));
 			}
+			else if (inGameUI->talkCount == 1)
+			{
+				inGameUI->text_human1->SetVisibility(ESlateVisibility::Hidden);
+				inGameUI->text_human2->SetVisibility(ESlateVisibility::Visible);
+				inGameUI->SetWriteText(FString::Printf(TEXT("당신들은 좀 더 숙련된 협동력을 보여주어야 우리들의 입맛을 제대로 충족시킬 수 있습니다.")));
+			}
+			else if (inGameUI->talkCount == 2)
+			{
+				inGameUI->text_human1->SetVisibility(ESlateVisibility::Visible);
+				inGameUI->text_human2->SetVisibility(ESlateVisibility::Hidden);
+				inGameUI->SetWriteText(FString::Printf(TEXT("이제 도시를 벗어나 야생의 땅으로 향하는 건 어때요? 그곳에는 어떤 대식가든 만족시킬 수 있는 맛들이 있다고 들었어요!")));
+			}
+			else if (inGameUI->talkCount == 3)
+			{
+				inGameUI->text_human1->SetVisibility(ESlateVisibility::Hidden);
+				inGameUI->text_human2->SetVisibility(ESlateVisibility::Visible);
+				inGameUI->SetWriteText(FString::Printf(TEXT("이제 가야 할 시간이군요. 다음에 우리가 찾아올땐 더욱 달달한 팀워크를 이루길 빌어요.")));
+			}
+
+			inGameUI->WrtingText();
 		}
 	}
 
@@ -306,7 +350,7 @@ void AH_OverkaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInpu
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	//��������Ʈ �ѹ� ȣ��
+	//델리게이트 한번 호출
 	onInputBindingDelegate.Broadcast(PlayerInputComponent);
 }
 
@@ -460,7 +504,7 @@ void AH_OverkaseCharacter::EndingSound()
 
 void AH_OverkaseCharacter::ServerAddScore_Implementation()
 {
-	//���⼭ ���� ���̰� �Ѱܾ���
+	//여기서 점수 먹이고 넘겨야함
 	int random = FMath::RandRange(1, 4);
 	int plusPoint = 0;
 

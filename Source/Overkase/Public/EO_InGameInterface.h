@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -29,6 +29,11 @@ public:
 	class UTextBlock* text_Score;
 	UPROPERTY(BlueprintReadOnly, meta=(BindWidget), Category="ScoreSettings")
 	class UTextBlock* text_typingText;
+
+	UPROPERTY(BlueprintReadOnly, meta=(BindWidget), Category="EndingSettings")
+	class UBorder* text_human1;
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget), Category = "EndingSettings")
+	class UBorder* text_human2;
 
 	UPROPERTY(VisibleAnywhere, meta = (BindWidgetAnim), Transient, Category = "WidgetAnimation")
 	class UWidgetAnimation* fadeInAnim;
@@ -88,9 +93,14 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	FString strWriteText;
 	UPROPERTY(EditDefaultsOnly)
-	float charsPerSecond = 1;
+	float charsPerSecond = 10;
 	UPROPERTY(VisibleAnywhere)
 	int charToDisplay = 0;
+	UPROPERTY()
+	int talkCount = 0;
+
+	UPROPERTY()
+	float textCurTime = 0;
 
 private:
 	UFUNCTION()
