@@ -163,6 +163,6 @@ void UH_OverGameInstance::OnJoinSelectedSession(FName sessionName, EOnJoinSessio
 void UH_OverGameInstance::TravelServer()
 {
 	UE_LOG(LogTemp,Warning,TEXT("%d"), )
-	bool result = GetWorld()->ServerTravel("/Game/OverCook-Alpha?Listen");
+	bool result = GetWorld()->ServerTravel("/Game/OverCook-Beta?Listen");
 	UE_LOG(LogTemp, Warning, TEXT("Travel Result: %s"), result ? *FString("Success") : *FString("Failed..."));
 }
