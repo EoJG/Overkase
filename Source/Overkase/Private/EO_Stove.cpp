@@ -231,7 +231,7 @@ void AEO_Stove::ServerOnServiceSound_Implementation()
 
 void AEO_Stove::MulticastOnServiceSound_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Emerald, FString::Printf(TEXT("Service")));
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Emerald, FString::Printf(TEXT("Service")));
 	UGameplayStatics::PlaySound2D(GetWorld(), serviceSound);
 }
 
