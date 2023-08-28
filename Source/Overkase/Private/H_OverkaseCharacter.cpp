@@ -183,16 +183,17 @@ AH_OverkaseCharacter::AH_OverkaseCharacter()
 	NiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComponent"));
 
 	// Niagara 에셋 할당
-	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NiagaraSystemAsset(TEXT("/Script/Niagara.NiagaraSystem'/Game/HanSeunghui/Effect/Blast_Particle.Blast_Particle'"));
+	/*static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NiagaraSystemAsset(TEXT("/Script/Niagara.NiagaraSystem'/Game/HanSeunghui/Effect/Blast_Particle.Blast_Particle'"));
 	if (NiagaraSystemAsset.Succeeded())
 	{
 		NiagaraComponent->SetAsset(NiagaraSystemAsset.Object);
-	}
+	}*/
 
 	// Niagara 컴포넌트를 액터에 부착
 	NiagaraComponent->SetupAttachment(crocodileMesh);
-	NiagaraComponent->SetRelativeLocation(FVector(0, -60, 0));
-	//NiagaraComponent->ActivateSystem(false);
+	NiagaraComponent->SetRelativeLocation(FVector(0, -60, 20));
+	NiagaraComponent->ActivateSystem(true);
+
 }
 
 void AH_OverkaseCharacter::SendMulticast_Implementation(int32 random)
@@ -215,6 +216,15 @@ void AH_OverkaseCharacter::BeginPlay()
 		}
 
 	}
+
+	//NiagaraComponent->ActivateSystem(true);
+
+	walkEffect = LoadObject<UNiagaraSystem>(nullptr, TEXT("/Script/Niagara.NiagaraSystem'/Game/HanSeunghui/Effect/Blast_Particle_walk.Blast_Particle_walk'"));
+	dashEffect = LoadObject<UNiagaraSystem>(nullptr, TEXT("/Script/Niagara.NiagaraSystem'/Game/HanSeunghui/Effect/Blast_Particle.Blast_Particle'"));
+
+	NiagaraComponent->SetAsset(walkEffect);
+	NiagaraComponent->SetVisibility(true);
+	//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Green, FString::Printf(TEXT("%s"),)
 
 	BGMAudio = UGameplayStatics::SpawnSound2D(GetWorld(), BGMSound);
 
@@ -244,11 +254,12 @@ void AH_OverkaseCharacter::BeginPlay()
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *GetWorld()->GetFirstPlayerController()->GetCharacter()->GetName());
 		GetWorld()->GetFirstPlayerController()->SetViewTarget(cam);
 	}
+
 	h_main_cam = Cast<AH_LerpCameraActor>(UGameplayStatics::GetActorOfClass(GetWorld(), AH_LerpCameraActor::StaticClass()));
 	mainCam = UGameplayStatics::GetActorOfClass(GetWorld(), ACameraActor::StaticClass());
 	eoCam = Cast<AEO_Camera>(UGameplayStatics::GetActorOfClass(GetWorld(), AEO_Camera::StaticClass()));
 	//NiagaraComponent->SetIsReplicated(true);
-	NiagaraComponent->SetVisibility(false);
+	//NiagaraComponent->SetVisibility(false);
 }
 
 // Called every frame
@@ -362,7 +373,16 @@ void AH_OverkaseCharacter::MulticastOnParticle_Implementation()
 void AH_OverkaseCharacter::MulticastOnVFX_Implementation()
 {
 	//UE_LOG(LogTemp,Warning,TEXT("VFX"));
-	NiagaraComponent->SetVisibility(true);
+	//NiagaraComponent->SetVisibility(true);
+
+	if (NiagaraComponent)
+	{
+		// Niagara 컴포넌트에 시스템 설정
+		NiagaraComponent->SetAsset(dashEffect);
+		//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Black, FString::Printf(TEXT("%s"), *NiagaraComponent->GetAsset()->GetName()));
+
+		NiagaraComponent->ResetSystem();
+	}
 
 	/*FString NiagaraAssetPath = TEXT("/Game/HanSeunghui/Effect/Blast_Particle");
 
@@ -400,8 +420,15 @@ void AH_OverkaseCharacter::ServerEndVFX_Implementation()
 void AH_OverkaseCharacter::MulticastEndVFX_Implementation()
 {
 	//UE_LOG(LogTemp,Warning,TEXT("%s"), *GetOwner()->GetName());
-	NiagaraComponent->SetVisibility(false);
+	//NiagaraComponent->SetVisibility(false);
+	if (NiagaraComponent)
+	{
+		// Niagara 컴포넌트에 시스템 설정
+		NiagaraComponent->SetAsset(walkEffect);
+		NiagaraComponent->ResetSystem();
 
+		//GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Black, FString::Printf(TEXT("%s"), *NiagaraComponent->GetAsset()->GetName()));
+	}
 	/*if (HasAuthority()) {
 	}*/
 }

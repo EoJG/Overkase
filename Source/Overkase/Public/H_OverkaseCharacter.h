@@ -67,7 +67,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "dashFX")
     class UNiagaraSystem* dashEffect;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "dashFX")
+    class UNiagaraSystem* walkEffect;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "dashFX")
 	class UNiagaraComponent* NiagaraComponent;
+	
 	 UPROPERTY(EditAnywhere, Category = "dashFX")
     bool bShouldUseNiagara = false;
 
