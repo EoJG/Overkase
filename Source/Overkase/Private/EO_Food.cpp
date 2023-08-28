@@ -86,7 +86,7 @@ void AEO_Food::Tick(float DeltaTime)
 	}
 
 
-	DrawDebugLine(GetWorld(), StartPos, EndPos, FColor::Green, false, -1, 0, 1);
+	//DrawDebugLine(GetWorld(), StartPos, EndPos, FColor::Green, false, -1, 0, 1);
 
 
 	FVector End1Pos = CharacterLocation + GetActorRightVector() * -100;
@@ -106,7 +106,7 @@ void AEO_Food::Tick(float DeltaTime)
 	}
 
 
-	DrawDebugLine(GetWorld(), StartPos, End1Pos, FColor::Black, false, -1, 0, 1);
+	//DrawDebugLine(GetWorld(), StartPos, End1Pos, FColor::Black, false, -1, 0, 1);
 	
 }
 
@@ -175,7 +175,7 @@ void AEO_Food::MulticastCheckOnHand_Implementation()
 
 	UE_LOG(LogTemp, Warning, TEXT("OnHnad"));
 
-	DrawDebugLine(GetWorld(), StartPos, End1Pos, FColor::Black, false, -1, 0, 1);
+	//DrawDebugLine(GetWorld(), StartPos, End1Pos, FColor::Black, false, -1, 0, 1);
 }
 
 void AEO_Food::ServerCheckOnGround_Implementation()
@@ -206,7 +206,7 @@ void AEO_Food::MulticastCheckOnGround_Implementation()
 	}
 	UE_LOG(LogTemp, Warning, TEXT("OnGround"));
 
-	DrawDebugLine(GetWorld(), StartPos, EndPos, FColor::Green, false, -1, 0, 1);
+	//DrawDebugLine(GetWorld(), StartPos, EndPos, FColor::Green, false, -1, 0, 1);
 }
 
 void AEO_Food::FoodVisible()
