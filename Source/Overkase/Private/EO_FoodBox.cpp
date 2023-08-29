@@ -47,7 +47,10 @@ void AEO_FoodBox::MulticastGetItem(class USceneComponent* playerSceneComp)
 		TArray<AActor*> items;
 		GetAttachedActors(items);
 
-		items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		if (!items.IsEmpty())
+		{
+			items[0]->AttachToComponent(playerSceneComp, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+		}
 		bOnItem = false;
 	}
 	else
